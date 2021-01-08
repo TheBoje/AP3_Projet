@@ -11,7 +11,7 @@ type 'a t_avltree = 'a bst;;
   | rd('a t_avltree) -> 'a t_avltree
   | rg('a t_avltree) -> 'a t_avltree
   | rdg('a t_avltree) -> 'a t_avltree
-  | rgd('a t_avltree) -> 'a t_avltree
+  - rgd('a t_avltree) -> 'a t_avltree
   - reequilibrer('a t_avltree) -> 'a t_avltree
   - desiquilibre('a t_avltree) -> int
   - max('a t_avltree) -> 'a
@@ -21,6 +21,7 @@ type 'a t_avltree = 'a bst;;
 
 
 (*
+  Fonctionnement de rd(t_avltree)
      (Q)                (P)
     /  \               /  \
   (P)   W  --rd()->   U   (Q)
@@ -42,6 +43,7 @@ let rd(avl : 'a t_avltree) : 'a t_avltree =
 
 
 (*
+  Fonctionnement de rg(t_avltree)
     (P)                 (Q)
    /  \                /  \
   U   (Q)  --rg()->  (P)   W
@@ -95,7 +97,7 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   if (isEmpty(avl) || isEmpty(rson(avl)) || isEmpty(lson(rson(avl))))
   then invalid_arg "rgd : avl and avl.rson and avl.rson.lson must not be empty"
   else (
-    let (r, p, q) = (root(avl), root(rson(avl)), root(lson(rson(avl)))) in
+    let (r, p, q) = (root(avl), root(rson(avl)), root(rson(lson(avl)))) in
     let (t, u, v, w) = (lson(avl), lson(lson(rson(avl))), rson(lson(rson(avl))), rson(rson(avl))) in
     rooting(q, rooting(r, t, u), rooting(p, v, w))
   )
