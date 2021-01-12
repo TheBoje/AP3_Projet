@@ -21,16 +21,16 @@ let rec bst_seek (elem, tree : 'a * 'a bst) : bool =
 ;;
 
 let rec bst_linsert (elem, tree : 'a * 'a bst) : 'a bst =
- let (v, g, d) : ('a * 'a bst * 'a bst) = root(tree), lson (tree), rson(tree) in
   if (isEmpty(tree))
   then rooting(elem, empty(), empty())
   else
+    let (v, g, d) : ('a * 'a bst * 'a bst) = root(tree), lson (tree), rson(tree) in
     if elem = v
     then tree
     else
       if elem < v
       then rooting (v, bst_linsert(elem, g), d)
-      else rooting (v, d, bst_linsert(elem, g))
+      else rooting (v, g, bst_linsert(elem, d))
 ;;
 
 
@@ -84,8 +84,6 @@ let rec  bst_delete(e, t : 'a * 'a bst): 'a bst =
           else
             rooting(max(g), dmax(g), d)
 ;;
-let l = [ 5 ; 6 ; 7 ; 1; 8; 154; 30 ; 58];;
-bst_lbuild(l);;
 
 let rec gen_rnd_lst (size, l : int * int list) : int list =
   if size = 0
@@ -101,5 +99,57 @@ let  bst_rnd_create (size : int) : int bst =
   bst_lbuild(l)
 ;;
 
-            
+let max (a , b : int * int ) = Pervasives.max a b;;
 
+let rec height (tree : 'a t_btree) : int =
+  if (tree = empty() || rson(tree) = empty() && lson(tree) = empty())
+  then 0
+  else 1 + max(height(rson(tree)), height(lson(tree)))
+;;
+
+
+let unbalance (tree : int bst) : int =
+  if isEmpty(tree)
+  then 0
+  else
+    let (v, g, d) : ('a * 'a bst * 'a bst) = root(tree), lson (tree), rson(tree) in
+    height(g) - height(d)
+;;
+
+let unbalanceAvg (tsample, treesSize : int * int) : float =
+
+  let sum : float ref = ref 0. in
+
+  for i=1 to tsample
+  do
+    sum := !sum +. float_of_int(unbalance(bst_rnd_create(100)))
+  done;
+
+  !sum /. float_of_int(tsample)
+;;
+
+let unbalanceAvgsAvg(avgSample, treeSample, treesSize : int * int * int) : float =
+  
+  let sum : float ref = ref 0. in
+
+  for i=1 to avgSample
+  do
+    sum := !sum +. unbalanceAvg(treeSample, treesSize);
+  done;
+
+  !sum /. float_of_int(avgSample)
+;;
+
+
+
+
+
+    
+let b : int bst  = rooting(10, empty(), empty);;
+bst_linsert(4,b );;      
+
+let t = bst_rnd_create(50);;
+
+unbalance(t);;
+unbalanceAvg(250, 100);;
+unbalanceAvgsAvg(1000, 250, 100);;
