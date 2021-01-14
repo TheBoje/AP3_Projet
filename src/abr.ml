@@ -3,7 +3,7 @@ open Btree;;
 
 type 'a bst = 'a t_btree;;
 
-
+(********* FONCTIONS DU MODULE FAIT EN TP ************)
 let rec bst_seek (elem, tree : 'a * 'a bst) : bool =
   if isEmpty(tree)
   then
@@ -40,7 +40,7 @@ let rec bst_lbuild (l : 'a list): 'a bst =
   | v::lt -> bst_linsert(v, bst_lbuild(lt))
 ;;
 
-let rec max(t : 'a bst) : 'a =
+let rec max_seek(t : 'a bst) : 'a =
   if isEmpty(t)
   then
     invalid_arg "max : l'arbre est vide"
@@ -49,7 +49,7 @@ let rec max(t : 'a bst) : 'a =
     then
       root(t)
     else
-      max(rson(t))
+      max_seek(rson(t))
 ;;
 
 let rec dmax(t : 'a t_btree) : 'a t_btree =
@@ -82,21 +82,7 @@ let rec  bst_delete(e, t : 'a * 'a bst): 'a bst =
           if isEmpty(d)
           then g
           else
-            rooting(max(g), dmax(g), d)
-;;
-
-let rec gen_rnd_lst (size, l : int * int list) : int list =
-  if size = 0
-  then l
-  else
-    let n = Random.int 500 in
-    let list = n::l in
-    gen_rnd_lst(size - 1, list)
-;;
-
-let  bst_rnd_create (size : int) : int bst =
-  let l = gen_rnd_lst(size, []) in
-  bst_lbuild(l)
+            rooting(max_seek(g), dmax(g), d)
 ;;
 
 let max (a , b : int * int ) = Pervasives.max a b;;
@@ -107,7 +93,81 @@ let rec height (tree : 'a t_btree) : int =
   else 1 + max(height(rson(tree)), height(lson(tree)))
 ;;
 
+(********** FONCTIONS UTILITAIRES AU PROJET ************)     
 
+(******** Fonctions de génération de liste ********)
+
+(* Génère une liste de size nombres aléatoires *)
+let rec gen_rnd_lst_aux (size, l : int * int list) : int list =
+  if size = 0
+  then l
+  else
+    let n = Random.int 500 in
+    let list = n::l in
+    gen_rnd_lst_aux(size - 1, list)
+;;
+
+let gen_rnd_lst(size : int ) : int list =
+  gen_rnd_lst_aux(size, [])
+;;
+
+(* Génère une liste contenant une suite de 1 à size *)
+let rec gen_seq_lst_aux(borneMin, borneMax , list : int * int * int list) : int list =
+  if borneMax = borneMin
+  then list
+  else
+    gen_seq_lst_aux(borneMin, borneMax - 1, borneMax::list)
+;;
+
+
+let gen_seq_lst( borneMin, borneMax :int * int) : int list =
+  gen_seq_lst_aux(borneMin,borneMax, [])
+;;
+
+(* Génère une liste contenant des suites ordonnée et des suites non-ordonnées *)
+let rec gen_mixed_lst_aux( nbOperation, l : int * int list) : int list =
+  if nbOperation = 0
+  then l
+  else let rn = Random.int 30 in
+       if nbOperation mod 2 == 0
+       then
+         let rndList : int list = gen_rnd_lst(rn) in
+         gen_mixed_lst_aux(nbOperation - 1, rndList@l)
+       else
+         let min : int = Random.int rn-1 in
+         let seqList : int list = gen_seq_lst(min, rn) in
+         gen_mixed_lst_aux(nbOperation - 1, seqList@l)
+;;
+
+(* Eviter de l'utiliser avec un nbOperation > 5 pour une question de propreté d'affichage *)
+let gen_mixed_lst ( nbOperation : int ) : int list =
+  gen_mixed_lst_aux(nbOperation, [])
+;;
+
+(******** Fonctions de génération d'arbre ********)
+
+(*Génère un ABR à partir d'une liste de nombre aléatoire de taille size*)
+let  bst_rnd_create (size : int) : int bst =
+  let l = gen_rnd_lst(size) in
+  bst_lbuild(l)
+;;
+
+(* Génère un ABR à partir d'une liste ordonnée *)
+let bst_seq_create(size : int) : int bst =
+  let min = Random.int size in
+  let l : int list = gen_seq_lst(min, size) in
+   bst_lbuild(l)
+;;
+
+let bst_mix_create(nbSequences : int) : int bst =
+  let l : int list = gen_mixed_lst(nbSequences) in
+  bst_lbuild(l)
+;;
+
+(******** Fonctions de calcul ********)
+
+(* Retourne le déséquilibre entre le fils droit et le fils gauche d'un arbre
+soit ; la différence de hauteur entre le fils gauche et le fils droit *)
 let unbalance (tree : int bst) : int =
   if isEmpty(tree)
   then 0
@@ -116,40 +176,92 @@ let unbalance (tree : int bst) : int =
     height(g) - height(d)
 ;;
 
-let unbalanceAvg (tsample, treesSize : int * int) : float =
+(* Retourne la moyenne de déséquilibre calculés sur tsample abr aléatoires de taille treesSize *)
+let rnd_unbalance_avg (tsample, treesSize : int * int) : float =
 
   let sum : float ref = ref 0. in
 
   for i=1 to tsample
   do
-    sum := !sum +. float_of_int(unbalance(bst_rnd_create(100)))
+    sum := !sum +. float_of_int(unbalance(bst_rnd_create(treesSize)))
   done;
 
   !sum /. float_of_int(tsample)
 ;;
 
-let unbalanceAvgsAvg(avgSample, treeSample, treesSize : int * int * int) : float =
+(* Retourne la moyenne de avgSample déséquilibres *)
+let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) : float =
   
   let sum : float ref = ref 0. in
 
   for i=1 to avgSample
   do
-    sum := !sum +. unbalanceAvg(treeSample, treesSize);
+    sum := !sum +. rnd_unbalance_avg(treeSample, treesSize);
   done;
 
   !sum /. float_of_int(avgSample)
 ;;
 
+(* rnd_unbalance_avg mais avec des arbres construits à partir d'une liste ordonnée *)
+let seq_unbalance_avg (tsample, treesSize : int * int) : float =
 
+  let sum : float ref = ref 0. in
 
+  for i=1 to tsample
+  do
+    sum := !sum +. float_of_int(unbalance(bst_seq_create(treesSize)))
+  done;
 
+  !sum /. float_of_int(tsample)
+;;
 
-    
-let b : int bst  = rooting(10, empty(), empty);;
-bst_linsert(4,b );;      
+let seq_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
+  
+  let sum : float ref = ref 0. in
 
-let t = bst_rnd_create(50);;
+  for i=1 to avgSample
+  do
+    sum := !sum +. seq_unbalance_avg(treeSample, treesSize);
+  done;
 
-unbalance(t);;
-unbalanceAvg(250, 100);;
-unbalanceAvgsAvg(1000, 250, 100);;
+  !sum /. float_of_int(avgSample)
+;;
+
+(* unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
+let mixed_unbalance_avg (tsample, treesOpe : int * int) : float =
+  Random.init(tsample);
+  let sum : float ref = ref 0. in
+
+  for i=1 to tsample
+  do
+    sum := !sum +. float_of_int(unbalance(bst_mix_create(treesOpe)))
+  done;
+
+  !sum /. float_of_int(tsample)
+;;
+
+let mixed_unbalance_avgs_avg (avgSample, treeSample, treesOpe : int * int * int) : float =
+  
+  let sum : float ref = ref 0. in
+
+  for i=1 to avgSample
+  do
+    sum := !sum +. mixed_unbalance_avg(treeSample, treesOpe);
+  done;
+
+  !sum /. float_of_int(avgSample)
+;;
+(******** TESTS ********)
+
+let rand = bst_rnd_create(50);;
+let seq = bst_seq_create(50);;
+let mix =bst_mix_create(5);;
+
+show_int_btree(rand);;
+show_int_btree(seq);;
+show_int_btree(mix);;
+unbalance(mix);;
+rnd_unbalance_avg(100, 200);;
+seq_unbalance_avg(100, 200);;
+mixed_unbalance_avg(10, 5);;
+mixed_unbalance_avgs_avg(10, 5, 3);;
