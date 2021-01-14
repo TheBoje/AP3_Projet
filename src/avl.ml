@@ -15,8 +15,8 @@ type 'a t_avltree = 'a bst;;
   | rgd('a t_avltree) -> 'a t_avltree
   - reequilibrer('a t_avltree) -> 'a t_avltree
   | desequilibre('a t_avltree) -> int
-  - max('a t_avltree) -> 'a
-  - dmax('a t_avltree) -> 'a t_avltree
+  | max('a t_avltree) -> 'a
+  | dmax('a t_avltree) -> 'a t_avltree
   - suppr_avl('a, 'a t_avltree) -> 'a t_avltree
   - insert_avl('a, 'a t_avltree) -> 'a t_avltree
 *)
@@ -112,10 +112,10 @@ let v_max(a, b : 'a * 'a) : 'a =
 
 (* Retourne hauteur de l'avl *)
 let rec avl_height(avl : 'a t_avltree) : int = 
-  if (isEmpty(avl))
+  if isEmpty(avl)
   then 0
   else
-    if(isEmpty(lson(avl)) && isEmpty(rson(avl)))
+    if (isEmpty(lson(avl)) && isEmpty(rson(avl)))
     then 0
     else 1 + v_max(avl_height(lson(avl)), avl_height(rson(avl)))
 ;;
@@ -130,6 +130,31 @@ let desequilibre(avl :'a t_avltree) : int =
   if isEmpty(avl)
   then 0
   else (avl_height(lson(avl)) - avl_height(rson(avl)))
+;;
+
+
+(*
+  Retourne l'élément maximal de l'avl
+*)
+
+let rec max(avl : 'a t_avltree) : 'a =
+  if isEmpty(rson(avl))
+  then root(t)
+  else max(rson(t))
+;;
+
+(*
+  Retourne un avl privé de son éĺément maximal auquel il faut le rééquilibrer.
+*)
+
+let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
+  if isEmpty(avl)
+  then invalid_arg "dmax : avl must not be empty"
+  else (
+    if isEmpty(rson(avl))
+    then lson(avl)
+    else rooting(root(avl), lson(avl), dmax(rson(t)))
+  )
 ;;
 
 
