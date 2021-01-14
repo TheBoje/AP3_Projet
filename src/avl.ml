@@ -1,5 +1,6 @@
 #directory "../data/";;
 
+
 #load "btree.cmo";;
 #load "bst.cmo";;
 open Bst;;
@@ -13,10 +14,11 @@ type 'a t_avltree = 'a bst;;
   | rdg('a t_avltree) -> 'a t_avltree
   | rgd('a t_avltree) -> 'a t_avltree
   - reequilibrer('a t_avltree) -> 'a t_avltree
-  - desiquilibre('a t_avltree) -> int
+  | desequilibre('a t_avltree) -> int
   - max('a t_avltree) -> 'a
   - dmax('a t_avltree) -> 'a t_avltree
   - suppr_avl('a, 'a t_avltree) -> 'a t_avltree
+  - insert_avl('a, 'a t_avltree) -> 'a t_avltree
 *)
 
 
@@ -101,6 +103,34 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   )
 ;;
 
+(* Retourne la plus grande des deux valeurs d'entrée *)
+let v_max(a, b : 'a * 'a) : 'a = 
+  if (a >= b)
+  then a
+  else b
+;;
+
+(* Retourne hauteur de l'avl *)
+let rec avl_height(avl : 'a t_avltree) : int = 
+  if (isEmpty(avl))
+  then 0
+  else
+    if(isEmpty(lson(avl)) && isEmpty(rson(avl)))
+    then 0
+    else 1 + v_max(avl_height(lson(avl)), avl_height(rson(avl)))
+;;
+
+(* 
+  Retourne le déséquilibre de l'avl
+  On calcule le déséquilibre de l'avl de la manière suivante :
+  desequilibre = hauteur(lson) - hauteur(rson)
+  avec lson, rson les fils gauche et droit de l'arbre d'entrée
+*)
+let desequilibre(avl :'a t_avltree) : int = 
+  if isEmpty(avl)
+  then 0
+  else (avl_height(lson(avl)) - avl_height(rson(avl)))
+;;
 
 
 (* === TESTS === *)
@@ -141,3 +171,7 @@ let test_avl_rdg : int t_avltree =
 ;;
 show_int_btree(test_avl_rdg);; 
 show_int_btree(rdg(test_avl_rdg));;
+
+let test_desequilibre : int t_avltree = test_avl_rd;;
+show_int_btree(test_desequilibre);;
+desequilibre(test_desequilibre);;
