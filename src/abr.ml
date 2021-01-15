@@ -1,6 +1,6 @@
 #load "btree.cmo";;
 open Btree;;
-
+open List;;
 type 'a bst = 'a t_btree;;
 
 (********* FONCTIONS DU MODULE FAIT EN TP ************)
@@ -93,6 +93,12 @@ let rec height (tree : 'a t_btree) : int =
   else 1 + max(height(rson(tree)), height(lson(tree)))
 ;;
 
+let rec size( tree : 'a t_btree) : int =
+  if (tree = empty())
+  then 0
+  else 1 + size(rson(tree)) + size(lson(tree))
+;;
+
 (********** FONCTIONS UTILITAIRES AU PROJET ************)     
 
 (******** Fonctions de génération de liste ********)
@@ -125,23 +131,25 @@ let gen_seq_lst( borneMin, borneMax :int * int) : int list =
 ;;
 
 (* Génère une liste contenant des suites ordonnée et des suites non-ordonnées *)
-let rec gen_mixed_lst_aux( nbOperation, l : int * int list) : int list =
-  if nbOperation = 0
+
+
+let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
+  if size = 0
   then l
-  else let rn = Random.int 30 in
-       if nbOperation mod 2 == 0
-       then
-         let rndList : int list = gen_rnd_lst(rn) in
-         gen_mixed_lst_aux(nbOperation - 1, rndList@l)
+  else
+    if size mod 2 = 0
+    then
+      let rndListLength : int = size/2 in
+         let rndList : int list = gen_rnd_lst(rndListLength) in
+         gen_mixed_lst_aux(size - rndListLength, rndList@l)
        else
-         let min : int = Random.int rn-1 in
-         let seqList : int list = gen_seq_lst(min, rn) in
-         gen_mixed_lst_aux(nbOperation - 1, seqList@l)
+         let min : int = Random.int size in
+         let seqList : int list = gen_seq_lst(min, size) in
+         gen_mixed_lst_aux(size - length(seqList) , seqList@l)
 ;;
 
-(* Eviter de l'utiliser avec un nbOperation > 5 pour une question de propreté d'affichage *)
-let gen_mixed_lst ( nbOperation : int ) : int list =
-  gen_mixed_lst_aux(nbOperation, [])
+let gen_mixed_lst (size : int ) : int list =
+  gen_mixed_lst_aux(size, [])
 ;;
 
 (******** Fonctions de génération d'arbre ********)
@@ -228,40 +236,43 @@ let seq_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) 
 ;;
 
 (* unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
-let mixed_unbalance_avg (tsample, treesOpe : int * int) : float =
-  Random.init(tsample);
+let mixed_unbalance_avg (tsample, treesSize : int * int) : float =
   let sum : float ref = ref 0. in
 
   for i=1 to tsample
   do
-    sum := !sum +. float_of_int(unbalance(bst_mix_create(treesOpe)))
+    sum := !sum +. float_of_int(unbalance(bst_mix_create(treesSize)))
   done;
 
   !sum /. float_of_int(tsample)
 ;;
 
-let mixed_unbalance_avgs_avg (avgSample, treeSample, treesOpe : int * int * int) : float =
+let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
   
   let sum : float ref = ref 0. in
 
   for i=1 to avgSample
   do
-    sum := !sum +. mixed_unbalance_avg(treeSample, treesOpe);
+    sum := !sum +. mixed_unbalance_avg(treeSample, treesSize);
   done;
 
   !sum /. float_of_int(avgSample)
 ;;
 (******** TESTS ********)
 
-let rand = bst_rnd_create(50);;
-let seq = bst_seq_create(50);;
-let mix =bst_mix_create(5);;
-
+let rand = bst_rnd_create(150);;
+let seq = bst_seq_create(150);;
+let mix =bst_mix_create(50);;
+let mixlist : int list = gen_mixed_lst(100);;
+length(mixlist);;
+size(mix);;
 show_int_btree(rand);;
 show_int_btree(seq);;
 show_int_btree(mix);;
 unbalance(mix);;
 rnd_unbalance_avg(100, 200);;
 seq_unbalance_avg(100, 200);;
-mixed_unbalance_avg(10, 5);;
-mixed_unbalance_avgs_avg(10, 5, 3);;
+mixed_unbalance_avg(100, 200);;
+rnd_unbalance_avgs_avg(100, 100, 200);;
+seq_unbalance_avgs_avg(100, 100, 200);;
+mixed_unbalance_avgs_avg(100, 100, 200);;
