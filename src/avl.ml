@@ -1,6 +1,5 @@
 #directory "../data/";;
 
-
 #load "btree.cmo";;
 #load "bst.cmo";;
 open Bst;;

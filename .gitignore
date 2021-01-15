@@ -1,7 +1,5 @@
 *.annot
-*.cmo
 *.cma
-*.cmi
 *.a
 *.o
 *.cmx
