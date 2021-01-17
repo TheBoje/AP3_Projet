@@ -5,6 +5,7 @@
 open Bst;;
 open Btree;;
 
+
 type 'a t_avltree = 'a bst;;
 
 (* A implémenter : (- a faire, + en cours, | fait)
@@ -12,12 +13,12 @@ type 'a t_avltree = 'a bst;;
   | rg('a t_avltree) -> 'a t_avltree
   | rdg('a t_avltree) -> 'a t_avltree
   | rgd('a t_avltree) -> 'a t_avltree
-  - reequilibrer('a t_avltree) -> 'a t_avltree
+  | reequilibrer('a t_avltree) -> 'a t_avltree
   | desequilibre('a t_avltree) -> int
   | max('a t_avltree) -> 'a
   | dmax('a t_avltree) -> 'a t_avltree
-  - suppr_avl('a, 'a t_avltree) -> 'a t_avltree
-  - insert_avl('a, 'a t_avltree) -> 'a t_avltree
+  | suppr_avl('a, 'a t_avltree) -> 'a t_avltree
+  | insert_avl('a, 'a t_avltree) -> 'a t_avltree
 *)
 
 
@@ -138,8 +139,8 @@ let desequilibre(avl :'a t_avltree) : int =
 
 let rec max(avl : 'a t_avltree) : 'a =
   if isEmpty(rson(avl))
-  then root(t)
-  else max(rson(t))
+  then root(avl)
+  else max(rson(avl))
 ;;
 
 (*
@@ -152,10 +153,80 @@ let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
   else (
     if isEmpty(rson(avl))
     then lson(avl)
-    else rooting(root(avl), lson(avl), dmax(rson(t)))
+    else rooting(root(avl), lson(avl), dmax(rson(avl)))
   )
 ;;
 
+(*
+  Retourne un avl qui est équilibré.
+*)
+
+let rec reequilibrer(avl: 'a t_avltree) : 'a t_avltree =
+  if(desequilibre(avl)==2 || desequilibre(avl)== -2 )
+  then
+    if(desequilibre(avl)==2)
+    then
+      if(desequilibre(lson(avl))==1)
+      then
+        rd(avl)
+      else
+        if(desequilibre(lson(avl))== -1)
+        then
+          rgd(avl)
+        else
+          rooting(root(avl),reequilibrer(lson(avl)),rson(avl))
+    else
+       if(desequilibre(rson(avl))==1)
+      then
+        rdg(avl)
+       else
+          if(desequilibre(lson(avl))== -1)
+        then
+          rg(avl)
+        else
+          rooting(root(avl),lson(avl),reequilibrer(rson(avl)))
+  else
+    avl
+
+let rec suppr_avl(a,avl : 'a* 'a t_avltree) : 'a t_avltree =
+  if( not(isEmpty(avl)))
+  then
+    if(a<root(avl))
+    then
+      reequilibrer(rooting(root(avl),suppr_avl(a,lson(avl)),rson(avl)))
+    else
+      if(a>root(avl))
+      then
+        reequilibrer(rooting(root(avl),lson(avl),suppr_avl(a,rson(avl))))
+      else
+        if(isEmpty(rson(avl)))
+        then
+          lson(avl)
+        else
+          if(isEmpty(lson(avl)))
+          then
+            rson(avl)
+          else
+            reequilibrer(rooting(max(lson(avl)),dmax(lson(avl)),rson(avl)))
+  else
+    empty()
+;;
+                   
+let rec insert_avl(a,avl : 'a * 'a t_avltree) : 'a t_avltree =
+  if( not(isEmpty(avl)))
+  then
+    if(a<root(avl))
+    then
+      reequilibrer(rooting(root(avl),insert_avl(a,lson(avl)),rson(avl)))
+    else
+      if(a>root(avl))
+      then
+        reequilibrer(rooting(root(avl),lson(avl),insert_avl(a,rson(avl))))
+      else
+        rooting(root(avl),lson(avl),rson(avl))
+  else
+    rooting(a,empty(),empty())
+  ;;
 
 (* === TESTS === *)
 let test_avl_rd : int t_avltree = rooting(1, rooting(2, rooting(3, empty(), empty()), rooting(4, empty(), empty())), rooting(5, empty(), empty()));;
