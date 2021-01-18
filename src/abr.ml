@@ -185,7 +185,7 @@ let unbalance (tree : int bst) : int =
 ;;
 
 (* Retourne la moyenne de déséquilibre calculés sur tsample abr aléatoires de taille treesSize *)
-let rnd_unbalance_avg (tsample, treesSize : int * int) : float =
+let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
 
   let sum : float ref = ref 0. in
 
@@ -194,7 +194,7 @@ let rnd_unbalance_avg (tsample, treesSize : int * int) : float =
     sum := !sum +. float_of_int(unbalance(bst_rnd_create(treesSize)))
   done;
 
-  !sum /. float_of_int(tsample)
+  !sum /. float_of_int(tSample)
 ;;
 
 (* Retourne la moyenne de avgSample déséquilibres *)
@@ -211,7 +211,7 @@ let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) :
 ;;
 
 (* rnd_unbalance_avg mais avec des arbres construits à partir d'une liste ordonnée *)
-let seq_unbalance_avg (tsample, treesSize : int * int) : float =
+let seq_unbalance_avg (tSample, treesSize : int * int) : float =
 
   let sum : float ref = ref 0. in
 
@@ -220,7 +220,7 @@ let seq_unbalance_avg (tsample, treesSize : int * int) : float =
     sum := !sum +. float_of_int(unbalance(bst_seq_create(treesSize)))
   done;
 
-  !sum /. float_of_int(tsample)
+  !sum /. float_of_int(tSample)
 ;;
 
 let seq_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
@@ -236,7 +236,7 @@ let seq_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) 
 ;;
 
 (* unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
-let mixed_unbalance_avg (tsample, treesSize : int * int) : float =
+let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
   
   let sum : float ref = ref 0. in
 
@@ -245,7 +245,7 @@ let mixed_unbalance_avg (tsample, treesSize : int * int) : float =
     sum := !sum +. float_of_int(unbalance(bst_mix_create(treesSize)))
   done;
 
-  !sum /. float_of_int(tsample)
+  !sum /. float_of_int(tSample)
 ;;
 
 let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
@@ -261,20 +261,9 @@ let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int
 ;;
 (******** TESTS ********)
 
-let rand = bst_rnd_create(150);;
-let seq = bst_seq_create(150);;
-let mix =bst_mix_create(100);;
-let mixlist : int list = gen_mixed_lst(100);;
-length(mixlist);;
-size(mix);;
-show_int_btree(rand);;
-show_int_btree(seq);;
-show_int_btree(mix);;
-unbalance(mix);;
 rnd_unbalance_avg(100, 100);;
-seq_unbalance_avg(100, 100);;
 mixed_unbalance_avg(100, 100);;
-rnd_unbalance_avgs_avg(100, 100, 100);;
-seq_unbalance_avgs_avg(100, 100, 100);;
-mixed_unbalance_avgs_avg(100, 100, 100);;
+
+rnd_unbalance_avgs_avg(1000, 100, 100);;
+mixed_unbalance_avgs_avg(1000, 100, 100);;
 Random.int 2;;
