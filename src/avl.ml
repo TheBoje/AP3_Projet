@@ -240,7 +240,25 @@ let rec insert_avl(a,avl : 'a * 'a t_avltree) : 'a t_avltree =
         rooting(root(avl),lson(avl),rson(avl))
   else
     rooting(a,empty(),empty())
+;;
+
+let rec avl_rnd_create_aux ( l  , t : int list * int t_avltree) : int t_avltree =
+   if(l=[])
+   then
+     t
+   else
+     avl_rnd_create_aux( List.tl(l) , insert_avl(List.hd(l),t) )
   ;;
+  
+
+let avl_rnd_create (l: int list): int t_avltree =
+  let t : int t_avltree=rooting(List.hd(l),empty(),empty())in
+  avl_rnd_create_aux(List.tl(l),t)
+  ;;
+ 
+
+
+
 
 (* === TESTS === *)
 let test_avl_rd : int t_avltree = rooting(1, rooting(2, rooting(3, empty(), empty()), rooting(4, empty(), empty())), rooting(5, empty(), empty()));;
@@ -300,3 +318,7 @@ show_int_btree(test_supr_avl);;
 desequilibre(test_supr_avl);;
 show_int_btree(suppr_avl(4,test_supr_avl));;
 desequilibre(suppr_avl(4,test_supr_avl));;
+
+let test_list: int list = [3;8;1;9;4;7];;
+let test_create_avl: int t_avltree = avl_rnd_create(test_list);;
+show_int_btree(test_create_avl);;
