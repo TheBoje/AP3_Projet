@@ -134,18 +134,18 @@ let gen_seq_lst( borneMin, borneMax :int * int) : int list =
 
 
 let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
-  if size = 0
+  if size <= 0
   then l
   else
-    if size mod 2 = 0
+    if size mod 2 = 0 && size != 2
     then
-      let rndListLength : int = size/2 in
-         let rndList : int list = gen_rnd_lst(rndListLength) in
-         gen_mixed_lst_aux(size - rndListLength, rndList@l)
-       else
-         let min : int = Random.int size in
-         let seqList : int list = gen_seq_lst(min, size) in
-         gen_mixed_lst_aux(size - length(seqList) , seqList@l)
+      let rndListLength : int = size/4 in
+      let rndList : int list = gen_rnd_lst(rndListLength) in
+      gen_mixed_lst_aux(size - rndListLength, rndList@l)
+    else
+      let min : int = Random.int size in
+      let seqList : int list = gen_seq_lst(min, size) in
+      gen_mixed_lst_aux(size - length(seqList) , seqList@l)
 ;;
 
 let gen_mixed_lst (size : int ) : int list =
@@ -167,8 +167,8 @@ let bst_seq_create(size : int) : int bst =
    bst_lbuild(l)
 ;;
 
-let bst_mix_create(nbSequences : int) : int bst =
-  let l : int list = gen_mixed_lst(nbSequences) in
+let bst_mix_create(size : int) : int bst =
+  let l : int list = gen_mixed_lst(size) in
   bst_lbuild(l)
 ;;
 
@@ -185,7 +185,7 @@ let unbalance (tree : int bst) : int =
 ;;
 
 (* Retourne la moyenne de déséquilibre calculés sur tsample abr aléatoires de taille treesSize *)
-let rnd_unbalance_avg (tsample, treesSize : int * int) : float =
+let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
 
   let sum : float ref = ref 0. in
 
@@ -194,7 +194,7 @@ let rnd_unbalance_avg (tsample, treesSize : int * int) : float =
     sum := !sum +. float_of_int(unbalance(bst_rnd_create(treesSize)))
   done;
 
-  !sum /. float_of_int(tsample)
+  !sum /. float_of_int(tSample)
 ;;
 
 (* Retourne la moyenne de avgSample déséquilibres *)
@@ -211,7 +211,7 @@ let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) :
 ;;
 
 (* rnd_unbalance_avg mais avec des arbres construits à partir d'une liste ordonnée *)
-let seq_unbalance_avg (tsample, treesSize : int * int) : float =
+let seq_unbalance_avg (tSample, treesSize : int * int) : float =
 
   let sum : float ref = ref 0. in
 
@@ -220,7 +220,7 @@ let seq_unbalance_avg (tsample, treesSize : int * int) : float =
     sum := !sum +. float_of_int(unbalance(bst_seq_create(treesSize)))
   done;
 
-  !sum /. float_of_int(tsample)
+  !sum /. float_of_int(tSample)
 ;;
 
 let seq_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
@@ -236,7 +236,8 @@ let seq_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) 
 ;;
 
 (* unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
-let mixed_unbalance_avg (tsample, treesSize : int * int) : float =
+let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
+  
   let sum : float ref = ref 0. in
 
   for i=1 to tsample
@@ -244,7 +245,7 @@ let mixed_unbalance_avg (tsample, treesSize : int * int) : float =
     sum := !sum +. float_of_int(unbalance(bst_mix_create(treesSize)))
   done;
 
-  !sum /. float_of_int(tsample)
+  !sum /. float_of_int(tSample)
 ;;
 
 let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
@@ -260,19 +261,9 @@ let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int
 ;;
 (******** TESTS ********)
 
-let rand = bst_rnd_create(150);;
-let seq = bst_seq_create(150);;
-let mix =bst_mix_create(50);;
-let mixlist : int list = gen_mixed_lst(100);;
-length(mixlist);;
-size(mix);;
-show_int_btree(rand);;
-show_int_btree(seq);;
-show_int_btree(mix);;
-unbalance(mix);;
-rnd_unbalance_avg(100, 200);;
-seq_unbalance_avg(100, 200);;
-mixed_unbalance_avg(100, 200);;
-rnd_unbalance_avgs_avg(100, 100, 200);;
-seq_unbalance_avgs_avg(100, 100, 200);;
-mixed_unbalance_avgs_avg(100, 100, 200);;
+rnd_unbalance_avg(100, 100);;
+mixed_unbalance_avg(100, 100);;
+
+rnd_unbalance_avgs_avg(1000, 100, 100);;
+mixed_unbalance_avgs_avg(1000, 100, 100);;
+Random.int 2;;
