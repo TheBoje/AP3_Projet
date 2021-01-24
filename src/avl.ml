@@ -168,26 +168,37 @@ let rec reequilibrer(avl: 'a t_avltree) : 'a t_avltree =
     then
       if(desequilibre(lson(avl))==1)
       then
-        rd(avl)
+       rd(avl)
       else
+         rgd(avl)
+        (*
         if(desequilibre(lson(avl))== -1)
         then
-          rgd(avl)
+         
         else
           rooting(root(avl),reequilibrer(lson(avl)),rson(avl))
+         *)
     else
        if(desequilibre(rson(avl))==1)
       then
         rdg(avl)
        else
+          rg(avl)
+          (*
           if(desequilibre(lson(avl))== -1)
-        then
+
+
+             then
           rg(avl)
         else
           rooting(root(avl),lson(avl),reequilibrer(rson(avl)))
+       *)
   else
     avl
 
+(*
+  Retourne un avl qui est équilibré avec a supprimé.
+*)
 let rec suppr_avl(a,avl : 'a* 'a t_avltree) : 'a t_avltree =
   if( not(isEmpty(avl)))
   then
@@ -211,7 +222,10 @@ let rec suppr_avl(a,avl : 'a* 'a t_avltree) : 'a t_avltree =
   else
     empty()
 ;;
-                   
+
+(*
+  Retourne un avl qui est équilibré avec a en plus.
+*)
 let rec insert_avl(a,avl : 'a * 'a t_avltree) : 'a t_avltree =
   if( not(isEmpty(avl)))
   then
@@ -238,12 +252,12 @@ show_int_btree(test_avl_rg);;
 show_int_btree(rg(test_avl_rg));;
 
 let test_avl_rgd : int t_avltree = 
-  rooting(1, 
+  rooting(6, 
     rooting(2, 
-      rooting(4, empty(), empty()),
-      rooting(3, 
-        rooting(5, empty(), empty()),
-        rooting(6, empty(), empty())
+      rooting(1, empty(), empty()),
+      rooting(4, 
+        rooting(3, empty(), empty()),
+        rooting(5, empty(), empty())
       )
     ),
     rooting(7, empty(), empty())
@@ -253,12 +267,12 @@ show_int_btree(test_avl_rgd);;
 show_int_btree(rgd(test_avl_rgd));;
 
 let test_avl_rdg : int t_avltree =
-  rooting(1,
-    rooting(4, empty(), empty()),
-    rooting(2,
-      rooting(3,
-        rooting(5, empty(), empty()),
-        rooting(6, empty(), empty())
+  rooting(2,
+    rooting(1, empty(), empty()),
+    rooting(6,
+      rooting(4,
+        rooting(3, empty(), empty()),
+        rooting(5, empty(), empty())
       ),
       rooting(7, empty(), empty())  
     )
@@ -270,3 +284,19 @@ show_int_btree(rdg(test_avl_rdg));;
 let test_desequilibre : int t_avltree = test_avl_rd;;
 show_int_btree(test_desequilibre);;
 desequilibre(test_desequilibre);;
+
+let test_reequilibre: int t_avltree= test_avl_rdg;;
+show_int_btree(test_reequilibre);;
+show_int_btree(reequilibrer(test_reequilibre));;
+
+let test_insert_avl: int t_avltree= test_avl_rdg;;
+show_int_btree(test_insert_avl);;
+desequilibre(test_insert_avl);;
+show_int_btree(insert_avl(8,test_insert_avl));;
+desequilibre((insert_avl(8,test_insert_avl)));;
+
+let test_supr_avl : int t_avltree= insert_avl(8,test_insert_avl);;
+show_int_btree(test_supr_avl);;
+desequilibre(test_supr_avl);;
+show_int_btree(suppr_avl(4,test_supr_avl));;
+desequilibre(suppr_avl(4,test_supr_avl));;
