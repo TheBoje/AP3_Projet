@@ -161,15 +161,15 @@ let rec reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
   if (des = 0 || des = -1 || des = 1)
   then avl
   else 
-    if des = 2
+    if des == 2
     then 
-      if desequilibre(lson(avl)) = 1
+      if desequilibre(lson(avl)) == 1
       then rd(avl)
       else rgd(avl)
     else 
-      if des = -2
+      if des == -2
       then 
-        if desequilibre(rson(avl)) = 1
+        if desequilibre(rson(avl)) == 1
         then rg(avl)
         else rdg(avl)
       else invalid_arg "reequilibrer: error desequilibre value"
@@ -272,7 +272,6 @@ let test_avl_rd : int t_avltree =
 ;;
 show_int_btree(test_avl_rd);; 
 show_int_btree(rd(test_avl_rd));;
-
 
 let test_avl_rg : int t_avltree = 
   rooting(1, 
