@@ -10,7 +10,7 @@ type 'a t_avltree = 'a bst;;
 
 (*
   TODO LIST :
-  - Vérifier si bst_seek fonctionne pour les avl
+  | Vérifier si bst_seek fonctionne pour les avl
   - Test de complexité des algos (log n)
   - Génération arbres sous-liste de longueur variable
   - Compter le nombre de rotations effectuées (et estimer)
@@ -239,6 +239,25 @@ let rec insert_avl(a,avl : 'a * 'a t_avltree) : 'a t_avltree =
     rooting(a,empty(),empty())
 ;;
 
+let rec bst_seek (elem, tree : 'a * 'a t_avltree) : bool =
+  if isEmpty(tree)
+  then
+    false
+  else
+    if elem < root(tree)
+    then
+      bst_seek(elem, lson(tree))
+    else
+      if elem > root(tree)
+      then
+        bst_seek(elem, rson(tree))
+      else
+        true
+;;
+
+
+
+
 let rec avl_rnd_create_aux ( l  , t : int list * int t_avltree) : int t_avltree =
    if(l=[])
    then
@@ -252,12 +271,25 @@ let avl_rnd_create (l: int list): int t_avltree =
   let t : int t_avltree=rooting(List.hd(l),empty(),empty())in
   avl_rnd_create_aux(List.tl(l),t)
 ;;
- 
+
+Random.self_init;;
+let set_elem (l,i,x : int list*int*int) : int list =
+  List.mapi (fun i' el -> if i = i' then x else el) l
+  ;;
+
+
+let rec random_list_int(n:int) : int list =
+  if(n <= 0)
+  then []
+  else
+    Random.int(20)::random_list_int(n-1)
+   ;;
+   
+  
 
 
 
-
-(* === TESTS === *)
+     (* === TESTS === *)
 let test_avl_rd : int t_avltree = rooting(1, rooting(2, rooting(3, empty(), empty()), rooting(4, empty(), empty())), rooting(5, empty(), empty()));;
 show_int_btree(test_avl_rd);; 
 show_int_btree(rd(test_avl_rd));;
@@ -316,6 +348,12 @@ desequilibre(test_supr_avl);;
 show_int_btree(suppr_avl(4,test_supr_avl));;
 desequilibre(suppr_avl(4,test_supr_avl));;
 
+bst_seek(5,test_supr_avl);;
+bst_seek(10,test_supr_avl);;
+
 let test_list: int list = [3;8;1;9;4;7];;
 let test_create_avl: int t_avltree = avl_rnd_create(test_list);;
 show_int_btree(test_create_avl);;
+
+show_int_btree(avl_rnd_create(random_list_int(5)));;
+show_int_btree(avl_rnd_create(random_list_int(6)));;
