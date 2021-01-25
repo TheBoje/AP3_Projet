@@ -8,17 +8,14 @@ open Btree;;
 
 type 'a t_avltree = 'a bst;;
 
-(* A implémenter : (- a faire, + en cours, | fait)
-  | rd('a t_avltree) -> 'a t_avltree
-  | rg('a t_avltree) -> 'a t_avltree
-  | rdg('a t_avltree) -> 'a t_avltree
-  | rgd('a t_avltree) -> 'a t_avltree
-  | reequilibrer('a t_avltree) -> 'a t_avltree
-  | desequilibre('a t_avltree) -> int
-  | max('a t_avltree) -> 'a
-  | dmax('a t_avltree) -> 'a t_avltree
-  | suppr_avl('a, 'a t_avltree) -> 'a t_avltree
-  | insert_avl('a, 'a t_avltree) -> 'a t_avltree
+(*
+  TODO LIST :
+  - Vérifier si bst_seek fonctionne pour les avl
+  - Test de complexité des algos (log n)
+  - Génération arbres sous-liste de longueur variable
+  - Compter le nombre de rotations effectuées (et estimer)
+    + variation en fonction de la taille
+  [ 3 9 9 123 2193 92 2 3 5 9 19 1]
 *)
 
 
@@ -248,13 +245,13 @@ let rec avl_rnd_create_aux ( l  , t : int list * int t_avltree) : int t_avltree 
      t
    else
      avl_rnd_create_aux( List.tl(l) , insert_avl(List.hd(l),t) )
-  ;;
+;;
   
 
 let avl_rnd_create (l: int list): int t_avltree =
   let t : int t_avltree=rooting(List.hd(l),empty(),empty())in
   avl_rnd_create_aux(List.tl(l),t)
-  ;;
+;;
  
 
 
