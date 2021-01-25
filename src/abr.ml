@@ -189,7 +189,7 @@ let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
 
   let sum : float ref = ref 0. in
 
-  for i=1 to tsample
+  for i=1 to tSample
   do
     sum := !sum +. float_of_int(unbalance(bst_rnd_create(treesSize)))
   done;
@@ -215,7 +215,7 @@ let seq_unbalance_avg (tSample, treesSize : int * int) : float =
 
   let sum : float ref = ref 0. in
 
-  for i=1 to tsample
+  for i=1 to tSample
   do
     sum := !sum +. float_of_int(unbalance(bst_seq_create(treesSize)))
   done;
@@ -240,7 +240,7 @@ let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
   
   let sum : float ref = ref 0. in
 
-  for i=1 to tsample
+  for i=1 to tSample
   do
     sum := !sum +. float_of_int(unbalance(bst_mix_create(treesSize)))
   done;
@@ -266,4 +266,4 @@ mixed_unbalance_avg(100, 100);;
 
 rnd_unbalance_avgs_avg(1000, 100, 100);;
 mixed_unbalance_avgs_avg(1000, 100, 100);;
-Random.int 2;;
+
