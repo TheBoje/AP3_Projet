@@ -13,7 +13,7 @@ Afin d’estimer une moyenne des déséquilibres entre les arbres nous avons con
 
 Cette organisation permet de lancer peu de fois la dernière fonction tout en évaluant un grand nombre d’arbres, nous avons décidé de lancer l’expérimentation 10 fois sur 1000 moyennes de déséquilibre entre 100 arbres de taille 100 afin d’avoir une expérimentation produisant des résultats fiables sur des échantillons similaires (changer les paramètres pourrait fausser les résultats).
 
-|	expérimentation	|	Résultat pour les arbres au hasard	|	Résultat pour les arbres aves sous-suites	|
+|	Expérimentation	|	Résultat pour les arbres au hasard	|	Résultat pour les arbres aves sous-suites	|
 | :-------------------------:	|:------------------------------------------:	| :------------------------------------------------:	|
 |		1		|		    -0.01604			|			24.45545			|
 |		2		|		    -0.00133			|			24.41074			|
@@ -25,6 +25,6 @@ Cette organisation permet de lancer peu de fois la dernière fonction tout en é
 |		8		|		    -0.00629			|			24.47762			|
 |		9		|		     0.04008			|			24.55913			|
 |	       10		|		     0.02023			|			24.51649			|
-|	     moyenne		|		     0.00820			|			24.47947			|
+|	     Moyenne		|		     0.00820			|			24.47947			|
 
 On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs au hasard.
