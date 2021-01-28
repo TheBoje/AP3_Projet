@@ -27,4 +27,6 @@ Cette organisation permet de lancer peu de fois la dernière fonction tout en é
 |	       10		|		     0.02023			|			24.51649			|
 |	     Moyenne		|		     0.00820			|			24.47947			|
 
+La complexité des fonctions générant les résultats ci-dessus est en O(n)
+
 On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs au hasard.
