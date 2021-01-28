@@ -13,12 +13,16 @@ type 'a t_avltree = 'a bst;;
 
 (*
   TODO LIST :
-  | Vérifier si bst_seek fonctionne pour les avl
-  - Test de complexité des algos (log n)
   - Génération arbres sous-liste de longueur variable
   - Compter le nombre de rotations effectuées (et estimer)
     + variation en fonction de la taille
+    [3, 9, 12]@[1, 3, 4, 10] -> [3, 9, 12, 1, 3, 4, 10]
+    [3, 2, 3, [3, 9, 12], 9, 32, [1, 3, 4, 10], 412]
+
+    nb de rotations moyen : nb non ordonnés + nb de listes
+    nb reste proportionnel au nb de noeuds non ordonnés
  *)
+
 
 
 (*
@@ -434,9 +438,8 @@ let seek_avl_plot(n : int) : float =
     )
 ;;
 (*
-insert_avl_plot(1000);;
-suppr_avl_plot(1000);;
-
+insert_avl_plot(300);;
+suppr_avl_plot(300);;
+seek_avl_plot(100);;
 *)
 
-insert_avl_plot(1000);;
