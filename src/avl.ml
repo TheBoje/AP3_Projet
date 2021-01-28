@@ -350,8 +350,9 @@ let insert_avl_compute(n : int) : float array * float array =
   (
     for i = 1 to n 
     do 
+      let avl = avl_rnd_create(random_list_int(i, valeur_max)) in
       temps.(i) <- Sys.time();
-      ignore(avl_rnd_create(random_list_int(i, valeur_max)));
+      ignore(insert_avl(Random.int(valeur_max), avl));
       temps.(i) <- Sys.time() -. temps.(i);
       indices.(i) <- float_of_int(i);
     done;
@@ -438,4 +439,4 @@ suppr_avl_plot(1000);;
 
 *)
 
-seek_avl_plot(1000);;
+insert_avl_plot(1000);;
