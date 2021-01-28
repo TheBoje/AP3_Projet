@@ -1,7 +1,10 @@
-#directory "../data/";;
+#directory "./";;
 
 #load "btree.cmo";;
 #load "bst.cmo";;
+#use "AP2util.ml";;
+#load "graphics.cma";;
+#use "graphics.ml";;
 open Bst;;
 open Btree;;
 
@@ -27,8 +30,8 @@ type 'a t_avltree = 'a bst;;
  *)
 
 let rd(avl : 'a t_avltree) : 'a t_avltree =
-  if (isEmpty(avl) || isEmpty(rson(avl)))
-  then invalid_arg "rd : avl and avl.rson must not be empty"
+  if (isEmpty(avl) || isEmpty(lson(avl)))
+  then invalid_arg "rd : avl and avl.lson must not be empty"
   else (
     let (p, q) = (root(lson(avl)), root(avl)) in
     let (u, v, w) = (lson(lson(avl)), rson(lson(avl)), rson(avl)) in
@@ -47,8 +50,8 @@ let rd(avl : 'a t_avltree) : 'a t_avltree =
  *)
 
 let rg(avl : 'a t_avltree) : 'a t_avltree =
-  if (isEmpty(avl) || isEmpty(lson(avl)))
-  then invalid_arg "rg : avl and avl.lson must not be empty"
+  if (isEmpty(avl) || isEmpty(rson(avl)))
+  then invalid_arg "rg : avl and avl.rson must not be empty"
   else (
     let (p, q) = (root(avl), root(rson(avl))) in
     let (u, v, w) = (lson(avl), lson(rson(avl)), rson(rson(avl))) in
@@ -68,13 +71,9 @@ let rg(avl : 'a t_avltree) : 'a t_avltree =
  *)
 
 let rgd(avl : 'a t_avltree) : 'a t_avltree =
-  if (isEmpty(avl) || isEmpty(lson(avl)) || isEmpty(rson(lson(avl))))
-  then invalid_arg "rgd : avl and avl.lson and avl.lson.rson must not be empty"
-  else (
-    let (r, p, q) = (root(avl), root(lson(avl)), root(rson(lson(avl)))) in
-    let (t, u, v, w) = (lson(lson(avl)), lson(rson(lson(avl))), rson(rson(lson(avl))), rson(avl)) in
-    rooting(q, rooting(p, t, u), rooting(r, v, w))
-  )
+  let (r, ls, rs) = (root(avl), lson(avl), rson(avl)) in
+  let temp = rooting(r, rg(ls), rs) in
+  rd(temp)  
 ;;
 
 
@@ -89,13 +88,9 @@ let rgd(avl : 'a t_avltree) : 'a t_avltree =
  *)
 
 let rdg(avl : 'a t_avltree) : 'a t_avltree =
-  if (isEmpty(avl) || isEmpty(rson(avl)) || isEmpty(lson(rson(avl))))
-  then invalid_arg "rgd : avl and avl.rson and avl.rson.lson must not be empty"
-  else (
-    let (r, p, q) = (root(avl), root(rson(avl)), root(lson(rson(avl)))) in
-    let (t, u, v, w) = (lson(avl), lson(lson(rson(avl))), rson(lson(rson(avl))), rson(rson(avl))) in
-    rooting(q, rooting(r, t, u), rooting(p, v, w))
-  )
+  let (r, ls, rs) = (root(avl), lson(avl), rson(avl)) in
+  let temp = rooting(r, ls, rd(rs)) in
+  rg(temp) 
 ;;
 
 (* Retourne la plus grande des deux valeurs d'entrée *)
@@ -109,10 +104,7 @@ let v_max(a, b : 'a * 'a) : 'a =
 let rec avl_height(avl : 'a t_avltree) : int = 
   if isEmpty(avl)
   then 0
-  else
-    if (isEmpty(lson(avl)) && isEmpty(rson(avl)))
-    then 0
-    else 1 + v_max(avl_height(lson(avl)), avl_height(rson(avl)))
+  else 1 + v_max(avl_height(lson(avl)), avl_height(rson(avl)))
 ;;
 
 (* 
@@ -170,8 +162,8 @@ let rec reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
       if des = -2
       then 
         if desequilibre(rson(avl)) = 1
-        then rg(avl)
-        else rdg(avl)
+        then rdg(avl)
+        else rg(avl)
       else invalid_arg "reequilibrer: error desequilibre value"
 ;;
 
@@ -188,10 +180,10 @@ let rec suppr_avl(a,avl : 'a* 'a t_avltree) : 'a t_avltree =
       if a > root(avl)
       then reequilibrer( rooting( root(avl), lson(avl), suppr_avl(a, rson(avl))))
       else
-        if isEmpty( rson(avl) )
+        if isEmpty(rson(avl))
         then lson(avl)
         else
-          if isEmpty( lson(avl) )
+          if isEmpty(lson(avl))
           then rson(avl)
           else reequilibrer( rooting( max(lson(avl)), dmax(lson(avl)), rson(avl)))
 ;;
@@ -244,16 +236,10 @@ let avl_rnd_create (l : int list) : int t_avltree =
 ;;
 
 Random.self_init;;
-
-let set_elem (l, i, x : int list * int * int) : int list =
-  List.mapi(fun i' el -> if i = i' then x else el) l
-;;
-
-
-let rec random_list_int( n : int ) : int list =
+let rec random_list_int( n, max_val : int * int ) : int list =
   if n <= 0
   then []
-  else Random.int(20)::random_list_int(n-1)
+  else Random.int(max_val)::random_list_int(n-1, max_val)
 ;;
 
 
@@ -344,15 +330,80 @@ desequilibre(suppr_avl(4,test_supr_avl));;
 
 bst_seek(5,test_supr_avl);;
 bst_seek(10,test_supr_avl);;
+(* TODO Note : la fonction bst_seek fonctionne toujours pour les avl *)
 
 
 let test_list: int list = [3;8;1;9;4;7];;
 let test_create_avl: int t_avltree = avl_rnd_create(test_list);;
 show_int_btree(test_create_avl);;
 
-show_int_btree(avl_rnd_create(random_list_int(5)));;
-show_int_btree(avl_rnd_create(random_list_int(6)));;
+show_int_btree(avl_rnd_create(random_list_int(5, 100)));;
+show_int_btree(avl_rnd_create(random_list_int(6, 100)));;
 
-let temp = random_list_int(20);;
-let temp2 = avl_rnd_create(temp);;
-show_int_btree(temp2);;
+(* Tests de complexité *)
+
+let valeur_max : int = 3000;;
+
+let insert_avl_compute(n : int) : float array * float array =
+  let indices : float array = arr_make(n + 1, 0.0) in
+  let temps : float array = arr_make(n + 1, 0.0) in
+  (
+    for i = 1 to n 
+    do 
+      temps.(i) <- Sys.time();
+      ignore(avl_rnd_create(random_list_int(i, valeur_max)));
+      temps.(i) <- Sys.time() -. temps.(i);
+      indices.(i) <- float_of_int(i);
+    done;
+    (temps, indices);
+  )
+;;
+
+let insert_avl_plot(n : int) : float =
+  let init_time : float = Sys.time() in
+  let (temps, indices) : float array * float array = insert_avl_compute(n) in
+  let repere : t_rep = {orx = 50; ory = 50; extx = 900; exty = 500} in
+  (
+    open_graph(1000, 600);
+    clear_graph();
+    draw_rep(repere);
+    draw_curve(temps, indices, arr_len(indices) - 1, repere);
+    Sys.time() -. init_time;
+  )
+;;
+
+let suppr_avl_compute(n : int) : float array * float array =
+  let indices : float array = arr_make(n + 1, 0.0) in
+  let temps : float array = arr_make(n + 1, 0.0) in
+  (
+    for i = 1 to n 
+    do 
+      let rnd_list = random_list_int(i, valeur_max) in
+      let avl = avl_rnd_create(rnd_list) in
+      temps.(i) <- Sys.time();
+      ignore(suppr_avl(nth(rnd_list, Random.int(len(rnd_list))), avl));
+      temps.(i) <- Sys.time() -. temps.(i);
+      indices.(i) <- float_of_int(i);
+    done;
+    (temps, indices);
+  )
+;;
+
+let suppr_avl_plot(n : int) : float =
+  let init_time : float = Sys.time() in
+  let (temps, indices) : float array * float array = suppr_avl_compute(n) in
+  let repere : t_rep = {orx = 50; ory = 50; extx = 900; exty = 500} in
+  (
+    open_graph(1000, 600);
+    clear_graph();
+    draw_rep(repere);
+    draw_curve(temps, indices, arr_len(indices) - 1, repere);
+    Sys.time() -. init_time;
+  )
+;;
+
+(*
+insert_avl_plot(1000);;
+
+*)
+suppr_avl_plot(1000);;
