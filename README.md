@@ -1,7 +1,7 @@
 # Algorithme et Programmation 3 </br> Compte rendu de projet
 
 M.Laurent Fuchs</br>
-Groupe 1, Yann Berthelot, Louis Leenart & Alexis Louail
+Groupe 1: Yann Berthelot, Louis Leenart & Alexis Louail
 ## Partie 1 : Arbres binaires de recherche
 ### Question 1
 // TODO
@@ -38,16 +38,23 @@ On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils s
 ## Arbres AVL
 ### Implantation d'un module `Avl`
 #### Question 1
-Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = 'a bst`. Nous avons aussi implémenté les opérations suivante : 
-- `rd(avl : 'a t_avltree) : 'a t_avltree` effectue la `Rotation Droite` de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.lson` existent.
-- `rg(avl : 'a t_avltree) : 'a t_avltree` effectue la `Rotation Gauche` de l'AVL
-- ``
+Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = 'a bst`. Nous avons aussi implémenté les opérations suivante dans le fichier `avl.ml` : 
+- `rd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Droite de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.lson` existent.
+- `rg(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Gauche de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.rson` existent.
+- `rgd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Gauche Droite de l'AVL, qui repose sur `rd()` et `rg()`.
+- `rdg(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Droite Gauche de l'AVL, qui repose sur `rd()` et `rg()`.
+
+Les exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`. // TODO Don't forget me 
 #### Question 2
-// TODO
+Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à cette opération. De plus, nous pouvons aussi utiliser la structure `improvedAvl` qui est sous la forme `('a * int) t_avltree` où `'a` représente la valeur du noeud, et `int` la valeur du déséquilibre. On utilise `getValue(avl : ('a * int) t_avltree) : 'a` et `getDes(avl : ('a * int) t_avltree) : int` pour accéder à la valeur et au déséquilibre de l'arbre.
 #### Question 3
-// TODO
+Les opérations ajoutées sont : 
+- `suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree` avec `a` la valeur a supprimer, et `avl` l'arbre d'entrée.
+- `insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree` avec `a` la valeur a ajouter, et `avl` l'arbre d'entrée. On note que si la valeur `a` existe déjà dans l'arbre, alors on ignore la commande.
+- `max(avl : 'a t_avltree) : 'a` retourne l'élément maximal de `avl`.
+- `dmax(avl : 'a t_avltree) : 'a t_avltree` retourne `avl` privé de son élément maximal.
 #### Question 4
-// TODO
+Nous remarquons que l'utilisation de la fonction `bst_seek (elem, tree : 'a * 'a t_avltree) : bool` est encore fonctionnelle pour notre implantation du type `t_avltree`. Cependant, cette fonction devrait être modifiée pour recevoir la structure `'a * int t_avltree`.
 ### Expérimentations avec les arbres AVL
 #### Question 1
 // TODO

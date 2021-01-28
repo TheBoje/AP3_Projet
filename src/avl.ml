@@ -97,6 +97,18 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   rg(temp) 
 ;;
 
+
+let getValue(avl : ('a * int) t_avltree) : 'a =
+  let (v, des) : ('a * int) =  root(avl) in
+  v
+;;
+
+let getDes(avl : ('a * int) t_avltree) : int =
+  let (v, des) : ('a * int) =  root(avl) in
+  des
+;;
+
+
 (* Retourne la plus grande des deux valeurs d'entrée *)
 let v_max(a, b : 'a * 'a) : 'a = 
   if (a >= b)
@@ -137,7 +149,6 @@ let rec max(avl : 'a t_avltree) : 'a =
 (*
   Retourne un avl privé de son éĺément maximal qu'il faut rééquilibrer.
  *)
-
 let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
   then invalid_arg "dmax : avl must not be empty"
@@ -152,7 +163,7 @@ let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
   Équilibre l'avl
  *)
 
-let rec reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
+let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
   let des = desequilibre(avl) in
   if (des = 0 || des = -1 || des = 1)
   then avl
@@ -171,10 +182,29 @@ let rec reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
       else invalid_arg "reequilibrer: error desequilibre value"
 ;;
 
+let reequilibrer_improved(avl : ('a * int) t_avltree) : ('a * int) t_avltree =
+  let des = getDes(avl) in
+  if (des = 0 || des = -1 || des = 1)
+  then avl
+  else 
+    if des = 2
+    then 
+      if getDes(lson(avl)) = 1
+      then rd(avl)
+      else rgd(avl)
+    else 
+      if des = -2
+      then 
+        if getDes(rson(avl)) = 1
+        then rdg(avl)
+        else rg(avl)
+      else invalid_arg "reequilibrer: error desequilibre value"
+;;
+
 (*
   Supprime A de l'avl  
  *)
-let rec suppr_avl(a,avl : 'a* 'a t_avltree) : 'a t_avltree =
+let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
   then empty()
   else
