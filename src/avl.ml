@@ -279,7 +279,7 @@ let rec random_sublist( n, max_val,last_val : int * int * int ) : int list =
   else
     (
     let m:int = (Random.int(max_val)+last_val)in
-    m::random_list_sublist(n-1, max_val,m)
+    m::random_sublist(n-1, max_val,m)
     )
 ;;
 
@@ -291,7 +291,7 @@ let rec random_list_sub_int( n, max_val,percent : int * int*int ) : int list =
       let m:int = (Random.int(max_val))in
       if(m<((max_val*percent)/100))
       then
-        random_list_sublist(5,max_val,0)@random_list_sub_int(n-1,max_val,percent)
+        random_sublist(5,max_val,0)@random_list_sub_int(n-1,max_val,percent)
       else
         m::random_list_sub_int(n-1,max_val,percent)
     )
