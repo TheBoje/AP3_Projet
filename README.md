@@ -2,11 +2,14 @@
 
 M.Laurent Fuchs</br>
 Groupe 1, Yann Berthelot, Louis Leenart & Alexis Louail
-
-## Réponse à la section 1.4
-
-### Expérimentation sur les ARB
-
+## Partie 1 : Arbres binaires de recherche
+### Question 1
+// TODO
+### Question 2
+// TODO
+### Question 3
+// TODO
+### Question 4
 Dans notre projet, les ABR sont créés à partir d’une liste générée de manière différente selon si l’on veut un arbre construit à partir de valeurs au hasard où si nous voulons un arbre contenant des sous-suites ordonnées mais en ne prenant toujours qu’un argument ; la taille de la liste voulue. Cela facilite grandement la fiabilité des expérimentations en permettant de pratiquer sur des échantillons semblables.
 
 Afin d’estimer une moyenne des déséquilibres entre les arbres nous avons construit et utilisé plusieurs fonctions : une fonction `unbalance(tree)` qui calcule le déséquilibre d’un arbre, une fonction `unbalance_avg(tSample, treesSize)` qui calcule la moyenne des déséquilibre d’un échantillon d’arbres générés par la fonction (`tSample` étant la taille de l’échantillon et `treesSize` la taille des arbres à créer et évaluer) et enfin une fonction `unbalance_avgs_avg(avgSample, treeSample, treesSize)` qui calcule une moyenne des moyennes des déséquilibres (`avgSample` étant le nombre de moyennes à évaluer).
@@ -30,3 +33,23 @@ Cette organisation permet de lancer peu de fois la dernière fonction tout en é
 La complexité des fonctions générant les résultats ci-dessus est en O(n)
 
 On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs au hasard.
+
+
+## Arbres AVL
+### Implantation d'un module `Avl`
+#### Question 1
+Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = 'a bst`. Nous avons aussi implémenté les opérations suivante : 
+- `rd(avl : 'a t_avltree) : 'a t_avltree` effectue la `Rotation Droite` de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.lson` existent.
+- `rg(avl : 'a t_avltree) : 'a t_avltree` effectue la `Rotation Gauche` de l'AVL
+- ``
+#### Question 2
+// TODO
+#### Question 3
+// TODO
+#### Question 4
+// TODO
+### Expérimentations avec les arbres AVL
+#### Question 1
+// TODO
+#### Question 2
+// TODO
