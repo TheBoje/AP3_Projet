@@ -247,6 +247,32 @@ let rec random_list_int( n, max_val : int * int ) : int list =
 ;;
 
 
+Random.self_init;;
+let rec random_sublist( n, max_val,last_val : int * int * int ) : int list =
+  if n <= 0
+  then []
+  else
+    (
+    let m:int = (Random.int(max_val)+last_val)in
+    m::random_list_sublist(n-1, max_val,m)
+    )
+;;
+
+let rec random_list_sub_int( n, max_val,percent : int * int*int ) : int list =
+  if n <= 0
+  then []
+  else
+    (
+      let m:int = (Random.int(max_val))in
+      if(m<((max_val*percent)/100))
+      then
+        random_list_sublist(5,max_val,0)@random_list_sub_int(n-1,max_val,percent)
+      else
+        m::random_list_sub_int(n-1,max_val,percent)
+    )
+;;
+
+
 
 
 
@@ -343,6 +369,12 @@ show_int_btree(test_create_avl);;
 
 show_int_btree(avl_rnd_create(random_list_int(5, 100)));;
 show_int_btree(avl_rnd_create(random_list_int(6, 100)));;
+
+random_sublist( 5,100 ,0 );;
+
+show_int_btree(avl_rnd_create(random_list_sub_int(10,100,10)));;
+
+
 
 (* Tests de complexité *)
 
@@ -442,4 +474,6 @@ insert_avl_plot(300);;
 suppr_avl_plot(300);;
 seek_avl_plot(100);;
 *)
+
+
 
