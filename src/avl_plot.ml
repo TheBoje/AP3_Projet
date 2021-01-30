@@ -7,6 +7,7 @@
 #load "bst.cmo";;
 open Bst;;
 open Btree;;
+#use "avl.ml";;
 
 
 (* Tests de complexité *)
@@ -105,5 +106,5 @@ let seek_avl_plot(n : int) : float =
 (*
 insert_avl_plot(300);;
 suppr_avl_plot(300);;
-*)
 seek_avl_plot(300);;
+*)

@@ -10,7 +10,6 @@ type 'a t_avltree = 'a bst;;
 
 (*
   TODO LIST :
-  - Génération arbres sous-liste de longueur variable
   - Compter le nombre de rotations effectuées (et estimer)
     + variation en fonction de la taille
     [3, 9, 12]@[1, 3, 4, 10] -> [3, 9, 12, 1, 3, 4, 10]
@@ -252,14 +251,14 @@ let rec bst_seek (elem, tree : 'a * 'a t_avltree) : bool =
 ;;
 
 
-let rec avl_rnd_create_aux (l, t : int list * int t_avltree) : int t_avltree =
+let rec avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
   match l with
   | [] -> t
   | hd::tl -> avl_rnd_create_aux(tl, insert_avl(hd, t))
 ;;
 
 
-let avl_rnd_create (l : int list) : int t_avltree =
+let avl_rnd_create (l : 'a list) : 'a t_avltree =
   let t : int t_avltree = rooting( List.hd(l), empty(), empty()) in
   avl_rnd_create_aux(List.tl(l), t)
 ;;
@@ -273,26 +272,30 @@ let rec random_list_int( n, max_val : int * int ) : int list =
 
 
 Random.self_init;;
-let rec random_sublist( n, max_val,last_val : int * int * int ) : int list =
+let rec random_sublist(n, max_val, last_val : int * int * int ) : int list =
   if n <= 0
   then []
   else
     (
-    let m:int = (Random.int(max_val)+last_val)in
-    m::random_sublist(n-1, max_val,m)
+    let m : int = (Random.int(max_val) + last_val)in
+    m::random_sublist(n - 1, max_val, m)
     )
 ;;
 
-let rec random_list_sub_int( n, max_val,percent : int * int*int ) : int list =
+let rec random_list_sub( n, max_val, percent : int * int * int ) : int list =
   if n <= 0
   then []
   else
     (
-      let m:int = (Random.int(max_val))in
-      if(m<((max_val*percent)/100))
-      then
-        random_sublist(5,max_val,0)@random_list_sub_int(n-1,max_val,percent)
-      else
-        m::random_list_sub_int(n-1,max_val,percent)
+      let try_sublist : int = Random.int(100) in
+      let random_sublist_len : int = Random.int(11) + 2 in
+      if (try_sublist < percent && random_sublist_len <= n)
+      then 
+      (
+        let updated_n : int = n - random_sublist_len in
+        let (first_half, second_half) : (int * int) = ((updated_n/2), updated_n - (updated_n/2)) in 
+        random_list_sub(first_half,max_val,percent)@random_sublist(random_sublist_len, max_val, 0)@random_list_sub(second_half,max_val,percent)
+      )
+      else Random.int(max_val)::random_list_sub(n-1,max_val,percent)
     )
 ;;

@@ -5,6 +5,9 @@
 #load "bst.cmo";;
 open Bst;;
 open Btree;;
+#use "avl.ml";;
+Random.self_init;;
+
 
 (*TESTS*)
 
@@ -101,6 +104,6 @@ show_int_btree(test_create_avl);;
 show_int_btree(avl_rnd_create(random_list_int(5, 100)));;
 show_int_btree(avl_rnd_create(random_list_int(6, 100)));;
 
-random_sublist( 5,100 ,0 );;
-
-show_int_btree(avl_rnd_create(random_list_sub_int(10,100,10)));;
+random_sublist( 10,10, 90);;
+random_list_sub(20,100,50);;
+show_int_btree(avl_rnd_create(random_list_sub(100,100,50)));;
