@@ -156,7 +156,7 @@ let v_max(a, b : 'a * 'a) : 'a =
 (* 
   Retourne hauteur de l'avl 
   input : 
-  - avl : arbre duquel on souhaite connaitre la hauteur
+  - avl : arbre auquel on souhaite connaitre la hauteur
   output :
   - int : taille de l'arbre
 *)
@@ -170,7 +170,7 @@ let rec avl_height(avl : 'a t_avltree) : int =
 (*
   Calcule le déséquilibre de l'arbre
   input : 
-  - avl : arbre duquel on souhaite obtenir le déséquilibre
+  - avl : arbre auquel on souhaite obtenir le déséquilibre
   output :
   - int : déséquilibre de l'arbre
   Pour calculer ce déséquilibre, on utilise la formule suivante : 
@@ -215,9 +215,16 @@ let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
 ;;
 
 (*
-  Équilibre l'avl
- *)
-
+  Rééquilibre l'arbre
+  input : 
+  - avl : arbre à rééquilibrer
+  output :
+  - 'a t_avltree : arbre rééquilibré
+  Note: avec notre structure de données actuelle, la compléxité
+  est de l'ordre de O(n), avec n la taille de avl. Pour obtenir
+  une complexité O(log n), il faudrait stocker le déséquilibre
+  de chaque noeud au lieu de le calculer à chaque appel.
+*)
 let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
   let des = desequilibre(avl) in
   if (des = 0 || des = -1 || des = 1)
@@ -237,6 +244,18 @@ let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
       else invalid_arg "reequilibrer: error desequilibre value"
 ;;
 
+(*
+  Rééquilibre l'arbre (structure de données améliorée)
+  input : 
+  - avl : arbre à rééquilibrer
+  output :
+  - ('a * int) t_avltree : arbre rééquilibré
+  Note: avec la structure de données actuelle, la complexité
+  en temps de cette fonction est de l'ordre de O(log n) avec
+  n la taille de avl. Cependant, les rotations rd, rg, rgd
+  et rdg ne mettent pas à jour les valeurs de déséquilibre
+  de l'arbre.
+*)
 let reequilibrer_improved(avl : ('a * int) t_avltree) : ('a * int) t_avltree =
   let des = getDes(avl) in
   if (des = 0 || des = -1 || des = 1)
@@ -257,7 +276,15 @@ let reequilibrer_improved(avl : ('a * int) t_avltree) : ('a * int) t_avltree =
 ;;
 
 (*
-  Supprime A de l'avl  
+  Supprime un noeud de l'arbre
+  input : 
+  - a : valeur du noeud à supprimer
+  - avl : arbre auquel on souhaite retirer a
+  output : 
+  - 'a t_avltree : arbre auquel on a supprimé le noeud
+  Note: étant donné que cette fonction dépend de la fonction
+  reequilibrer() (qui a une complexité de O(n)), la 
+  complexité de cette fonction est aussi de O(n).
  *)
 let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
@@ -278,7 +305,18 @@ let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
 ;;
 
 (*
-  Ajoute A à l'avl
+  Ajoute un noeud a l'arbre
+  input : 
+  - a : valeur du noeud à ajouter
+  - avl : arbre auquel on souhaite ajouter a
+  output : 
+  - 'a t_avltree : arbre auquel on a ajouté le noeud
+  Note1: Si a existe déjà dans l'arbre avl, on ignore
+  l'ajout de la valeur.
+  Note2: étant donné que cette fonction dépend de la 
+  fonction reequilibrer() (qui a une complexité de 
+  O(n)), la complexité de cette fonction est aussi de
+  O(n).
  *)
 let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
@@ -297,6 +335,19 @@ let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
   )
 ;;
 
+(* 
+  Recherche une valeur dans l'arbre
+  input : 
+  - a : valeur du noeud à trouver
+  - avl : arbre dans lequel on cherche a
+  output : 
+  - bool : True -> a existe dans avl, 
+           False -> a n'existe pas dans avl
+  Note: Cette fonction est fonctionnelle pour les 
+  avl, mais pas pour la structure de données améliorée
+  ('a * int), structure pour laquelle cette fonction
+  nécessite des modifications minimales. 
+*)
 let rec bst_seek (elem, tree : 'a * 'a t_avltree) : bool =
   if isEmpty(tree)
   then false
@@ -309,17 +360,33 @@ let rec bst_seek (elem, tree : 'a * 'a t_avltree) : bool =
       else true
 ;;
 
-
-let rec avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
+(* 
+  FONCTION PRIVÉE 
+  Créé un avl à partir d'une liste
+  input : 
+  - l : liste des valeurs de l'avl 
+  - t : arbre de retour
+  output : 
+  - 'a t_avltree : avl créé à partir de la liste
+  d'entrée l
+*)
+let rec __avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
   match l with
   | [] -> t
-  | hd::tl -> avl_rnd_create_aux(tl, insert_avl(hd, t))
+  | hd::tl -> __avl_rnd_create_aux(tl, insert_avl(hd, t))
 ;;
 
-
+(* 
+  Crée un avl à partir d'une liste
+  input : 
+  - l : liste de valeur de l'arbre à créer
+  output :
+  - 'a t_avltree : avl créé à partir de la 
+  liste l
+*)
 let avl_rnd_create (l : 'a list) : 'a t_avltree =
   let t : int t_avltree = rooting( List.hd(l), empty(), empty()) in
-  avl_rnd_create_aux(List.tl(l), t)
+  __avl_rnd_create_aux(List.tl(l), t)
 ;;
 
 Random.self_init;;
@@ -330,7 +397,6 @@ let rec random_list_int( n, max_val : int * int ) : int list =
 ;;
 
 
-Random.self_init;;
 let rec random_sublist(n, max_val, last_val : int * int * int ) : int list =
   if n <= 0
   then []
