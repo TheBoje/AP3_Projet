@@ -12,8 +12,6 @@ type 'a t_avltree = 'a bst;;
   TODO LIST :
   - Compter le nombre de rotations effectuées (et estimer)
     + variation en fonction de la taille
-    [3, 9, 12]@[1, 3, 4, 10] -> [3, 9, 12, 1, 3, 4, 10]
-    [3, 2, 3, [3, 9, 12], 9, 32, [1, 3, 4, 10], 412]
 
     nb de rotations moyen : nb non ordonnés + nb de listes
     nb reste proportionnel au nb de noeuds non ordonnés
@@ -22,6 +20,11 @@ type 'a t_avltree = 'a bst;;
 
 
 (*
+  Rotation droite de l'arbre 
+  input : 
+  - avl : arbre qui va subir la rotation
+  output :
+  - 'a t_avltree : arbre qui a subi la rotation
      (Q)                (P)
     /  \               /  \
   (P)   W  --rd()->   U   (Q)
@@ -42,6 +45,11 @@ let rd(avl : 'a t_avltree) : 'a t_avltree =
 
 
 (*
+  Rotation gauche de l'arbre 
+  input : 
+  - avl : arbre qui va subir la rotation
+  output :
+  - 'a t_avltree : arbre qui a subi la rotation
     (P)                 (Q)
    /  \                /  \
   U   (Q)  --rg()->  (P)   W
@@ -61,6 +69,11 @@ let rg(avl : 'a t_avltree) : 'a t_avltree =
 
 
 (*
+  Rotation "gauche droite" de l'arbre 
+  input : 
+  - avl : arbre qui va subir la rotation
+  output :
+  - 'a t_avltree : arbre qui a subi la rotation
        (R)                     (Q)
       /  \                   /    \
     (P)   W                (P)    (R)
@@ -78,6 +91,11 @@ let rgd(avl : 'a t_avltree) : 'a t_avltree =
 
 
 (*
+  Rotation droite gauche de l'arbre 
+  input : 
+  - avl : arbre qui va subir la rotation
+  output :
+  - 'a t_avltree : arbre qui a subi la rotation
     (R)                      (Q)
     /  \                    /    \
   T   (P)                (R)    (P)
@@ -94,37 +112,71 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
 ;;
 
 
+(*
+  Récupération de la valeur du noeud de l'avl. Utilisé pour les arbres avl améliorés (déséquilibre stocké dans le noeud de l'arbre)
+  input : 
+  - avl : arbre dont on souhaite avoir la valeur au noeud
+  output :
+  - 'a : valeur du noeud de l'arbre
+*)
 let getValue(avl : ('a * int) t_avltree) : 'a =
   let (v, des) : ('a * int) =  root(avl) in
   v
 ;;
 
+(*
+  Récupération de la valeur du déséquilibre de l'avl. Utilisé pour les arbres avl améliorés (déséquilibre stocké dans le noeud de l'arbre)
+  input : 
+  - avl : arbre dont on souhaite avoir le déséquilibre
+  output :
+  - int : valeur du déséquilibre de l'arbre
+*)
 let getDes(avl : ('a * int) t_avltree) : int =
   let (v, des) : ('a * int) =  root(avl) in
   des
 ;;
 
 
-(* Retourne la plus grande des deux valeurs d'entrée *)
+(* 
+  Retourne la plus grande des deux valeurs d'entrée 
+  input :
+  - a : valeur 1
+  - b : valeur 2
+  output :
+  - 'a : plus grande valeur entre a et b
+*)
 let v_max(a, b : 'a * 'a) : 'a = 
   if (a >= b)
   then a
   else b
 ;;
 
-(* Retourne hauteur de l'avl *)
+
+
+(* 
+  Retourne hauteur de l'avl 
+  input : 
+  - avl : arbre duquel on souhaite connaitre la hauteur
+  output :
+  - int : taille de l'arbre
+*)
 let rec avl_height(avl : 'a t_avltree) : int = 
   if isEmpty(avl)
   then 0
   else 1 + v_max(avl_height(lson(avl)), avl_height(rson(avl)))
 ;;
 
-(* 
-  Retourne le déséquilibre de l'avl
-  On calcule le déséquilibre de l'avl de la manière suivante :
-  desequilibre = hauteur(lson) - hauteur(rson)
-  avec lson, rson les fils gauche et droit de l'arbre d'entrée
- *)
+
+(*
+  Calcule le déséquilibre de l'arbre
+  input : 
+  - avl : arbre duquel on souhaite obtenir le déséquilibre
+  output :
+  - int : déséquilibre de l'arbre
+  Pour calculer ce déséquilibre, on utilise la formule suivante : 
+  desequilibre = hauteur(lson) - hauteur(rson) avec lson et rson 
+  étant respectivement les fils gauche et droit de l'arbre.
+*)
 let desequilibre(avl :'a t_avltree) : int = 
   if isEmpty(avl)
   then 0
@@ -133,9 +185,12 @@ let desequilibre(avl :'a t_avltree) : int =
 
 
 (*
-  Retourne l'élément maximal de l'avl
- *)
-
+  Calcule l'élément maximal de l'arbre
+  input : 
+  - avl : arbre dans lequel on cherche le plus grand élément
+  output : 
+  'a : élément maximal de l'arbre
+*)
 let rec max(avl : 'a t_avltree) : 'a =
   if isEmpty(rson(avl))
   then root(avl)
@@ -143,8 +198,12 @@ let rec max(avl : 'a t_avltree) : 'a =
 ;;
 
 (*
-  Retourne un avl privé de son éĺément maximal qu'il faut rééquilibrer.
- *)
+  Retire l'élément maximal de l'arbre
+  input : 
+  - avl : arbre dont on souhaite retirer l'élément maximal
+  output : 
+  - 'a t_avltree : arbre dont on a retiré l'élément maximal
+*)
 let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
   then invalid_arg "dmax : avl must not be empty"
