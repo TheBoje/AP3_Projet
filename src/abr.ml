@@ -236,4 +236,5 @@ rnd_unbalance_avg(100, 100);;
 mixed_unbalance_avg(100, 100);;
 
 rnd_unbalance_avgs_avg(1000, 100, 100);;
-mixed_unbalance_avgs_avg(1000, 100, 100);;*)
+mixed_unbalance_avgs_avg(1000, 100, 100);;
+*)

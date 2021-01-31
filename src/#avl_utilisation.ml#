@@ -11,31 +11,31 @@ Random.self_init;;
 
 (*TESTS*)
 
-let test_avl_rd : int t_avltree = updateHeight(
+let test_avl_rd : int t_avltree = 
   rooting((1, 0), 
           rooting((2, 0), 
                   rooting((3, 0), empty(), empty()),
                   rooting((4, 0), empty(), empty())
             ),
           rooting((5, 0), empty(), empty())
-    ))
+    )
 ;;
 (* // TODO FIXME Parce que ca compile plus ;( *)
-show_int_btree(test_avl_rd);; 
-show_int_btree(rd(test_avl_rd));;
+show_int_btree(updateHeight(test_avl_rd));; 
+show_int_btree(rd(updateHeight(test_avl_rd)));;
 
 
-let test_avl_rg : int t_avltree = updateHeight(
+let test_avl_rg : int t_avltree = 
   rooting((1, 0), 
           rooting((3, 0), empty(), empty()),
           rooting((2, 0), 
                   rooting((4, 0), empty(), empty()),
                   rooting((5, 0), empty(), empty())
             )
-    ))
+    )
 ;;
-show_int_btree(test_avl_rg);; 
-show_int_btree(rg(test_avl_rg));;
+show_int_btree(updateHeight(test_avl_rg));; 
+show_int_btree(rg(updateHeight(test_avl_rg)));;
 
 
 let test_avl_rgd : int t_avltree = updateHeight(rooting((6, 0), 
@@ -81,7 +81,6 @@ show_int_btree(reequilibrer(test_reequilibre));;
 let test_insert_avl: int t_avltree = test_avl_rdg;;
 show_int_btree(test_insert_avl);;
 desequilibre(test_insert_avl);;
-(* erreur ->*)
 show_int_btree(insert_avl(8,test_insert_avl));;
 desequilibre((insert_avl(8,test_insert_avl)));;
 

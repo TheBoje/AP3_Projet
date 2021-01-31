@@ -20,7 +20,7 @@ let insert_avl_compute(n : int) : float array * float array =
   (
     for i = 1 to n 
     do 
-      let avl = avl_rnd_create(random_list_int(i, valeur_max)) in
+      let avl = avl_rnd_create(rnd_list_int(i, valeur_max)) in
       temps.(i) <- Sys.time();
       ignore(insert_avl(Random.int(valeur_max), avl));
       temps.(i) <- Sys.time() -. temps.(i);
@@ -49,7 +49,7 @@ let suppr_avl_compute(n : int) : float array * float array =
   (
     for i = 1 to n 
     do 
-      let rnd_list = random_list_int(i, valeur_max) in
+      let rnd_list = rnd_list_int(i, valeur_max) in
       let avl = avl_rnd_create(rnd_list) in
       temps.(i) <- Sys.time();
       ignore(suppr_avl(nth(rnd_list, Random.int(len(rnd_list))), avl));
@@ -80,7 +80,7 @@ let seek_avl_compute(n : int) : float array * float array =
   (
     for i = 1 to n 
     do 
-      let rnd_list = random_list_int(i, valeur_max) in
+      let rnd_list = rnd_list_int(i, valeur_max) in
       let avl = avl_rnd_create(rnd_list) in
       temps.(i) <- Sys.time();
       ignore(bst_seek(nth(rnd_list, Random.int(len(rnd_list))), avl));
