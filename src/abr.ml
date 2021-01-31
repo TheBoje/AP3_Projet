@@ -142,7 +142,7 @@ let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
   if size <= 0
   then l
   else
-    if size mod 2 = 0 && size != 2
+    if size mod 2 = 0 && size != 2 (* size =! 2 car si on tombe sur 2 en longeur la fonction boucle, n'arrive que rarement *)
     then
       let rndListLength : int = size/4 in
       let rndList : int list = gen_rnd_lst(rndListLength) in
@@ -160,17 +160,13 @@ let gen_mixed_lst (size : int ) : int list =
 (******** Fonctions de génération d'arbre ********)
 
 (*Génère un ABR à partir d'une liste de nombre aléatoire de taille size*)
+
 let  bst_rnd_create (size : int) : int bst =
   let l = gen_rnd_lst(size) in
   bst_lbuild(l)
 ;;
 
-(* Génère un ABR à partir d'une liste ordonnée *)
-let bst_seq_create(size : int) : int bst =
-  let min = Random.int size in
-  let l : int list = gen_seq_lst(min, size) in
-   bst_lbuild(l)
-;;
+(* Génère un ABR au hasard avec des sous-suites *)
 
 let bst_mix_create(size : int) : int bst =
   let l : int list = gen_mixed_lst(size) in
@@ -191,118 +187,49 @@ let unbalance (tree : int bst) : int =
 
 (* Retourne la moyenne de déséquilibre calculés sur tsample abr aléatoires de taille treesSize *)
 let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
-
   let sum : float ref = ref 0. in
-
   for i=1 to tSample
   do
     sum := !sum +. float_of_int(unbalance(bst_rnd_create(treesSize)))
   done;
-
   !sum /. float_of_int(tSample)
 ;;
 
 (* Retourne la moyenne de avgSample déséquilibres *)
-let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) : float =
-  
-  let sum : float ref = ref 0. in
 
+let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) : float =
+  let sum : float ref = ref 0. in
   for i=1 to avgSample
   do
     sum := !sum +. rnd_unbalance_avg(treeSample, treesSize);
   done;
-
   !sum /. float_of_int(avgSample)
 ;;
 
 
-(* unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
-let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
-  
-  let sum : float ref = ref 0. in
+(* rnd_unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
 
+let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
+  let sum : float ref = ref 0. in
   for i=1 to tSample
   do
     sum := !sum +. float_of_int(unbalance(bst_mix_create(treesSize)))
   done;
-
   !sum /. float_of_int(tSample)
 ;;
 
-let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
-  
-  let sum : float ref = ref 0. in
+(* rnd_unbalance_avgs_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
 
+let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
+  let sum : float ref = ref 0. in
   for i=1 to avgSample
   do
     sum := !sum +. mixed_unbalance_avg(treeSample, treesSize);
   done;
-
   !sum /. float_of_int(avgSample)
 ;;
 
 (******** TESTS ********)
-
- let rnd_avg_compute(n : int) : float array * float array =
-  let indices : float array = arr_make(n + 1, 0.0) in
-  let temps : float array = arr_make(n + 1, 0.0) in
-  (
-    for i = 1 to n 
-    do 
-      temps.(i) <- Sys.time();
-      ignore(rnd_unbalance_avgs_avg(100,100,i));
-      temps.(i) <- Sys.time() -. temps.(i);
-      indices.(i) <- float_of_int(i);
-      done;
-      (temps, indices);
-  )
- ;;
- 
- 
-let rnd_avg_plot(n : int) : float =
-  let init_time : float = Sys.time() in
-  let (temps, indices) : float array * float array = rnd_avg_compute(n) in
-  let repere : t_rep = {orx = 50; ory = 50; extx = 900; exty = 500} in
-  (
-    open_graph(1000, 600);
-    clear_graph();
-    draw_rep(repere);
-    draw_curve(temps, indices, arr_len(indices) - 1, repere);
-    Sys.time() -. init_time;
-    );;
-
-(*rnd_avg_plot(100);;*)
-
-
-let mixed_compute(n : int) : float array * float array =
-  let indices : float array = arr_make(n + 1, 0.0) in
-  let temps : float array = arr_make(n + 1, 0.0) in
-  (
-    for i = 1 to n 
-    do 
-      temps.(i) <- Sys.time();
-      ignore(mixed_unbalance_avgs_avg(100,i,100));
-      temps.(i) <- Sys.time() -. temps.(i);
-      indices.(i) <- float_of_int(i);
-      done;
-      (temps, indices);
-      )
-;;
-
-let mixed_avg_plot(n : int) : float =
-  let init_time : float = Sys.time() in
-  let (temps, indices) : float array * float array = mixed_compute(n) in
-  let repere : t_rep = {orx = 50; ory = 50; extx = 900; exty = 500} in
-  (
-    open_graph(1000, 600);
-    clear_graph();
-    draw_rep(repere);
-    draw_curve(temps, indices, arr_len(indices) - 1, repere);
-    Sys.time() -. init_time;
-    )
-;;
-
-(*mixed_avg_plot(100);;*)
 
 (*
 rnd_unbalance_avg(100, 100);;
