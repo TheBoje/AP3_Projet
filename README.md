@@ -77,4 +77,6 @@ Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et
 Nous remarquons que la complexité de ces trois fonctions semble être de l'ordre de O(n). En effet, sans implémenter la structure `'a * int t_btree` pour ces fonctions, il est nécessaire de faire un appel aux fonctions `desequilibre` et `reequilibrer` étant donné que la donné n'est ni conservée ni mise à jour. 
 
 #### Question 2
+
+### a Verif
 En créan plusieur Arbres Avl avec des parametres différents pour variés les longeurs des listes et sous-listes d'entiers on peut alors estimer le nomnre moyen de roation qui correspond donc au nombre de sous liste + le nombre d'entiers .
