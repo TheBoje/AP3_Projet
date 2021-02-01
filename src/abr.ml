@@ -66,7 +66,7 @@ let rec dmax(t : 'a t_btree) : 'a t_btree =
     else rooting(root(t), lson(t), dmax(rson(t)))
 ;;
 
-  
+
 let rec  bst_delete(e, t : 'a * 'a bst): 'a bst =
   if isEmpty(t)
   then t
@@ -237,4 +237,4 @@ mixed_unbalance_avg(100, 100);;
 
 rnd_unbalance_avgs_avg(1000, 100, 100);;
 mixed_unbalance_avgs_avg(1000, 100, 100);;
-*)
+ *)

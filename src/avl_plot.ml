@@ -105,9 +105,9 @@ let seek_avl_compute(n : int) : float array * float array =
       ignore(seek_avl(nth(rnd_list, Random.int(len(rnd_list))), avl));
       temps.(i) <- Sys.time() -. temps.(i);
       indices.(i) <- float_of_int(i);
-      done;
-      (temps, indices);
-      )
+    done;
+    (temps, indices);
+  )
 ;;
 
 let seek_avl_plot(n : int) : float =
@@ -120,14 +120,14 @@ let seek_avl_plot(n : int) : float =
     draw_rep(repere);
     draw_curve(temps, indices, arr_len(indices) - 1, repere);
     Sys.time() -. init_time;
-    )
+  )
 ;;
 
 insert_avl_plot(1000);;
 
 (*
 suppr_avl_plot(300);; 
-*)
+ *)
 (*
 seek_avl_plot(300);;
-*)
+ *)
