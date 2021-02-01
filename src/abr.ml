@@ -7,6 +7,7 @@
 open Btree;;
 open List;;
 type 'a bst = 'a t_btree;;
+Random.self_init;;
 
 (********* FONCTIONS DU MODULE FAIT EN TP ************)
 let rec bst_seek (elem, tree : 'a * 'a bst) : bool =
@@ -109,11 +110,12 @@ let rec size( tree : 'a t_btree) : int =
 (******** Fonctions de génération de liste ********)
 
 (* Génère une liste de size nombres aléatoires *)
+let max_val : int = 3000;;
 let rec gen_rnd_lst_aux (size, l : int * int list) : int list =
   if size = 0
   then l
   else
-    let n = Random.int 500 in
+    let n = Random.int max_val in
     let list = n::l in
     gen_rnd_lst_aux(size - 1, list)
 ;;
