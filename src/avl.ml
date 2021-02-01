@@ -5,7 +5,7 @@
 open Bst;;
 open Btree;;
 
-
+(* structure AVL : stockage de la valeur et de la hauteur dans le noeud via la structure suivante *)
 type 'a t_avltree = ('a * int) bst;;
 (*
   TODO LIST :
@@ -17,7 +17,7 @@ type 'a t_avltree = ('a * int) bst;;
  *)
 
 (*
-  Récupération de la valeur du déséquilibre de l'avl. Utilisé pour les arbres avl améliorés (déséquilibre stocké dans le noeud de l'arbre)
+  Récupération de la valeur du déséquilibre de l'avl
   input : 
   - avl : arbre dont on souhaite avoir le déséquilibre
   output :
@@ -32,7 +32,7 @@ let getHeight(avl : 'a t_avltree) : int =
 ;;
 
 (*
-  Récupération de la valeur du noeud de l'avl. Utilisé pour les arbres avl améliorés (déséquilibre stocké dans le noeud de l'arbre)
+  Récupération de la valeur du noeud de l'avl
   input : 
   - avl : arbre dont on souhaite avoir la valeur au noeud
   output :
@@ -59,6 +59,14 @@ let rec max(avl : 'a t_avltree) : 'a =
   else max(rson(avl))
 ;;
 
+(* 
+  Calcule le max de deux éléments
+  input : 
+  - a : élément 1 à comparer
+  - b : élément 2 à comparer
+  ouput : 
+  - 'a : élément le plus grand entre a et b 
+*)
 let max2(a, b : 'a * 'a) : 'a = 
   if a > b
   then a 
@@ -66,7 +74,13 @@ let max2(a, b : 'a * 'a) : 'a =
 ;;
 
 
-(* //TODO Comment me *)
+(* 
+  Mise à jour de la hauteur du noeud. À utiliser apres modification de l'avl
+  input : 
+  avl : arbre avl dont on veut mettre à jour la valeur de la hauteur dans le noeud
+  output :
+  'a t_avltree : avl avec valeur de hauteur mises à jour
+*)
 let updateHeight(avl : 'a t_avltree) : 'a t_avltree = 
   if (isEmpty(avl))
   then avl
@@ -100,36 +114,36 @@ let desequilibre(avl :'a t_avltree) : int =
   else getHeight(lson(avl)) - getHeight(rson(avl))
 ;;
 
+(* Fonctions d'affichage des AVL et de leurs différentes données *)
 
-
-let rec avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
+let rec _avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
   if (isEmpty(avl))
   then empty()
   else rooting(getValue(avl), avl_to_btree(lson(avl)), avl_to_btree(rson(avl)))
 ;;
 
-let rec avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
+let rec _avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
   if (isEmpty(avl))
   then empty()
   else rooting(getHeight(avl), avl_to_height_btree(lson(avl)), avl_to_height_btree(rson(avl)))
 ;;
 
-let rec avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
+let rec _avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
   if (isEmpty(avl))
   then empty()
   else rooting(desequilibre(avl), avl_to_deseq_btree(lson(avl)), avl_to_deseq_btree(rson(avl)))
 ;;
 
 let show_avl_tree(avl : int t_avltree) : unit =
-  show_int_btree(avl_to_btree(avl))
+  show_int_btree(_avl_to_btree(avl))
 ;;
 
 let show_height_tree(avl : 'a t_avltree) : unit = 
-  show_int_btree(avl_to_height_btree(avl))
+  show_int_btree(_avl_to_height_btree(avl))
 ;;
 
 let show_deseq_btree(avl : 'a t_avltree) : unit =
-  show_int_btree(avl_to_deseq_btree(avl))
+  show_int_btree(_avl_to_deseq_btree(avl))
 ;;
 
 
@@ -145,7 +159,6 @@ let show_deseq_btree(avl : 'a t_avltree) : unit =
   / \                    /  \
  U   V                  V    W
  *)
-
 let rd(avl : 'a t_avltree) : 'a t_avltree =
   if (isEmpty(avl) || isEmpty(lson(avl)))
   then invalid_arg "rd : avl and avl.lson must not be empty"
@@ -160,7 +173,6 @@ let rd(avl : 'a t_avltree) : 'a t_avltree =
 ;;
 
 
-
 (*
   Rotation gauche de l'arbre 
   input : 
@@ -173,7 +185,6 @@ let rd(avl : 'a t_avltree) : 'a t_avltree =
      /  \           /  \
     V    W         U    V
  *)
-
 let rg(avl : 'a t_avltree) : 'a t_avltree =
   if (isEmpty(avl) || isEmpty(rson(avl)))
   then invalid_arg "rg : avl and avl.rson must not be empty"
@@ -202,7 +213,6 @@ let rg(avl : 'a t_avltree) : 'a t_avltree =
      /  \
     U    V
  *)
-
 let rgd(avl : 'a t_avltree) : 'a t_avltree =
   let (r, ls, rs) = (root(avl), lson(avl), rson(avl)) in
   rd(rooting(r, rg(ls), rs))  
@@ -223,42 +233,9 @@ let rgd(avl : 'a t_avltree) : 'a t_avltree =
   /  \
   U    V
  *)
-
 let rdg(avl : 'a t_avltree) : 'a t_avltree =
   let (r, ls, rs) = (root(avl), lson(avl), rson(avl)) in
   rg(rooting(r, ls, rd(rs))) 
-;;
-
-
-
-(* 
-  Retourne la plus grande des deux valeurs d'entrée 
-  input :
-  - a : valeur 1
-  - b : valeur 2
-  output :
-  - 'a : plus grande valeur entre a et b
- *)
-let v_max(a, b : 'a * 'a) : 'a = 
-  if (a >= b)
-  then a
-  else b
-;;
-
-
-
-(* 
-// TODO OLD
-  Retourne hauteur de l'avl 
-  input : 
-  - avl : arbre auquel on souhaite connaitre la hauteur
-  output :
-  - int : taille de l'arbre
- *)
-let rec avl_height(avl : 'a t_avltree) : int = 
-  if isEmpty(avl)
-  then 0
-  else 1 + v_max(avl_height(lson(avl)), avl_height(rson(avl)))
 ;;
 
 
@@ -269,9 +246,7 @@ let rec avl_height(avl : 'a t_avltree) : int =
   output :
   - 'a t_avltree : arbre rééquilibré
   Note: avec notre structure de données actuelle, la compléxité
-  est de l'ordre de O(n), avec n la taille de avl. Pour obtenir
-  une complexité O(log n), il faudrait stocker le déséquilibre
-  de chaque noeud au lieu de le calculer à chaque appel.
+  est de l'ordre de O(log n), avec n la taille de avl
  *)
 let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
   let des = desequilibre(avl) in
@@ -310,37 +285,6 @@ let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
   )
 ;;
 
-(*
-// TODO OLD
-  Rééquilibre l'arbre (structure de données améliorée)
-  input : 
-  - avl : arbre à rééquilibrer
-  output :
-  - ('a * int) t_avltree : arbre rééquilibré
-  Note: avec la structure de données actuelle, la complexité
-  en temps de cette fonction est de l'ordre de O(log n) avec
-  n la taille de avl. Cependant, les rotations rd, rg, rgd
-  et rdg ne mettent pas à jour les valeurs de déséquilibre
-  de l'arbre.
- *)
-let reequilibrer_improved(avl : ('a * int) t_avltree) : ('a * int) t_avltree =
-  let des = desequilibre(avl) in
-  if (des = 0 || des = -1 || des = 1)
-  then avl
-  else 
-    if des = 2
-    then 
-      if desequilibre(lson(avl)) = 1
-      then rd(avl)
-      else rgd(avl)
-    else 
-      if des = -2
-      then 
-        if desequilibre(rson(avl)) = 1
-        then rdg(avl)
-        else rg(avl)
-      else invalid_arg "reequilibrer: error desequilibre value"
-;;
 
 (*
   Supprime un noeud de l'arbre
@@ -350,8 +294,8 @@ let reequilibrer_improved(avl : ('a * int) t_avltree) : ('a * int) t_avltree =
   output : 
   - 'a t_avltree : arbre auquel on a supprimé le noeud
   Note: étant donné que cette fonction dépend de la fonction
-  reequilibrer() (qui a une complexité de O(n)), la 
-  complexité de cette fonction est aussi de O(n).
+  reequilibrer() (qui a une complexité de O(log n)), la 
+  complexité de cette fonction est aussi de O(log n).
  *)
 let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
@@ -377,6 +321,7 @@ let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
           else reequilibrer(updateHeight(rooting((max(ls), height), dmax(ls), rs)))
 ;;
 
+
 (*
   Ajoute un noeud a l'arbre
   input : 
@@ -388,8 +333,8 @@ let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
   l'ajout de la valeur.
   Note2: étant donné que cette fonction dépend de la 
   fonction reequilibrer() (qui a une complexité de 
-  O(n)), la complexité de cette fonction est aussi de
-  O(n).
+  O(log n)), la complexité de cette fonction est aussi de
+  O(log n).
  *)
 let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
@@ -411,12 +356,8 @@ let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
   - a : valeur du noeud à trouver
   - avl : arbre dans lequel on cherche a
   output : 
-  - bool : True -> a existe dans avl, 
-           False -> a n'existe pas dans avl
-  Note: Cette fonction est fonctionnelle pour les 
-  avl, mais pas pour la structure de données améliorée
-  ('a * int), structure pour laquelle cette fonction
-  nécessite des modifications minimales. 
+  - 'a t_avltree : avl contenant la valeur recherchée dans le noeud.
+  Si l'élément d'existe pas dans l'avl, l'avl retourné est vide.
  *)
 let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
@@ -437,7 +378,7 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
 ;;
 
 (* 
-  FONCTION PRIVÉE 
+  [FONCTION PRIVÉE] 
   Créé un avl à partir d'une liste
   input : 
   - l : liste des valeurs de l'avl 
@@ -452,6 +393,7 @@ let rec __avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
   | hd::tl -> __avl_rnd_create_aux(tl, insert_avl(hd, t))
 ;;
 
+
 (* 
   Crée un avl à partir d'une liste
   input : 
@@ -465,11 +407,19 @@ let avl_rnd_create (l : 'a list) : 'a t_avltree =
   __avl_rnd_create_aux(List.tl(l), t)
 ;;
 
+
 (* Initialisation nécessaire du module d'aléatoire *)
 Random.self_init;;
 
 (*
-
+  Génère une liste d'entier de taille n avec tout élément
+  compris entre 0 et max_val.
+  input : 
+  - n : taille de la liste d'entiers 
+  - max_val : valeur maximale des élément de la liste
+  output : 
+  - int list : liste d'entier de n éléments compris entre
+  0 et max_val.
  *)
 let rec rnd_list_int(n, max_val : int * int ) : int list =
   if n <= 0
@@ -477,17 +427,48 @@ let rec rnd_list_int(n, max_val : int * int ) : int list =
   else Random.int(max_val)::rnd_list_int(n-1, max_val)
 ;;
 
-
-let rec rnd_sublist(n, max_val, last_val : int * int * int ) : int list =
+(*
+  [FONCTION PRIVÉE]
+  Génère une liste d'entier ordonnée de taille n avec tout
+  élément compris entre last_val et max_val.
+  input : 
+  - n : taille de la liste d'entiers 
+  - max_val : valeur maximale des élément de la liste
+  - last_val : valeur minimale de la liste
+  output : 
+  - int list : liste d'entier de n éléments compris entre
+  0 et max_val.
+  Note: cette fonction est utilisée pour créer des listes 
+  contenant des sous-listes ordonnées.
+ *)
+let rec _rnd_sublist(n, max_val, last_val : int * int * int ) : int list =
   if n <= 0
   then []
   else
     (
       let m : int = (Random.int(max_val) + last_val)in
-      m::rnd_sublist(n - 1, max_val, m)
+      m::_rnd_sublist(n - 1, max_val, m)
     )
 ;;
 
+
+(* 
+  Génère une liste d'entier de taille n contenant des sous-listes
+  ordonnées avec tout élément compris entre 0 et max_val.
+  input : 
+  - n : taille de la liste d'entiers 
+  - max_val : valeur maximale des élément de la liste
+  - percent : [0-100] taux d'apparition des sous-listes ordonnées
+  dans la liste d'entier. 
+      0 -> aucune sous-liste
+      100 -> uniquement des sous-listes ordonnées 
+  output : 
+  - int list : liste d'entier de n éléments compris entre
+  0 et max_val contenant des sous-listes ordonnées
+  Note: la taille des sous-listes ordonnées est une valeur aléatoire
+  entre 2 et 12. Idéalement, cette valeur devrait etre modifiable
+  selon les paramètres de création de la liste principale.  
+*)
 let rec rnd_list_sub(n, max_val, percent : int * int * int ) : int list =
   if n <= 0
   then []
@@ -500,7 +481,7 @@ let rec rnd_list_sub(n, max_val, percent : int * int * int ) : int list =
         (
           let updated_n : int = n - rnd_sublist_len in
           let (first_half, second_half) : (int * int) = ((updated_n/2), updated_n - (updated_n/2)) in 
-          rnd_list_sub(first_half,max_val,percent)@rnd_sublist(rnd_sublist_len, max_val, 0)@rnd_list_sub(second_half,max_val,percent)
+          rnd_list_sub(first_half,max_val,percent)@_rnd_sublist(rnd_sublist_len, max_val, 0)@rnd_list_sub(second_half,max_val,percent)
         )
       else Random.int(max_val)::rnd_list_sub(n-1,max_val,percent)
     )
