@@ -1,9 +1,30 @@
+(* ================================================== *)
+(* ================== MODULE AVL.ML ================= *)
+(*
+  Ce module a été créé par le groupe d'étudiants suivant :
+  - Yann Berthelot
+  - Louis Leenart
+  - Alexis Louail
+  Le contenu de ce module a été fait d'apres le sujet de
+  projet d'Algorithmique et Programmation 3.
+*)
+(* ================================================== *)
+
+
+(* ================================================== *)
+(* ================== IMPORTATIONS ================== *)
+(* ================================================== *)
+
 #directory "./";;
 
 #load "btree.cmo";;
 #load "bst.cmo";;
 open Bst;;
 open Btree;;
+
+(* ================================================== *)
+(* ====================== TYPE ====================== *)
+(* ================================================== *)
 
 (* structure AVL : stockage de la valeur et de la hauteur dans le noeud via la structure suivante *)
 type 'a t_avltree = ('a * int) bst;;
@@ -16,6 +37,46 @@ type 'a t_avltree = ('a * int) bst;;
     nb reste proportionnel au nb de noeuds non ordonnés
  *)
 
+(* ================================================== *)
+(* ================== AFFICHAGE AVL ================= *)
+(* ================================================== *)
+
+(* Fonctions d'affichage des AVL et de leurs différentes données *)
+
+let rec _avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(getValue(avl), avl_to_btree(lson(avl)), avl_to_btree(rson(avl)))
+;;
+
+let rec _avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(getHeight(avl), avl_to_height_btree(lson(avl)), avl_to_height_btree(rson(avl)))
+;;
+
+let rec _avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(desequilibre(avl), avl_to_deseq_btree(lson(avl)), avl_to_deseq_btree(rson(avl)))
+;;
+
+let show_avl_tree(avl : int t_avltree) : unit =
+  show_int_btree(_avl_to_btree(avl))
+;;
+
+let show_height_tree(avl : 'a t_avltree) : unit = 
+  show_int_btree(_avl_to_height_btree(avl))
+;;
+
+let show_deseq_btree(avl : 'a t_avltree) : unit =
+  show_int_btree(_avl_to_deseq_btree(avl))
+;;
+
+(* ================================================== *)
+(* ================ UTILITAIRES AVL ================= *)
+(* ================================================== *)
+
 (*
   Récupération de la valeur du déséquilibre de l'avl
   input : 
@@ -23,7 +84,7 @@ type 'a t_avltree = ('a * int) bst;;
   output :
   - int : valeur du déséquilibre de l'arbre
  *)
-let getHeight(avl : 'a t_avltree) : int =
+ let getHeight(avl : 'a t_avltree) : int =
   if (isEmpty(avl))
   then 0
   else
@@ -46,6 +107,7 @@ let getValue(avl : 'a t_avltree) : 'a =
     value
 ;;
 
+
 (*
   Calcule l'élément maximal de l'arbre
   input : 
@@ -53,11 +115,12 @@ let getValue(avl : 'a t_avltree) : 'a =
   output : 
   'a : élément maximal de l'arbre
  *)
-let rec max(avl : 'a t_avltree) : 'a =
+ let rec max(avl : 'a t_avltree) : 'a =
   if isEmpty(rson(avl))
   then getValue(avl)
   else max(rson(avl))
 ;;
+
 
 (* 
   Calcule le max de deux éléments
@@ -108,44 +171,16 @@ let updateHeight(avl : 'a t_avltree) : 'a t_avltree =
   desequilibre = hauteur(lson) - hauteur(rson) avec lson et rson 
   étant respectivement les fils gauche et droit de l'arbre.
  *)
-let desequilibre(avl :'a t_avltree) : int = 
+ let desequilibre(avl :'a t_avltree) : int = 
   if isEmpty(avl)
   then 0
   else getHeight(lson(avl)) - getHeight(rson(avl))
 ;;
 
-(* Fonctions d'affichage des AVL et de leurs différentes données *)
 
-let rec _avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
-  if (isEmpty(avl))
-  then empty()
-  else rooting(getValue(avl), avl_to_btree(lson(avl)), avl_to_btree(rson(avl)))
-;;
-
-let rec _avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
-  if (isEmpty(avl))
-  then empty()
-  else rooting(getHeight(avl), avl_to_height_btree(lson(avl)), avl_to_height_btree(rson(avl)))
-;;
-
-let rec _avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
-  if (isEmpty(avl))
-  then empty()
-  else rooting(desequilibre(avl), avl_to_deseq_btree(lson(avl)), avl_to_deseq_btree(rson(avl)))
-;;
-
-let show_avl_tree(avl : int t_avltree) : unit =
-  show_int_btree(_avl_to_btree(avl))
-;;
-
-let show_height_tree(avl : 'a t_avltree) : unit = 
-  show_int_btree(_avl_to_height_btree(avl))
-;;
-
-let show_deseq_btree(avl : 'a t_avltree) : unit =
-  show_int_btree(_avl_to_deseq_btree(avl))
-;;
-
+(* ================================================== *)
+(* ================= ROTATIONS AVL ================== *)
+(* ================================================== *)
 
 (*
   Rotation droite de l'arbre 
@@ -159,7 +194,7 @@ let show_deseq_btree(avl : 'a t_avltree) : unit =
   / \                    /  \
  U   V                  V    W
  *)
-let rd(avl : 'a t_avltree) : 'a t_avltree =
+ let rd(avl : 'a t_avltree) : 'a t_avltree =
   if (isEmpty(avl) || isEmpty(lson(avl)))
   then invalid_arg "rd : avl and avl.lson must not be empty"
   else (
@@ -238,6 +273,9 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   rg(rooting(r, ls, rd(rs))) 
 ;;
 
+(* ================================================== *)
+(* ================= OPERATIONS AVL ================= *)
+(* ================================================== *)
 
 (*
   Rééquilibre l'arbre
@@ -248,7 +286,7 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   Note: avec notre structure de données actuelle, la compléxité
   est de l'ordre de O(log n), avec n la taille de avl
  *)
-let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
+ let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
   let des = desequilibre(avl) in
   if (des = 0 || des = -1 || des = 1)
   then avl
@@ -275,7 +313,7 @@ let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
   output : 
   - 'a t_avltree : arbre dont on a retiré l'élément maximal
  *)
-let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
+ let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
   then invalid_arg "dmax : avl must not be empty"
   else (
@@ -297,7 +335,7 @@ let rec dmax(avl : 'a t_avltree) : 'a t_avltree =
   reequilibrer() (qui a une complexité de O(log n)), la 
   complexité de cette fonction est aussi de O(log n).
  *)
-let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
+ let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
   then empty()
   else
@@ -377,6 +415,11 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
       else seek_avl(elem, ls)
 ;;
 
+
+(* ================================================== *)
+(* ================= GENERATION AVL ================= *)
+(* ================================================== *)
+
 (* 
   [FONCTION PRIVÉE] 
   Créé un avl à partir d'une liste
@@ -387,7 +430,7 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
   - 'a t_avltree : avl créé à partir de la liste
   d'entrée l
  *)
-let rec __avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
+ let rec __avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
   match l with
   | [] -> t
   | hd::tl -> __avl_rnd_create_aux(tl, insert_avl(hd, t))
