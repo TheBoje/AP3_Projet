@@ -26,22 +26,23 @@ open Btree;;
 (* ====================== TYPE ====================== *)
 (* ================================================== *)
 
+
 (* structure AVL : stockage de la valeur et de la hauteur dans le noeud via la structure suivante *)
 type 'a t_avltree = ('a * int) bst;;
-(*
-  TODO LIST :
-  - Compter le nombre de rotations effectuées (et estimer)
-    + variation en fonction de la taille
 
-    nb de rotations moyen : nb non ordonnés + nb de listes
-    nb reste proportionnel au nb de noeuds non ordonnés
- *)
 
 (* ================================================== *)
 (* ================== AFFICHAGE AVL ================= *)
 (* ================================================== *)
 
-(* Fonctions d'affichage des AVL et de leurs différentes données *)
+
+(* 
+  Fonctions d'affichage des AVL et de leurs différentes 
+  données. Permet d'afficher :
+  - les valeurs de l'avl
+  - la hauteur de chaque noeud de l'avl
+  - le déséquilibre de chaque noeud de l'avl
+*)
 
 let rec _avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
   if (isEmpty(avl))
