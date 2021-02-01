@@ -4,15 +4,17 @@ M.Laurent Fuchs</br>
 Groupe 1: Yann Berthelot, Louis Leenart & Alexis Louail
 ## Partie 1 : Arbres binaires de recherche
 ### Question 1
-// TODO
+	La fonction `bst_rnd_create : int size -> 'a bst` créé un arbre de taille `size`, elle utilise deux fonctions auxiliaires : 
+* `gen_rnd_list : int size -> 'a list` qui génère une une liste de la taille de l'int donné en paramètre
+* `bst_build : 'a list ls -> 'a bst` qui créé un arbe binaire de recherche à partir de la liste donnée en paramètre
 ### Question 2
-// TODO
+	La fonction évaluant le déséquilibre d'un arbre est `unbalance : 'a bst tree -> int`. Elle calcule la différence de hauteur entre le fils gauche et le fils droit d'un arbre.
+La fonction `rnd_unbalance_avg : int tSample, int treesSize -> float` calcule la moyenne des déséquilibre d'un nombre tSample d'arbres construits à partir de suites de nombres entiers aléatoires de taille treesSize _Les résultats d'expérimentations se trouvent dans la section consacrée à la question 4._
 ### Question 3
-// TODO
+	La fonction `mixed_unbalance_avg : int tSample, int treesSize -> float` calcule la moyenne des déséquilibre d'un nombre tSample d'arbres construits à partir de suites de nombres entiers aléatoires et de sous-suites ordonnées de taille treesSize _Les résultats d'expérimentations se trouvent dans la section consacrée à la question 4._ 
 ### Question 4
 &nbsp; Dans notre projet, les ABR sont créés à partir d’une liste générée de manière différente selon si l’on veut un arbre construit à partir de valeurs au hasard où si nous voulons un arbre contenant des sous-suites ordonnées mais en ne prenant toujours qu’un argument ; la taille de la liste voulue. Cela facilite grandement la fiabilité des expérimentations en permettant de pratiquer sur des échantillons semblables.
-
-&nbsp; Afin d’estimer une moyenne des déséquilibres entre les arbres nous avons construit et utilisé plusieurs fonctions : une fonction `unbalance(tree)` qui calcule le déséquilibre d’un arbre, une fonction `unbalance_avg(tSample, treesSize)` qui calcule la moyenne des déséquilibre d’un échantillon d’arbres générés par la fonction (`tSample` étant la taille de l’échantillon et `treesSize` la taille des arbres à créer et évaluer) et enfin une fonction `unbalance_avgs_avg(avgSample, treeSample, treesSize)` qui calcule une moyenne des moyennes des déséquilibres (`avgSample` étant le nombre de moyennes à évaluer).
+`unbalance_avgs_avg : int avgSample, int treeSample, int treesSize -> float `calcule une moyenne des moyennes des déséquilibres (`avgSample` étant le nombre de moyennes à évaluer).
 
 &nbsp; Cette organisation permet de lancer peu de fois la dernière fonction tout en évaluant un grand nombre d’arbres, nous avons décidé de lancer l’expérimentation 10 fois sur 1000 moyennes de déséquilibre entre 100 arbres de taille 100 afin d’avoir une expérimentation produisant des résultats fiables sur des échantillons similaires (changer les paramètres pourrait fausser les résultats).
 
@@ -32,7 +34,7 @@ Groupe 1: Yann Berthelot, Louis Leenart & Alexis Louail
 
 La complexité des fonctions générant les résultats ci-dessus est en O(n)
 
-On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs au hasard.
+	On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs aléatoires.
 
 
 ## Arbres AVL

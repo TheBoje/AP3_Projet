@@ -144,9 +144,11 @@ let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
   if size <= 0
   then l
   else
-    if size mod 2 = 0 && size != 2 (* size =! 2 car si on tombe sur 2 en longeur la fonction boucle, n'arrive que rarement *)
+    if size mod 2 = 0
     then
-      let rndListLength : int = size/4 in
+      let rndListLength : int = (Random.int size) + 1 in
+      (* +1 afin de ne pas boucler si on tombe sur Random.int size = 0 *)
+      
       let rndList : int list = gen_rnd_lst(rndListLength) in
       gen_mixed_lst_aux(size - rndListLength, rndList@l)
     else
@@ -163,7 +165,8 @@ let gen_mixed_lst (size : int ) : int list =
 
 (*Génère un ABR à partir d'une liste de nombre aléatoire de taille size*)
 
-let  bst_rnd_create (size : int) : int bst =
+let  bst_rnd_create (size : int) : 'a bst =
+  Random.self_init();
   let l = gen_rnd_lst(size) in
   bst_lbuild(l)
 ;;
@@ -179,7 +182,7 @@ let bst_mix_create(size : int) : int bst =
 
 (* Retourne le déséquilibre entre le fils droit et le fils gauche d'un arbre
 soit ; la différence de hauteur entre le fils gauche et le fils droit *)
-let unbalance (tree : int bst) : int =
+let unbalance (tree : 'a bst) : int =
   if isEmpty(tree)
   then 0
   else
@@ -233,10 +236,10 @@ let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int
 
 (******** TESTS ********)
 
+
 (*
 rnd_unbalance_avg(100, 100);;
 mixed_unbalance_avg(100, 100);;
 
 rnd_unbalance_avgs_avg(1000, 100, 100);;
-mixed_unbalance_avgs_avg(1000, 100, 100);;
- *)
+mixed_unbalance_avgs_avg(100, 10, 100);;*)
