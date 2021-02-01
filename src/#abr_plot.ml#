@@ -19,10 +19,10 @@ let bst_rnd_compute(n : int) : float array * float array =
       if (i mod 10 = 0)
       then ignore(Printf.printf "%d\n" i; flush stdout);
       let bst = bst_rnd_create(i) in
-      let desec_val : float = float_of_int(unbalance(bst)) in
-      sum := !sum +. desec_val;
-      desec.(i) <- (!sum /. float_of_int(i));
-      indices.(i) <- float_of_int(i);
+      let desec_val : float = float_of_int(unbalance(bst));
+                              sum := !sum +. desec_val;
+                              desec.(i) <- (!sum /. float_of_int(i));
+                              indices.(i) <- float_of_int(i);
     done;
     (desec, indices);
   )
@@ -41,5 +41,5 @@ let bst_rnd_plot(n : int) : float =
   )
 ;;
 
-bst_rnd_plot(10000);;
+bst_rnd_plot(1000);;
 

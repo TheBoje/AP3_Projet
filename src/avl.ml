@@ -7,7 +7,6 @@ open Btree;;
 
 
 type 'a t_avltree = ('a * int) bst;;
-
 (*
   TODO LIST :
   - Compter le nombre de rotations effectuées (et estimer)
