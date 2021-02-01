@@ -25,8 +25,11 @@ type 'a t_avltree = ('a * int) bst;;
   - int : valeur du déséquilibre de l'arbre
 *)
 let getHeight(avl : 'a t_avltree) : int =
-  let (value, height) : ('a * int) =  root(avl) in
-  height
+  if (isEmpty(avl))
+  then 0
+  else
+    let (value, height) : ('a * int) =  root(avl) in
+    height
 ;;
 
 (*
@@ -37,8 +40,11 @@ let getHeight(avl : 'a t_avltree) : int =
   - 'a : valeur du noeud de l'arbre
 *)
 let getValue(avl : 'a t_avltree) : 'a =
-  let (value, height) : ('a * int) =  root(avl) in
-  value
+  if (isEmpty(avl))
+  then invalid_arg "avl: getValue on empty is not allowed"
+  else
+    let (value, height) : ('a * int) =  root(avl) in
+    value
 ;;
 
 (*
@@ -78,6 +84,7 @@ let updateHeight(avl : 'a t_avltree) : 'a t_avltree =
   )
 ;;
 
+
 (*
   Calcule le déséquilibre de l'arbre
   input : 
@@ -94,6 +101,37 @@ let desequilibre(avl :'a t_avltree) : int =
   else getHeight(lson(avl)) - getHeight(rson(avl))
 ;;
 
+
+
+let rec avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(getValue(avl), avl_to_btree(lson(avl)), avl_to_btree(rson(avl)))
+;;
+
+let rec avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(getHeight(avl), avl_to_height_btree(lson(avl)), avl_to_height_btree(rson(avl)))
+;;
+
+let rec avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(desequilibre(avl), avl_to_deseq_btree(lson(avl)), avl_to_deseq_btree(rson(avl)))
+;;
+
+let show_avl_tree(avl : int t_avltree) : unit =
+    show_int_btree(avl_to_btree(avl))
+;;
+
+let show_height_tree(avl : 'a t_avltree) : unit = 
+    show_int_btree(avl_to_height_btree(avl))
+;;
+
+let show_deseq_btree(avl : 'a t_avltree) : unit =
+  show_int_btree(avl_to_deseq_btree(avl))
+;;
 
 
 (*
@@ -364,10 +402,7 @@ let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
     else
       if a > value
       then reequilibrer(updateHeight(rooting((value, height), ls, insert_avl(a, rs))))
-      else 
-        if a = value
-        then avl
-        else invalid_arg "insert_avl : root value error"
+      else avl (* cas a = value*)
   )
 ;;
 

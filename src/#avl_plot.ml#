@@ -34,7 +34,7 @@ let insert_avl_compute(n : int) : float array * float array =
     for i = 1 to n 
     do 
       if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+      then Printf.printf "%d\n" i; flush;
       let avl = avl_rnd_create(rnd_list_int(i, valeur_max)) in
       temps.(i) <- Sys.time();
       ignore(insert_avl(Random.int(valeur_max), avl));
@@ -65,7 +65,7 @@ let suppr_avl_compute(n : int) : float array * float array =
     for i = 1 to n 
     do 
       if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+      then Printf.printf "%d\t" i; flush;
       let rnd_list = rnd_list_int(i, valeur_max) in
       let avl = avl_rnd_create(rnd_list) in
       temps.(i) <- Sys.time();
@@ -98,7 +98,7 @@ let seek_avl_compute(n : int) : float array * float array =
     for i = 1 to n 
     do 
       if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+      then Printf.printf "%d\t" i; flush;
       let rnd_list = rnd_list_int(i, valeur_max) in
       let avl = avl_rnd_create(rnd_list) in
       temps.(i) <- Sys.time();
@@ -126,7 +126,7 @@ let seek_avl_plot(n : int) : float =
 insert_avl_plot(1000);;
 
 (*
-suppr_avl_plot(300);; 
+suppr_avl_plot(300);;
 *)
 (*
 seek_avl_plot(300);;
