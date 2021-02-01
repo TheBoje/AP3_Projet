@@ -88,7 +88,7 @@ let insert_avl_plot(n : int) : float =
     draw_curve(temps, indices, arr_len(indices) - 1, repere);
     Sys.time() -. init_time;
   )
-;;
+;; 
 
 
 (*
