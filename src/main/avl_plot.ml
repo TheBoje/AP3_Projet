@@ -16,7 +16,7 @@
 (* ================== IMPORTATIONS ================== *)
 (* ================================================== *)
 
-#directory "src/usage";;
+#directory "../usage";;
 
 #use "ap2util.ml";;
 #load "graphics.cma";;

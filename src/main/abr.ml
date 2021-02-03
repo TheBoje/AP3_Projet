@@ -1,4 +1,4 @@
-#directory "src/usage";;
+#directory "../usage";;
 
 #load "btree.cmo";;
 #load "bst.cmo";;
