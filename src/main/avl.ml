@@ -482,7 +482,7 @@ let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
   - bool : TRUE - elem existe dans avl
           FALSE - elem n'existe pas dans avl
  *)
-let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
+let rec seek_avl (elem, avl : 'a * 'a t_avltree) : bool =
   if isEmpty(avl)
   then false
   else

@@ -113,6 +113,7 @@ let _suppr_avl_compute(n : int) : float array * float array =
   (
     for i = 1 to n 
     do 
+      if (i mod 10 = 0)
       (*
        affichage toutes les 10 opération 
        pour connaitre l'avancement du programme
