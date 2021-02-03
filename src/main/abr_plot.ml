@@ -1,10 +1,25 @@
-#directory "../usage";;
+(* ================================================== *)
+(* =============== MODULE ABR_PLOT.ML =============== *)
+(*
+  Ce module a été créé par le groupe d'étudiants suivant :
+  - Yann Berthelot
+  - Louis Leenart
+  - Alexis Louail
+  Le contenu de ce module a été fait d'apres le sujet de
+  projet d'Algorithmique et Programmation 3.
+*)
+(* ================================================== *)
 
+(* ================================================== *)
+(* ================== IMPORTATIONS ================== *)
+(* ================================================== *)
+
+#directory "../usage";;
 
 #load "btree.cmo";;
 #load "bst.cmo";;
-#use "ap2util.ml";;
 #load "graphics.cma";;
+#use "ap2util.ml";;
 #use "graphics.ml";;
 #use "abr.ml";;
 
@@ -12,6 +27,18 @@ open Btree;;
 open List;;
 
 
+(* ================================================== *)
+(* ================ UTILITAIRES PLOT ================ *)
+(* ================================================== *)
+
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let bst_rnd_compute(n : int) : float array * float array =
   let indices : float array = arr_make(n + 1, 0.0) in
   let desec : float array = arr_make(n + 1, 0.0) in
@@ -35,6 +62,14 @@ let bst_rnd_compute(n : int) : float array * float array =
   )
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let bst_rnd_plot(n : int) : float =
   let init_time : float = Sys.time() in
   let (desec, indices) : float array * float array = bst_rnd_compute(n) in
@@ -48,6 +83,14 @@ let bst_rnd_plot(n : int) : float =
   )
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let bst_rnd_sublist_compute(n : int) : float array * float array =
   let indices : float array = arr_make(n + 1, 0.0) in
   let desec : float array = arr_make(n + 1, 0.0) in
@@ -71,6 +114,14 @@ let bst_rnd_sublist_compute(n : int) : float array * float array =
   )
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let bst_rnd_sublist_plot(n : int) : float =
   let init_time : float = Sys.time() in
   let (desec, indices) : float array * float array = bst_rnd_sublist_compute(n) in
@@ -86,7 +137,5 @@ let bst_rnd_sublist_plot(n : int) : float =
 
 (*
 bst_rnd_plot(1000);;
-*)
-(*
 bst_rnd_sublist_plot(1000);;
 *)
