@@ -1,17 +1,53 @@
+(* ================================================== *)
+(* ================== MODULE ABR.ML ================= *)
+(*
+  Ce module a été créé par le groupe d'étudiants suivant :
+  - Yann Berthelot
+  - Louis Leenart
+  - Alexis Louail
+  Le contenu de ce module a été fait d'apres le sujet de
+  projet d'Algorithmique et Programmation 3 en suivant 
+  les axiomes décrits en cours.
+*)
+(* ================================================== *)
+
+
+(* ================================================== *)
+(* ================== IMPORTATIONS ================== *)
+(* ================================================== *)
+
 #directory "../usage";;
 
 #load "btree.cmo";;
 #load "bst.cmo";;
-#use "ap2util.ml";;
 #load "graphics.cma";;
+#use "ap2util.ml";;
 #use "graphics.ml";;
 
 open Btree;;
 open List;;
+
+(* ================================================== *)
+(* ====================== TYPE ====================== *)
+(* ================================================== *)
+
 type 'a bst = 'a t_btree;;
+
+(* ================================================== *)
+(* ================ FONCTION ABR TP ================= *)
+(* ================================================== *)
+
+
 Random.self_init;;
 
-(********* FONCTIONS DU MODULE FAIT EN TP ************)
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec bst_seek (elem, tree : 'a * 'a bst) : bool =
   if isEmpty(tree)
   then
@@ -28,6 +64,14 @@ let rec bst_seek (elem, tree : 'a * 'a bst) : bool =
         true
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec bst_linsert (elem, tree : 'a * 'a bst) : 'a bst =
   if (isEmpty(tree))
   then rooting(elem, empty(), empty())
@@ -42,12 +86,27 @@ let rec bst_linsert (elem, tree : 'a * 'a bst) : 'a bst =
 ;;
 
 
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec bst_lbuild (l : 'a list): 'a bst =
   match l with
   | [] -> empty()
   | v::lt -> bst_linsert(v, bst_lbuild(lt))
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec max_seek(t : 'a bst) : 'a =
   if isEmpty(t)
   then
@@ -60,6 +119,14 @@ let rec max_seek(t : 'a bst) : 'a =
       max_seek(rson(t))
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec dmax(t : 'a t_btree) : 'a t_btree =
   if isEmpty(t)
   then invalid_arg "dmax l'arbre est vide"
@@ -70,6 +137,13 @@ let rec dmax(t : 'a t_btree) : 'a t_btree =
 ;;
 
 
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec  bst_delete(e, t : 'a * 'a bst): 'a bst =
   if isEmpty(t)
   then t
@@ -93,25 +167,58 @@ let rec  bst_delete(e, t : 'a * 'a bst): 'a bst =
             rooting(max_seek(g), dmax(g), d)
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let max (a , b : int * int ) = Pervasives.max a b;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec height (tree : 'a t_btree) : int =
   if (tree = empty() || rson(tree) = empty() && lson(tree) = empty())
   then 0
   else 1 + max(height(rson(tree)), height(lson(tree)))
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec size( tree : 'a t_btree) : int =
   if (tree = empty())
   then 0
   else 1 + size(rson(tree)) + size(lson(tree))
 ;;
 
-(********** FONCTIONS UTILITAIRES AU PROJET ************)     
+(* ================================================== *)
+(* ================ UTILITAIRES ABR ================= *)
+(* ============== GÉNÉRATION DE LISTE =============== *)
+(* ================================================== *)
 
-(******** Fonctions de génération de liste ********)
 
 (* Génère une liste de size nombres aléatoires *)
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let max_val : int = 3000;;
 let rec gen_rnd_lst_aux (size, l : int * int list) : int list =
   if size = 0
@@ -122,11 +229,27 @@ let rec gen_rnd_lst_aux (size, l : int * int list) : int list =
     gen_rnd_lst_aux(size - 1, list)
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let gen_rnd_lst(size : int ) : int list =
   gen_rnd_lst_aux(size, [])
 ;;
 
+
 (* Génère une liste contenant une suite de 1 à size *)
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec gen_seq_lst_aux(borneMin, borneMax , list : int * int * int list) : int list =
   if borneMax = borneMin
   then list
@@ -135,13 +258,26 @@ let rec gen_seq_lst_aux(borneMin, borneMax , list : int * int * int list) : int 
 ;;
 
 
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let gen_seq_lst( borneMin, borneMax :int * int) : int list =
   gen_seq_lst_aux(borneMin,borneMax, [])
 ;;
 
+
 (* Génère une liste contenant des suites ordonnée et des suites non-ordonnées *)
-
-
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
   if size <= 0
   then l
@@ -159,31 +295,67 @@ let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
       gen_mixed_lst_aux(size - length(seqList) , seqList@l)
 ;;
 
+
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let gen_mixed_lst (size : int ) : int list =
   gen_mixed_lst_aux(size, [])
 ;;
 
-(******** Fonctions de génération d'arbre ********)
+
+(* ================================================== *)
+(* ================ GÉNÉRATION ABR ================== *)
+(* ================================================== *)
+
 
 (*Génère un ABR à partir d'une liste de nombre aléatoire de taille size*)
-
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let  bst_rnd_create (size : int) : 'a bst =
   Random.self_init();
   let l = gen_rnd_lst(size) in
   bst_lbuild(l)
 ;;
 
-(* Génère un ABR au hasard avec des sous-suites *)
 
+(* Génère un ABR au hasard avec des sous-suites *)
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let bst_mix_create(size : int) : int bst =
   let l : int list = gen_mixed_lst(size) in
   bst_lbuild(l)
 ;;
 
-(******** Fonctions de calcul ********)
+
+(* ================================================== *)
+(* =============== FONCTIONS CALCUL ================= *)
+(* ================================================== *)
+
 
 (* Retourne le déséquilibre entre le fils droit et le fils gauche d'un arbre
 soit ; la différence de hauteur entre le fils gauche et le fils droit *)
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let unbalance (tree : 'a bst) : int =
   if isEmpty(tree)
   then 0
@@ -192,7 +364,15 @@ let unbalance (tree : 'a bst) : int =
     height(g) - height(d)
 ;;
 
+
 (* Retourne la moyenne de déséquilibre calculés sur tsample abr aléatoires de taille treesSize *)
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
   let sum : float ref = ref 0. in
   for i=1 to tSample
@@ -202,8 +382,15 @@ let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
   !sum /. float_of_int(tSample)
 ;;
 
-(* Retourne la moyenne de avgSample déséquilibres *)
 
+(* Retourne la moyenne de avgSample déséquilibres *)
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) : float =
   let sum : float ref = ref 0. in
   for i=1 to avgSample
@@ -215,7 +402,13 @@ let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) :
 
 
 (* rnd_unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
-
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
   let sum : float ref = ref 0. in
   for i=1 to tSample
@@ -226,7 +419,13 @@ let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
 ;;
 
 (* rnd_unbalance_avgs_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
-
+(*
+  [DESCRIPTION]
+  input : 
+  - 
+  output :
+  - 
+ *)
 let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
   let sum : float ref = ref 0. in
   for i=1 to avgSample
@@ -236,7 +435,9 @@ let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int
   !sum /. float_of_int(avgSample)
 ;;
 
-(******** TESTS ********)
+(* ================================================== *)
+(* ===================== TESTS ====================== *)
+(* ================================================== *)
 
 
 (*
@@ -244,4 +445,5 @@ rnd_unbalance_avg(100, 100);;
 mixed_unbalance_avg(100, 100);;
 
 rnd_unbalance_avgs_avg(1000, 100, 100);;
-mixed_unbalance_avgs_avg(100, 10, 100);;*)
+mixed_unbalance_avgs_avg(100, 10, 100);;
+*)
