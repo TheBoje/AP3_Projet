@@ -40,15 +40,17 @@ On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils s
 ## Arbres AVL
 ### Implantation d'un module `Avl`
 #### Question 1
-&nbsp; Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = 'a bst`. Nous avons aussi implémenté les opérations suivante dans le fichier `avl.ml` : 
+&nbsp; Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = ('a * int) bst`. Pour cette structure de données,  `'a` représente la valeur du noeud, et `int` représente la hauteur du noeud. Nous avons aussi implémenté les opérations suivante dans le fichier `avl.ml` : 
 - `rd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Droite de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.lson` existent.
 - `rg(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Gauche de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.rson` existent.
 - `rgd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Gauche Droite de l'AVL, qui repose sur `rd(avl)` et `rg(avl)`.
 - `rdg(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Droite Gauche de l'AVL, qui repose sur `rd(avl)` et `rg(avl)`.
+- `updateHeight(avl : 'a t_avltree) : 'a t_avltree` permet de mettre à jour la hauteur du noeud suite à une rotation.
+- `getHeight(avl : 'a t_avltree) : int` et `getValue(avl : 'a t_avltree) : 'a` permettent de récupérer soit la valeur soit la hauteur du noeud. On note que la hauteur du noeud n'est pas mise à jour dynamiquement, il est donc nécessaire d'utiliser la fonction `updateHeight()` avant.
 
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 #### Question 2
-&nbsp; Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à cette opération. De plus, nous pouvons aussi utiliser la structure `improvedAvl` qui est sous la forme `('a * int) t_avltree` où `'a` représente la valeur du noeud, et `int` la valeur du déséquilibre. On utilise `getValue(avl : ('a * int) t_avltree) : 'a` et `getDes(avl : ('a * int) t_avltree) : int` pour accéder à la valeur et au déséquilibre de l'arbre.
+&nbsp; Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à l'opération de rééquilibrage de l'avl. En fonction des valeurs de déséquilibre de chaque noeud de l'avl (calculé via la hauteur de chaque noeuds fils), on effectue des rotations.
 
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 #### Question 3
@@ -60,25 +62,31 @@ Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 #### Question 4
-&nbsp; Nous remarquons que l'utilisation de la fonction `bst_seek (elem, tree : 'a * 'a t_avltree) : bool` est encore fonctionnelle pour notre implantation du type `t_avltree`. Cependant, cette fonction devrait être legerement modifiée pour recevoir la structure `'a * int t_avltree`, et cela sans affecter la complexité.
+&nbsp; Nous remarquons que l'utilisation de la fonction `bst_seek(elem, tree : 'a * 'a t_avltree) : bool` a due être légèrement modifié pour permettre la recherche d'un élément dans un avl, cependant, les modifications sont mineurs et l'algorithme reste presque identique à la version utilisée pour les `'a bst`.
 ### Expérimentations avec les arbres AVL
 #### Question 1
 Pour créer des AVL aléatoirement, nous avons mis en place plusieurs fonctions : 
 - `rnd_list_int(n, max_val : int * int) : int list` qui permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val`.
-- `rnd_sublist(n, max_val, last_val : int * int * int) : int list` permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val` avec `l[n] < l[n+1]`.
+- `_rnd_sublist(n, max_val, last_val : int * int * int) : int list` est une fonction privée qui permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val` avec `l[n] < l[n+1]`.
 - `rnd_list_sub(n, max_val, percent : int * int * int ) : int list` permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val` avec des sous-listes d'entiers de taille de taille 2 à 10. La probabilité de générer une sous-liste ordonnée est définie par l'argument `percent` ( 0 = aucune sous-liste, 100 = que des sous-listes).
-- `avl_rnd_create (l : int list) : int t_avltree` permet de créer un AVL à partir d'une liste. Utilise la fonction privée `__avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree`.
-- `__avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree` permet de créer un AVL à partir d'une liste.
+- `avl_rnd_create (l : int list) : int t_avltree` permet de créer un AVL à partir d'une liste. Utilise la fonction privée `_avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree`.
+- `_avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree` permet de créer un AVL à partir d'une liste.
 
-Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et `bst_seek`. Pour cela, nous calculons le temps d'execution de chacune des fonction, et ce pour des arbres aléatoires de taille 1 à n. Une fois les calculs terminés, nous utilisons le module graphique d'Ocaml pour afficher l'évolution du temps de calcul en fonction de la taille de l'arbre étudié. L'ensemble des fonctions utilisés sont regroupés dans le fichier `avl_plot.ml`. Nous testons alors les différentes fonctions avec une taille d'arbre allant de 1 à 1000.
+Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et `bst_seek`. Pour cela, nous calculons le temps d'execution de chacune des fonction, et ce pour des arbres aléatoires de taille 1 à n. Une fois les calculs terminés, nous utilisons le module graphique d'Ocaml pour afficher l'évolution du temps de calcul en fonction de la taille de l'arbre étudié. L'ensemble des fonctions utilisés sont regroupés dans le fichier `avl_plot.ml`. Nous testons alors les différentes fonctions avec une taille d'arbre allant de 1 à 10000.
 
 <img src="data/suppr.png">Fonction de suppression</img></br>
-<img src="data/insert.png">Fonction de insertion</img></br>
+Pour la fonction de suppression, nous pouvons constater que la complexité en temps est de l'ordre de O(log n), avec n la taille de l'avl.
+<img src="data/insert.png">Fonction d'insertion</img></br>
+Pour la fonction d'insertion, nous pouvons constater que la complexité en temps est de l'ordre de O(log n), avec n la taille de l'avl.
 <img src="data/seek.png">Fonction de recherche</img></br>
+Pour la fonction de recherche, nous pouvons constater que la complexité en temps est de l'ordre de O(log n), avec n la taille de l'avl.
 
-Nous remarquons que la complexité de ces trois fonctions semble être de l'ordre de O(n). En effet, sans implémenter la structure `'a * int t_btree` pour ces fonctions, il est nécessaire de faire un appel aux fonctions `desequilibre` et `reequilibrer` étant donné que la donné n'est ni conservée ni mise à jour. 
+La complexité en temps de ces trois fonctions est donc de l'ordre de O(log n) grâce à la mise en place de la structure de données suivante : `'a t_avltree = ('a * int) bst`. 
 
 #### Question 2
 
-### a Verif
-En créant plusieurs Avl avec des parametres différents pour variés les longeurs des listes et sous-listes d'entiers on peut alors estimer le nomnre moyen de roation qui correspond donc au nombre de sous liste + le nombre d'entiers.
+En créant plusieurs AVL avec des suites de nombres entiers qui contiennent des sous-suites ordonnés de longueur variable, nous pouvons estimer que le nombre de rotations qui sont effectuées pour garder l'arbre équilibré est de l'ordre de : ??? TODO
+
+
+## Note 
+### Structure des fichiers

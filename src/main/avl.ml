@@ -6,7 +6,8 @@
   - Louis Leenart
   - Alexis Louail
   Le contenu de ce module a été fait d'apres le sujet de
-  projet d'Algorithmique et Programmation 3.
+  projet d'Algorithmique et Programmation 3 en suivant 
+  les axiomes décrits en cours.
 *)
 (* ================================================== *)
 
@@ -15,7 +16,7 @@
 (* ================== IMPORTATIONS ================== *)
 (* ================================================== *)
 
-#directory "./";;
+#directory "src/usage";;
 
 #load "btree.cmo";;
 #load "bst.cmo";;
@@ -27,8 +28,14 @@ open Btree;;
 (* ================================================== *)
 
 
-(* structure AVL : stockage de la valeur et de la hauteur dans le noeud via la structure suivante *)
+(* structure AVL : stockage de la valeur et de la hauteur
+dans le noeud via la structure suivante *)
 type 'a t_avltree = ('a * int) bst;;
+(*
+                 (VALEUR | HAUTEUR)
+                 /                \
+(VALEUR | HAUTEUR - 1)       (VALEUR | HAUTEUR - 2)
+*)
 
 
 (* ================================================== *)
@@ -96,9 +103,11 @@ let max2(a, b : 'a * 'a) : 'a =
 
 
 (* 
-  Mise à jour de la hauteur du noeud. À utiliser apres modification de l'avl
+  Mise à jour de la hauteur du noeud. À utiliser apres 
+  modification de l'avl
   input : 
-  avl : arbre avl dont on veut mettre à jour la valeur de la hauteur dans le noeud
+  avl : arbre avl dont on veut mettre à jour la valeur 
+  de la hauteur dans le noeud
   output :
   'a t_avltree : avl avec valeur de hauteur mises à jour
 *)
@@ -107,12 +116,11 @@ let updateHeight(avl : 'a t_avltree) : 'a t_avltree =
   then avl
   else 
     (
-      let ((value, height), ls, rs) : (('a * int) * 'a t_avltree * 'a t_avltree) = 
-        (
-          root(avl),
-          lson(avl),
-          rson(avl)
-        ) in 
+      let ((value, height), ls, rs) : 
+        (('a * int) * 'a t_avltree * 'a t_avltree) = 
+        (root(avl),
+         lson(avl),
+         rson(avl)) in 
       let newHeight : int = 1 + max2(getHeight(ls), getHeight(rs)) in
       rooting((value, newHeight), ls, rs)
     )
@@ -151,19 +159,31 @@ let updateHeight(avl : 'a t_avltree) : 'a t_avltree =
 let rec _avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
   if (isEmpty(avl))
   then empty()
-  else rooting(getValue(avl), _avl_to_btree(lson(avl)), _avl_to_btree(rson(avl)))
+  else rooting(
+        getValue(avl),
+        _avl_to_btree(lson(avl)), 
+        _avl_to_btree(rson(avl))
+        )
 ;;
 
 let rec _avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
   if (isEmpty(avl))
   then empty()
-  else rooting(getHeight(avl), _avl_to_height_btree(lson(avl)), _avl_to_height_btree(rson(avl)))
+  else rooting(
+        getHeight(avl),
+        _avl_to_height_btree(lson(avl)), 
+        _avl_to_height_btree(rson(avl))
+        )
 ;;
 
 let rec _avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
   if (isEmpty(avl))
   then empty()
-  else rooting(desequilibre(avl), _avl_to_deseq_btree(lson(avl)), _avl_to_deseq_btree(rson(avl)))
+  else rooting(
+        desequilibre(avl), 
+        _avl_to_deseq_btree(lson(avl)), 
+        _avl_to_deseq_btree(rson(avl))
+        )
 ;;
 
 let show_avl_tree(avl : int t_avltree) : unit =
@@ -204,7 +224,15 @@ let show_deseq_btree(avl : 'a t_avltree) : unit =
         lson(lson(avl)),
         rson(lson(avl)), 
         rson(avl)) in
-    updateHeight(rooting(p, u, updateHeight(rooting(q, v, w))))
+    updateHeight(rooting(
+          p, 
+          u, 
+          updateHeight(rooting(
+                q, 
+                v, 
+                w
+              ))
+        ))
   )
 ;;
 
@@ -230,7 +258,15 @@ let rg(avl : 'a t_avltree) : 'a t_avltree =
         lson(avl),
         lson(rson(avl)),
         rson(rson(avl))) in
-    updateHeight(rooting(q, updateHeight(rooting(p, u, v)), w))
+    updateHeight(rooting(
+          q, 
+          updateHeight(rooting(
+                p, 
+                u, 
+                v
+                )), 
+          w
+          ))
   )
 ;;
 
@@ -250,8 +286,16 @@ let rg(avl : 'a t_avltree) : 'a t_avltree =
     U    V
  *)
 let rgd(avl : 'a t_avltree) : 'a t_avltree =
-  let (r, ls, rs) = (root(avl), lson(avl), rson(avl)) in
-  rd(rooting(r, rg(ls), rs))  
+  let (r, ls, rs) = (
+    root(avl), 
+    lson(avl), 
+    rson(avl)
+  ) in
+  rd(rooting(
+        r, 
+        rg(ls), 
+        rs
+      ))  
 ;;
 
 
@@ -270,8 +314,15 @@ let rgd(avl : 'a t_avltree) : 'a t_avltree =
   U    V
  *)
 let rdg(avl : 'a t_avltree) : 'a t_avltree =
-  let (r, ls, rs) = (root(avl), lson(avl), rson(avl)) in
-  rg(rooting(r, ls, rd(rs))) 
+  let (r, ls, rs) = (
+    root(avl), 
+    lson(avl), 
+    rson(avl)) in
+  rg(rooting(
+        r, 
+        ls, 
+        rd(rs))
+      ) 
 ;;
 
 (* ================================================== *)
@@ -282,7 +333,7 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   Rééquilibre l'arbre
   input : 
   - avl : arbre à rééquilibrer
-  output :
+  output :__
   - 'a t_avltree : arbre rééquilibré
   Note: avec notre structure de données actuelle, la compléxité
   est de l'ordre de O(log n), avec n la taille de avl
@@ -320,7 +371,11 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   else (
     if isEmpty(rson(avl))
     then lson(avl)
-    else reequilibrer(updateHeight(rooting(root(avl), lson(avl), dmax(rson(avl)))))
+    else reequilibrer(updateHeight(rooting(
+                      root(avl), 
+                      lson(avl), 
+                      dmax(rson(avl))
+                    )))
   )
 ;;
 
@@ -340,24 +395,37 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
   then empty()
   else
-    let ((value, height), ls, rs) : (('a * int) * 'a t_avltree * 'a t_avltree) =
+    let ((value, height), ls, rs) : 
+    (('a * int) * 'a t_avltree * 'a t_avltree) =
       (
         root(avl),
         lson(avl),
         rson(avl)
       ) in
     if a < value
-    then reequilibrer(updateHeight(rooting((value, height), suppr_avl( a, ls), rs)))
+    then reequilibrer(updateHeight(rooting(
+          (value, height), 
+          suppr_avl( a, ls), 
+          rs
+        )))
     else
       if a > value
-      then reequilibrer(updateHeight(rooting((value, height), ls, suppr_avl(a, rs))))
+      then reequilibrer(updateHeight(rooting(
+              (value, height), 
+              ls, 
+              suppr_avl(a, rs)
+            )))
       else
         if isEmpty(rs)
         then ls
         else
           if isEmpty(ls)
           then rs
-          else reequilibrer(updateHeight(rooting((max(ls), height), dmax(ls), rs)))
+          else reequilibrer(updateHeight(rooting(
+                        (max(ls), height), 
+                        dmax(ls), 
+                        rs
+                      )))
 ;;
 
 
@@ -377,14 +445,30 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
  *)
 let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
-  then rooting((a, 1), empty(), empty())
+  then rooting(
+      (a, 1), 
+      empty(), 
+      empty()
+    )
   else (
-    let ((value, height), ls, rs) = (root(avl), lson(avl), rson(avl)) in
+    let ((value, height), ls, rs) = (
+          root(avl), 
+          lson(avl), 
+          rson(avl)) in
+
     if a < value
-    then reequilibrer(updateHeight(rooting((value, height), insert_avl(a, ls), rs)))
+    then reequilibrer(updateHeight(rooting(
+              (value, height), 
+              insert_avl(a, ls), 
+              rs
+            )))
     else
       if a > value
-      then reequilibrer(updateHeight(rooting((value, height), ls, insert_avl(a, rs))))
+      then reequilibrer(updateHeight(rooting(
+                      (value, height), 
+                      ls, 
+                      insert_avl(a, rs)
+                    )))
       else avl (* cas a = value*)
   )
 ;;
@@ -403,11 +487,10 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
   then avl
   else
     let ((value, height), ls, rs) = 
-      (
-        root(avl),
-        lson(avl),
-        rson(avl)
-      ) in
+          (root(avl),
+           lson(avl),
+           rson(avl)
+          ) in  
     if elem = value
     then avl
     else
@@ -431,10 +514,10 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
   - 'a t_avltree : avl créé à partir de la liste
   d'entrée l
  *)
- let rec __avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
+ let rec _avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree =
   match l with
   | [] -> t
-  | hd::tl -> __avl_rnd_create_aux(tl, insert_avl(hd, t))
+  | hd::tl -> _avl_rnd_create_aux(tl, insert_avl(hd, t))
 ;;
 
 
@@ -447,8 +530,12 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
   liste l
  *)
 let avl_rnd_create (l : 'a list) : 'a t_avltree =
-  let t : int t_avltree = rooting( (List.hd(l), 0), empty(), empty()) in
-  __avl_rnd_create_aux(List.tl(l), t)
+  let t : int t_avltree = rooting(
+          (List.hd(l), 0), 
+          empty(), 
+          empty()) in
+
+  _avl_rnd_create_aux(List.tl(l), t)
 ;;
 
 
@@ -524,7 +611,13 @@ let rec rnd_list_sub(n, max_val, percent : int * int * int ) : int list =
       then 
         (
           let updated_n : int = n - rnd_sublist_len in
-          let (first_half, second_half) : (int * int) = ((updated_n/2), updated_n - (updated_n/2)) in 
+          let (first_half, second_half): 
+          (int * int) = 
+          (
+            (updated_n/2),
+            updated_n - (updated_n/2)
+          ) in
+
           rnd_list_sub(first_half,max_val,percent)@_rnd_sublist(rnd_sublist_len, max_val, 0)@rnd_list_sub(second_half,max_val,percent)
         )
       else Random.int(max_val)::rnd_list_sub(n-1,max_val,percent)

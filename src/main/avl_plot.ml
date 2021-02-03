@@ -16,9 +16,9 @@
 (* ================== IMPORTATIONS ================== *)
 (* ================================================== *)
 
-#directory "./";;
+#directory "src/usage";;
 
-#use "AP2util.ml";;
+#use "ap2util.ml";;
 #load "graphics.cma";;
 #use "graphics.ml";;
 #load "btree.cmo";;

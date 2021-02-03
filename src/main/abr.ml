@@ -1,6 +1,8 @@
+#directory "src/usage";;
+
 #load "btree.cmo";;
 #load "bst.cmo";;
-#use "AP2util.ml";;
+#use "ap2util.ml";;
 #load "graphics.cma";;
 #use "graphics.ml";;
 
