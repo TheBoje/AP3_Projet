@@ -33,13 +33,17 @@ open List;;
 
 
 (*
-  [DESCRIPTION]
+  [FONCTION PRIVÉE]
+  Génère n abr aléatoires de taille 1 à n. On conserve 
+  alors la moyenne des déséquilibres.
   input : 
-  - 
+  - n : taille de l'abr le plus grand
   output :
-  - 
+  - float array (1) : liste des moyennes de déséquilibre
+  de chaque abr
+  - float array (2) : indice de chaque opération 
  *)
-let bst_rnd_compute(n : int) : float array * float array =
+let _bst_rnd_compute(n : int) : float array * float array =
   let indices : float array = arr_make(n + 1, 0.0) in
   let desec : float array = arr_make(n + 1, 0.0) in
   let sum : float ref = ref 0. in
@@ -64,15 +68,18 @@ let bst_rnd_compute(n : int) : float array * float array =
 
 
 (*
-  [DESCRIPTION]
+  Affiche la moyenne du déséquilibre des abr pour une taille
+  allant de 1 à n.
   input : 
-  - 
+  - n : taille de l'abr le plus grand
   output :
-  - 
+  - float : temps total d'execution de la fonction.
+  - unit : affichage du graphique de la moyenne du déséquilibre
+  en fonction de la taille de l'abr.
  *)
 let bst_rnd_plot(n : int) : float =
   let init_time : float = Sys.time() in
-  let (desec, indices) : float array * float array = bst_rnd_compute(n) in
+  let (desec, indices) : float array * float array = _bst_rnd_compute(n) in
   let repere : t_rep = {orx = 50; ory = 50; extx = 900; exty = 500} in
   (
     open_graph(1000, 600);
@@ -85,13 +92,17 @@ let bst_rnd_plot(n : int) : float =
 
 
 (*
-  [DESCRIPTION]
+  [FONCTION PRIVÉE]
+  Génère n abr aléatoires de taille 1 à n contenant des 
+  sous-suites. On conserve alors la moyenne des déséquilibres.
   input : 
-  - 
+  - n : taille de l'abr le plus grand
   output :
-  - 
+  - float array (1) : liste des moyennes de déséquilibre
+  de chaque abr
+  - float array (2) : indice de chaque opération 
  *)
-let bst_rnd_sublist_compute(n : int) : float array * float array =
+let _bst_rnd_sublist_compute(n : int) : float array * float array =
   let indices : float array = arr_make(n + 1, 0.0) in
   let desec : float array = arr_make(n + 1, 0.0) in
   let sum : float ref = ref 0. in
@@ -116,15 +127,18 @@ let bst_rnd_sublist_compute(n : int) : float array * float array =
 
 
 (*
-  [DESCRIPTION]
+  Affiche la moyenne du déséquilibre des abr pour une taille
+  allant de 1 à n contenant des sous-suites d'entiers
   input : 
-  - 
+  - n : taille de l'abr le plus grand
   output :
-  - 
+  - float : temps total d'execution de la fonction.
+  - unit : affichage du graphique de la moyenne du déséquilibre
+  en fonction de la taille de l'abr.
  *)
 let bst_rnd_sublist_plot(n : int) : float =
   let init_time : float = Sys.time() in
-  let (desec, indices) : float array * float array = bst_rnd_sublist_compute(n) in
+  let (desec, indices) : float array * float array = _bst_rnd_sublist_compute(n) in
   let repere : t_rep = {orx = 50; ory = 50; extx = 900; exty = 500} in
   (
     open_graph(1000, 600);
@@ -134,6 +148,7 @@ let bst_rnd_sublist_plot(n : int) : float =
     Sys.time() -. init_time;
   )
 ;;
+
 
 (*
 bst_rnd_plot(1000);;
