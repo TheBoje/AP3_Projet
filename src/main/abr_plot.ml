@@ -20,7 +20,11 @@ let bst_rnd_compute(n : int) : float array * float array =
     for i = 1 to n 
     do 
       if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+      (*
+       affichage toutes les 10 opération 
+       pour connaitre l'avancement du programme
+      *)
+      then ignore(Printf.printf "%d/%d\n" i n; flush stdout);
       let bst = bst_rnd_create(i) in
       let desec_val : float = float_of_int(unbalance(bst)) in
       sum := !sum +. desec_val;
@@ -52,7 +56,11 @@ let bst_rnd_sublist_compute(n : int) : float array * float array =
     for i = 1 to n 
     do 
       if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+      (*
+       affichage toutes les 10 opération 
+       pour connaitre l'avancement du programme
+      *)
+      then ignore(Printf.printf "%d/%d\n" i n; flush stdout);
       let bst = bst_mix_create(i) in
       let desec_val : float = float_of_int(unbalance(bst)) in
       sum := !sum +. desec_val;
@@ -80,5 +88,5 @@ let bst_rnd_sublist_plot(n : int) : float =
 bst_rnd_plot(1000);;
 *)
 (*
-bst_rnd_sublist_plot(2000);;
+bst_rnd_sublist_plot(1000);;
 *)

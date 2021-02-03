@@ -56,7 +56,11 @@ let _insert_avl_compute(n : int) : float array * float array =
     for i = 1 to n 
     do 
       if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+      (*
+       affichage toutes les 10 opération 
+       pour connaitre l'avancement du programme
+      *)
+      then ignore(Printf.printf "%d/%d\n" i n; flush stdout);
       let avl = avl_rnd_create(rnd_list_int(i, valeur_max)) in
       temps.(i) <- Sys.time();
       ignore(insert_avl(Random.int(valeur_max), avl));
@@ -109,8 +113,11 @@ let _suppr_avl_compute(n : int) : float array * float array =
   (
     for i = 1 to n 
     do 
-      if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+      (*
+       affichage toutes les 10 opération 
+       pour connaitre l'avancement du programme
+      *)
+      then ignore(Printf.printf "%d/%d\n" i n; flush stdout);
       let rnd_list = rnd_list_int(i, valeur_max) in
       let avl = avl_rnd_create(rnd_list) in
       temps.(i) <- Sys.time();
@@ -166,7 +173,11 @@ let _seek_avl_compute(n : int) : float array * float array =
     for i = 1 to n 
     do 
       if (i mod 10 = 0)
-      then ignore(Printf.printf "%d\n" i; flush stdout);
+            (*
+       affichage toutes les 10 opération 
+       pour connaitre l'avancement du programme
+      *)
+      then ignore(Printf.printf "%d/%d\n" i n; flush stdout);
       let rnd_list = rnd_list_int(i, valeur_max) in
       let avl = avl_rnd_create(rnd_list) in
       temps.(i) <- Sys.time();

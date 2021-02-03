@@ -85,8 +85,7 @@ La complexité en temps de ces trois fonctions est donc de l'ordre de O(log n) g
 
 #### Question 2
 
-En créant plusieurs AVL avec des suites de nombres entiers qui contiennent des sous-suites ordonnés de longueur variable, nous pouvons estimer que le nombre de rotations qui sont effectuées pour garder l'arbre équilibré est de l'ordre de : ??? TODO
-
+En créant plusieurs AVL avec des suites de nombres entiers qui contiennent des sous-suites ordonnés de longueur variable, nous pouvons estimer que le nombre de rotations qui sont effectuées pour garder l'arbre équilibré est de l'ordre de : ??? TODO 
 
 ## Note 
 ### Structure des fichiers
