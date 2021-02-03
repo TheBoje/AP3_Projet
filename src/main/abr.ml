@@ -374,14 +374,14 @@ let bst_mix_create(size : int) : int bst =
 (* ================================================== *)
 
 
-(* Retourne le déséquilibre entre le fils droit et le fils gauche d'un arbre
-soit ; la différence de hauteur entre le fils gauche et le fils droit *)
 (*
-  [DESCRIPTION]
+  Calcule le déséquilibre de la racine de l'arbre
   input : 
-  - 
+  - tree : arbre dont on souhaite connaitre le déséquilibre
   output :
-  - 
+  - int : déséquilibre de l'arbre au niveau de la racine
+  Note: le calcul du déséquilibre correspond à la différence de hauteur
+  entre le fils gauche et le fils droit.
  *)
 let unbalance (tree : 'a bst) : int =
   if isEmpty(tree)
@@ -392,13 +392,16 @@ let unbalance (tree : 'a bst) : int =
 ;;
 
 
-(* Retourne la moyenne de déséquilibre calculés sur tsample abr aléatoires de taille treesSize *)
 (*
-  [DESCRIPTION]
+  Calcule la moyenne de déséquilibre sur un nombre de tSample 
+  ABR aléatoires (chaque ABR étant de taille treesSize)
   input : 
-  - 
+  - tSample : nombre d'ABR aléatoire générés pour calculer 
+  la moyenne
+  - treesSize : taille de chaque ABR 
   output :
-  - 
+  - float : moyenne de déséquilibre des tSample ABR de taille
+  treesSize
  *)
 let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
   let sum : float ref = ref 0. in
@@ -410,13 +413,15 @@ let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
 ;;
 
 
-(* Retourne la moyenne de avgSample déséquilibres *)
-(*
-  [DESCRIPTION]
+
+(* TODO Clarifier la formulation
+  Calcule la moyenne de avgSample déséquilibre
   input : 
-  - 
+  - avgSample : TODO
+  - treeSample : TODO
+  - treesSize : taille de chaque ABR
   output :
-  - 
+  - float : TODO
  *)
 let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) : float =
   let sum : float ref = ref 0. in
@@ -428,13 +433,17 @@ let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) :
 ;;
 
 
-(* rnd_unbalance_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
 (*
-  [DESCRIPTION]
+  Calcule la moyenne de déséquilibre sur un nombre de tSample 
+  ABR aléatoires (chaque ABR étant de taille treesSize) construits 
+  à partir d'une liste composée de sous-suites.
   input : 
-  - 
+  - tSample : nombre d'ABR aléatoire générés pour calculer 
+  la moyenne
+  - treesSize : taille de chaque ABR 
   output :
-  - 
+   - float : moyenne de déséquilibre des tSample ABR de taille
+  treesSize 
  *)
 let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
   let sum : float ref = ref 0. in
@@ -445,13 +454,16 @@ let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
   !sum /. float_of_int(tSample)
 ;;
 
-(* rnd_unbalance_avgs_avg mais avec des arbres construits à partir d'une liste composée de sous-suites *)
-(*
-  [DESCRIPTION]
+(* TODO Aussi clarifier la formulation
+  Calcule la moyenne de avgSample déséquilibre pour
+  des arbres générés à partir d'une liste composée
+  de sous-suites.
   input : 
-  - 
+  - avgSample : TODO
+  - treeSample : TODO
+  - treesSize : taille de chaque ABR
   output :
-  - 
+  - float : TODO
  *)
 let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
   let sum : float ref = ref 0. in
