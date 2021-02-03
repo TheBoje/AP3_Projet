@@ -132,56 +132,58 @@ let rec max_seek(tree : 'a bst) : 'a =
 
 
 (*
-  [DESCRIPTION]
+  Retire l'élément maximal de l'arbre
   input : 
-  - 
+  - tree : arbre dont on souhaite retirer l'élément maximal
   output :
-  - 
+  - 'a t_btree : arbre dont on a retiré l'élément maximal
  *)
-let rec dmax(t : 'a t_btree) : 'a t_btree =
-  if isEmpty(t)
+let rec dmax(tree : 'a t_btree) : 'a t_btree =
+  if isEmpty(tree)
   then invalid_arg "dmax l'arbre est vide"
   else
-    if isEmpty(rson(t))
-    then lson(t)
-    else rooting(root(t), lson(t), dmax(rson(t)))
+    if isEmpty(rson(tree))
+    then lson(tree)
+    else rooting(root(tree), lson(tree), dmax(rson(tree)))
 ;;
 
 
 (*
-  [DESCRIPTION]
+  Supprime un noeud de l'arbre
   input : 
-  - 
+  - elem : valeur du noeud à supprimer
+  - tree : arbre auquel on souhaite retirer elem
   output :
-  - 
+  - 'a bst : arbre auquel on a suprimé le noeud
  *)
-let rec bst_delete(e, t : 'a * 'a bst): 'a bst =
-  if isEmpty(t)
-  then t
+let rec bst_delete(elem, tree : 'a * 'a bst): 'a bst =
+  if isEmpty(tree)
+  then tree
   else
-    let (v, g, d) = (root(t), lson(t), rson(t))
+    let (v, ls, rs) = (root(tree), lson(tree), rson(tree))
     in
-    if e < v
-    then rooting(v, bst_delete(e, g), d)
+    if elem < v
+    then rooting(v, bst_delete(elem, ls), rs)
     else
-      if e > v
-      then rooting(v, g, bst_delete(e, d))
+      if elem > v
+      then rooting(v, ls, bst_delete(elem, rs))
       else
-        if isEmpty(g)
-        then d
+        if isEmpty(ls)
+        then rs
         else
-          if isEmpty(d)
-          then g
-          else rooting(max_seek(g), dmax(g), d)
+          if isEmpty(rs)
+          then ls
+          else rooting(max_seek(ls), dmax(ls), rs)
 ;;
 
 
 (*
-  [DESCRIPTION]
+  Calcule le max de deux éléments
   input : 
-  - 
+  - a : élément 1 à comparer
+  - b : élément 2 à comparer
   output :
-  - 
+  - 'a : élément le plus grand entre a et b
  *)
 let max (a , b : int * int ) = 
   if a > b
@@ -191,11 +193,11 @@ let max (a , b : int * int ) =
 
 
 (*
-  [DESCRIPTION]
+  Calcule la hauteur de la racine de l'arbre
   input : 
-  - 
+  - tree : arbre dont on souhaite calculer la hauteur
   output :
-  - 
+  - int : hauteur de la racine de l'arbre
  *)
 let rec height (tree : 'a t_btree) : int =
   if (tree = empty() || rson(tree) = empty() && lson(tree) = empty())
@@ -205,11 +207,11 @@ let rec height (tree : 'a t_btree) : int =
 
 
 (*
-  [DESCRIPTION]
+  Calcule la taille de l'arbre
   input : 
-  - 
+  - tree : arbre dont on souhaite calculer la hauteur
   output :
-  - 
+  - int : hauteur de l'arbre
  *)
 let rec size( tree : 'a t_btree) : int =
   if (tree = empty())
@@ -225,72 +227,82 @@ let rec size( tree : 'a t_btree) : int =
 
 (* Génère une liste de size nombres aléatoires *)
 (*
-  [DESCRIPTION]
+  [FONCTION PRIVÉE]
+  Génère une liste d'entiers aléatoire 
   input : 
-  - 
+  - size : taille de la liste à générer
+  - l : liste initiale, paramètre privé
   output :
-  - 
+  - int list : liste d'entiers aléatoire de taille
+  size, avec tout élément compris entre 0 et max_val.
  *)
 let max_val : int = 3000;;
-let rec gen_rnd_lst_aux (size, l : int * int list) : int list =
+let rec _gen_rnd_lst_aux(size, l : int * int list) : int list =
   if size = 0
   then l
   else
     let n = Random.int max_val in
     let list = n::l in
-    gen_rnd_lst_aux(size - 1, list)
+    _gen_rnd_lst_aux(size - 1, list)
 ;;
 
 
 (*
-  [DESCRIPTION]
+  Génère une liste d'entiers aléatoire
   input : 
-  - 
+  - size : taille de la liste à générer
   output :
-  - 
+  - int list : liste d'entiers aléatoire de taille
+  size, avec tout élément compris entre 0 et max_val.
  *)
 let gen_rnd_lst(size : int ) : int list =
-  gen_rnd_lst_aux(size, [])
+  _gen_rnd_lst_aux(size, [])
 ;;
 
 
-(* Génère une liste contenant une suite de 1 à size *)
 (*
-  [DESCRIPTION]
+  [FONCTION PRIVÉE]
+  Génère une liste contenant une suite d'entiers 
   input : 
-  - 
+  - borneMin : TODO
+  - borneMax : TODO
+  - l : liste de retour, initialisée à []
   output :
-  - 
+  - int list : suite d'entiers de taille borneMax - borneMin
  *)
-let rec gen_seq_lst_aux(borneMin, borneMax , list : int * int * int list) : int list =
+let rec _gen_seq_lst_aux(borneMin, borneMax , l : int * int * int list) : int list =
   if borneMax = borneMin
-  then list
+  then l
   else
-    gen_seq_lst_aux(borneMin, borneMax - 1, borneMax::list)
+    _gen_seq_lst_aux(borneMin, borneMax - 1, borneMax::list)
 ;;
 
 
 (*
-  [DESCRIPTION]
+  Génère une liste contenant une suite d'entiers
   input : 
-  - 
+  - borneMin : TODO
+  - borneMax : TODO
   output :
-  - 
+  - int list : suite d'entiers de taille borneMax - borneMin
  *)
-let gen_seq_lst( borneMin, borneMax :int * int) : int list =
-  gen_seq_lst_aux(borneMin,borneMax, [])
+let gen_seq_lst(borneMin, borneMax : int * int) : int list =
+  _gen_seq_lst_aux(borneMin,borneMax, [])
 ;;
 
 
-(* Génère une liste contenant des suites ordonnée et des suites non-ordonnées *)
 (*
-  [DESCRIPTION]
+  [FONCTION PRIVÉE]
+  Génère une liste contenant des suites ordonnées et des suites
+  non-ordonnées
   input : 
-  - 
+  - size : taille de la liste
+  - l : liste de retour, initialisée à []
   output :
-  - 
+  - int list : liste d'entiers contenant des suites ordonnées et des
+  suites non-ordonnées
  *)
-let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
+let rec _gen_mixed_lst_aux(size, l : int *  int list) : int list =
   if size <= 0
   then l
   else
@@ -300,23 +312,25 @@ let rec gen_mixed_lst_aux( size, l : int *  int list) : int list =
       (* +1 afin de ne pas boucler si on tombe sur Random.int size = 0 *)
       
       let rndList : int list = gen_rnd_lst(rndListLength) in
-      gen_mixed_lst_aux(size - rndListLength, rndList@l)
+      _gen_mixed_lst_aux(size - rndListLength, rndList@l)
     else
       let min : int = Random.int size in
       let seqList : int list = gen_seq_lst(min, size) in
-      gen_mixed_lst_aux(size - length(seqList) , seqList@l)
+      _gen_mixed_lst_aux(size - length(seqList) , seqList@l)
 ;;
 
 
 (*
-  [DESCRIPTION]
+  Génère une liste contenant des suites ordonnées et des suites
+  non-ordonnées
   input : 
-  - 
+  - size : taille de la liste
   output :
-  - 
+  - int list : liste d'entiers contenant des suites ordonnées et des
+  suites non-ordonnées
  *)
 let gen_mixed_lst (size : int ) : int list =
-  gen_mixed_lst_aux(size, [])
+  _gen_mixed_lst_aux(size, [])
 ;;
 
 
@@ -325,13 +339,14 @@ let gen_mixed_lst (size : int ) : int list =
 (* ================================================== *)
 
 
-(*Génère un ABR à partir d'une liste de nombre aléatoire de taille size*)
 (*
-  [DESCRIPTION]
+  Génère un ABR à partir d'une liste de nombre aléatoire
+  de taille size
   input : 
-  - 
+  - size : taille de l'arbre à générer
   output :
-  - 
+  - 'a bst : arbre de taille size créé à partir d'une 
+  liste d'entiers aléatoires
  *)
 let  bst_rnd_create (size : int) : 'a bst =
   Random.self_init();
@@ -340,13 +355,13 @@ let  bst_rnd_create (size : int) : 'a bst =
 ;;
 
 
-(* Génère un ABR au hasard avec des sous-suites *)
 (*
-  [DESCRIPTION]
+  Génère un ABR aléatoire contenant des sous-suites
   input : 
-  - 
+  - size : taille de l'ABR
   output :
-  - 
+  - int bst : arbre aléatoire de taille size contenant
+  des sous-suites
  *)
 let bst_mix_create(size : int) : int bst =
   let l : int list = gen_mixed_lst(size) in
