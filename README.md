@@ -2,7 +2,15 @@
 
 M.Laurent Fuchs</br>
 Groupe 1: Yann Berthelot, Louis Leenart & Alexis Louail
-## Partie 1 : Arbres binaires de recherche
+## Partie 1 : Arbres binaires de recherche (ABR)
+L'ensemble des fichiers liés au module `ABR` sont les suivants : 
+```bash
+src
+├── main
+.   ├── abr.ml                      # Implantation du module
+    ├── abr_plot.ml                 # Tests de complexité / Affichage
+    .
+```
 ### Question 1
 &nbsp; La fonction `bst_rnd_create : int size -> 'a bst` créé un arbre de taille `size`, elle utilise deux fonctions auxiliaires : 
 * `gen_rnd_list : int size -> 'a list` qui génère une une liste de la taille de l'int donné en paramètre
@@ -37,8 +45,19 @@ La complexité des fonctions générant les résultats ci-dessus est en O(n)
 On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs aléatoires.
 
 
-## Arbres AVL
-### Implantation d'un module `Avl`
+## Partie 2 : Arbres de Adelson-Velsky et Landis (AVL)
+### Implantation d'un module `AVL`
+
+L'ensemble des fichiers liés au module `AVL` sont les suivants : 
+```bash
+src
+├── main
+.   ├── avl.ml                      # Implantation du module
+    ├── avl_plot.ml                 # Tests de complexité / Affichage
+    ├── avl_utilisation.ml          # Tests de l'implantation
+    .
+```
+
 #### Question 1
 &nbsp; Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = ('a * int) bst`. Pour cette structure de données,  `'a` représente la valeur du noeud, et `int` représente la hauteur du noeud. Nous avons aussi implémenté les opérations suivante dans le fichier `avl.ml` : 
 - `rd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Droite de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.lson` existent.
@@ -49,6 +68,7 @@ On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils s
 - `getHeight(avl : 'a t_avltree) : int` et `getValue(avl : 'a t_avltree) : 'a` permettent de récupérer soit la valeur soit la hauteur du noeud. On note que la hauteur du noeud n'est pas mise à jour dynamiquement, il est donc nécessaire d'utiliser la fonction `updateHeight()` avant.
 
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
+
 #### Question 2
 &nbsp; Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à l'opération de rééquilibrage de l'avl. En fonction des valeurs de déséquilibre de chaque noeud de l'avl (calculé via la hauteur de chaque noeuds fils), on effectue des rotations.
 
@@ -91,29 +111,29 @@ En créant plusieurs AVL avec des suites de nombres entiers qui contiennent des 
 ### Structure des fichiers
 Notre structude des fichiers se présente de la facon suivante :
 ```bash
-├── data
-│   ├── sujet.pdf
-│   ├── insert.png
-│   ├── seek.png
-│   └── suppr.png
-├── README.md
-└── src
-    ├── main
-    │   ├── abr.ml
-    │   ├── abr_plot.ml
-    │   ├── avl.ml
-    │   ├── avl_plot.ml
-    │   └── avl_utilisation.ml
-    └── usage
-        ├── ap2util.ml
-        ├── ap3queue.cmi
-        ├── ap3queue.cmo
-        ├── ap3stack.cmi
-        ├── ap3stack.cmo
-        ├── bst.cmi
-        ├── bst.cmo
-        ├── btree.cmi
-        ├── btree.cmo
-        └── graphics.ml
+.
+├── README.md                       # Fichier de rédaction du compte rendu
+├── data                            # Dossier de données
+│   ├── sujet.pdf                   # Sujet du projet
+│   ├── insert.png                  # Graphique du temps d'exec. de la fct insert_avl()
+│   ├── seek.png                    # Graphique du temps d'exec. de la fct seek_avl()
+│   └── suppr.png                   # Graphique du temps d'exec. de la fct suppr_avl()
+│
+└── src                             # Dossier de code
+    │
+    ├── main                        # Dossier de code du projet
+    │   ├── abr.ml                  # Implantation du module ABR
+    │   ├── abr_plot.ml             # Tests de complexité / Affichage d'ABR
+    │   ├── avl.ml                  # Implantation du module AVL
+    │   ├── avl_plot.ml             # Tests de complexité / Affichage d'AVL
+    │   └── avl_utilisation.ml      # Tests de l'implantation d'AVL
+    │
+    └── usage                       # Dossier de dépendances
+        ├── ap2util.ml              # Utilitaire listes
+        ├── bst.cmi                 # Arbres binaires de recherche
+        ├── bst.cmo                 # Arbres binaires de recherche
+        ├── btree.cmi               # Arbres binaires
+        ├── btree.cmo               # Arbres binaires
+        └── graphics.ml             # Fenetre graphique
 ```
 Le dossier `data` contient le sujet et les graphique d'évolution du temps d'execution de différentes fonctions. Le dossier `src` comprend tous les fichiers OCaml, plus particulièrement, `main` correspond aux fichiers que nous avons fait pour ce projet, et `usage` aux fichiers que nous avons utilisé mais dont nous ne sommes pas les créateurs.
