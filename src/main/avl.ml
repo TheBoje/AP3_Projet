@@ -432,7 +432,7 @@ let rdg(avl : 'a t_avltree) : 'a t_avltree =
 (*
   Ajoute un noeud a l'arbre
   input : 
-  - a : valeur du noeud à ajouter
+  - a : valeur à ajouter
   - avl : arbre auquel on souhaite ajouter a
   output : 
   - 'a t_avltree : arbre auquel on a ajouté le noeud

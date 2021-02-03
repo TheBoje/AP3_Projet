@@ -42,56 +42,70 @@ Random.self_init;;
 
 
 (*
-  [DESCRIPTION]
-  input : 
-  - 
-  output :
-  - 
+  Recherche une valeur dans l'arbre
+  input :
+  - elem : valeur du noeud à trouver
+  - tree : arbre dans lequel on cherche elem
+  output : 
+  - bool : TRUE - elem existe dans tree
+          FALSE - elem n'existe pas dans tree
  *)
 let rec bst_seek (elem, tree : 'a * 'a bst) : bool =
   if isEmpty(tree)
-  then
-    false
+  then false
   else
     if elem < root(tree)
-    then
-      bst_seek(elem, lson(tree))
+    then bst_seek(elem, lson(tree))
     else
       if elem > root(tree)
-      then
-        bst_seek(elem, rson(tree))
-      else
-        true
+      then bst_seek(elem, rson(tree))
+      else true
 ;;
 
 
 (*
-  [DESCRIPTION]
+  Ajout d'un élément dans l'arbre
   input : 
-  - 
+  - elem : valeur à ajouter
+  - tree : arbre auquel on souhaite ajouter elem
   output :
-  - 
+  - 'a bst : tree auquel on a ajouté elem
+  Note: si elem existe déjà dans tree, alors
+  elem n'est pas ajouté et tree n'est pas modifié.
  *)
 let rec bst_linsert (elem, tree : 'a * 'a bst) : 'a bst =
   if (isEmpty(tree))
   then rooting(elem, empty(), empty())
   else
-    let (v, g, d) : ('a * 'a bst * 'a bst) = root(tree), lson (tree), rson(tree) in
+    let (v, g, d) :
+      ('a * 'a bst * 'a bst) = 
+      root(tree), 
+      lson (tree), 
+      rson(tree) in
+
     if elem = v
     then tree
     else
       if elem < v
-      then rooting (v, bst_linsert(elem, g), d)
-      else rooting (v, g, bst_linsert(elem, d))
+      then rooting(
+            v, 
+            bst_linsert(elem, g), 
+            d
+          )
+      else rooting(
+            v, 
+            g, 
+            bst_linsert(elem, d)
+          )
 ;;
 
 
 (*
-  [DESCRIPTION]
+  Construction d'un bst à partir d'une liste
   input : 
-  - 
+  - l : liste de valeurs
   output :
-  - 
+  - 'a bst : arbre contenant les valeurs de la liste
  *)
 let rec bst_lbuild (l : 'a list): 'a bst =
   match l with
@@ -101,22 +115,19 @@ let rec bst_lbuild (l : 'a list): 'a bst =
 
 
 (*
-  [DESCRIPTION]
+  Cherche l'élément maximum de l'arbre
   input : 
-  - 
+  - tree : arbre pour lequel on cherche le max
   output :
-  - 
+  - 'a : élément max de tree
  *)
-let rec max_seek(t : 'a bst) : 'a =
-  if isEmpty(t)
-  then
-    invalid_arg "max : l'arbre est vide"
+let rec max_seek(tree : 'a bst) : 'a =
+  if isEmpty(tree)
+  then invalid_arg "max : l'arbre est vide"
   else
-    if isEmpty(rson(t))
-    then
-      root(t)
-    else
-      max_seek(rson(t))
+    if isEmpty(rson(tree))
+    then root(tree)
+    else max_seek(rson(tree))
 ;;
 
 
@@ -144,27 +155,24 @@ let rec dmax(t : 'a t_btree) : 'a t_btree =
   output :
   - 
  *)
-let rec  bst_delete(e, t : 'a * 'a bst): 'a bst =
+let rec bst_delete(e, t : 'a * 'a bst): 'a bst =
   if isEmpty(t)
   then t
   else
     let (v, g, d) = (root(t), lson(t), rson(t))
     in
-    if e<v
-    then
-      rooting(v, bst_delete(e, g), d)
+    if e < v
+    then rooting(v, bst_delete(e, g), d)
     else
       if e > v
-      then
-        rooting(v, g, bst_delete(e, d))
+      then rooting(v, g, bst_delete(e, d))
       else
         if isEmpty(g)
         then d
         else
           if isEmpty(d)
           then g
-          else
-            rooting(max_seek(g), dmax(g), d)
+          else rooting(max_seek(g), dmax(g), d)
 ;;
 
 
@@ -175,7 +183,11 @@ let rec  bst_delete(e, t : 'a * 'a bst): 'a bst =
   output :
   - 
  *)
-let max (a , b : int * int ) = Pervasives.max a b;;
+let max (a , b : int * int ) = 
+  if a > b
+  then a
+  else b
+;;
 
 
 (*
