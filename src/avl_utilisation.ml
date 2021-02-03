@@ -205,6 +205,6 @@ show_avl_tree(test_create_avl);;
 show_avl_tree(avl_rnd_create(rnd_list_int(5, 100)));;
 show_avl_tree(avl_rnd_create(rnd_list_int(6, 100)));;
 
-rnd_sublist( 10,10, 90);;
+_rnd_sublist( 10,10, 90);;
 rnd_list_sub(20,100,50);;
 show_avl_tree(avl_rnd_create(rnd_list_sub(100,100,50)));;

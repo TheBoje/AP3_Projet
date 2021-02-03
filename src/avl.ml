@@ -32,49 +32,6 @@ type 'a t_avltree = ('a * int) bst;;
 
 
 (* ================================================== *)
-(* ================== AFFICHAGE AVL ================= *)
-(* ================================================== *)
-
-
-(* 
-  Fonctions d'affichage des AVL et de leurs différentes 
-  données. Permet d'afficher :
-  - les valeurs de l'avl
-  - la hauteur de chaque noeud de l'avl
-  - le déséquilibre de chaque noeud de l'avl
-*)
-
-let rec _avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
-  if (isEmpty(avl))
-  then empty()
-  else rooting(getValue(avl), avl_to_btree(lson(avl)), avl_to_btree(rson(avl)))
-;;
-
-let rec _avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
-  if (isEmpty(avl))
-  then empty()
-  else rooting(getHeight(avl), avl_to_height_btree(lson(avl)), avl_to_height_btree(rson(avl)))
-;;
-
-let rec _avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
-  if (isEmpty(avl))
-  then empty()
-  else rooting(desequilibre(avl), avl_to_deseq_btree(lson(avl)), avl_to_deseq_btree(rson(avl)))
-;;
-
-let show_avl_tree(avl : int t_avltree) : unit =
-  show_int_btree(_avl_to_btree(avl))
-;;
-
-let show_height_tree(avl : 'a t_avltree) : unit = 
-  show_int_btree(_avl_to_height_btree(avl))
-;;
-
-let show_deseq_btree(avl : 'a t_avltree) : unit =
-  show_int_btree(_avl_to_deseq_btree(avl))
-;;
-
-(* ================================================== *)
 (* ================ UTILITAIRES AVL ================= *)
 (* ================================================== *)
 
@@ -176,6 +133,49 @@ let updateHeight(avl : 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
   then 0
   else getHeight(lson(avl)) - getHeight(rson(avl))
+;;
+
+(* ================================================== *)
+(* ================== AFFICHAGE AVL ================= *)
+(* ================================================== *)
+
+
+(* 
+  Fonctions d'affichage des AVL et de leurs différentes 
+  données. Permet d'afficher :
+  - les valeurs de l'avl
+  - la hauteur de chaque noeud de l'avl
+  - le déséquilibre de chaque noeud de l'avl
+*)
+
+let rec _avl_to_btree(avl : 'a t_avltree) : 'a t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(getValue(avl), _avl_to_btree(lson(avl)), _avl_to_btree(rson(avl)))
+;;
+
+let rec _avl_to_height_btree(avl : 'a t_avltree) : int t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(getHeight(avl), _avl_to_height_btree(lson(avl)), _avl_to_height_btree(rson(avl)))
+;;
+
+let rec _avl_to_deseq_btree(avl : 'a t_avltree) : int t_btree =
+  if (isEmpty(avl))
+  then empty()
+  else rooting(desequilibre(avl), _avl_to_deseq_btree(lson(avl)), _avl_to_deseq_btree(rson(avl)))
+;;
+
+let show_avl_tree(avl : int t_avltree) : unit =
+  show_int_btree(_avl_to_btree(avl))
+;;
+
+let show_height_tree(avl : 'a t_avltree) : unit = 
+  show_int_btree(_avl_to_height_btree(avl))
+;;
+
+let show_deseq_btree(avl : 'a t_avltree) : unit =
+  show_int_btree(_avl_to_deseq_btree(avl))
 ;;
 
 
