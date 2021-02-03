@@ -90,3 +90,31 @@ En créant plusieurs AVL avec des suites de nombres entiers qui contiennent des 
 
 ## Note 
 ### Structure des fichiers
+Notre structude des fichiers se présente de la facon suivante :
+```bash
+├── data
+│   ├── sujet.pdf
+│   ├── insert.png
+│   ├── seek.png
+│   └── suppr.png
+├── README.md
+└── src
+    ├── main
+    │   ├── abr.ml
+    │   ├── abr_plot.ml
+    │   ├── avl.ml
+    │   ├── avl_plot.ml
+    │   └── avl_utilisation.ml
+    └── usage
+        ├── ap2util.ml
+        ├── ap3queue.cmi
+        ├── ap3queue.cmo
+        ├── ap3stack.cmi
+        ├── ap3stack.cmo
+        ├── bst.cmi
+        ├── bst.cmo
+        ├── btree.cmi
+        ├── btree.cmo
+        └── graphics.ml
+```
+Le dossier `data` contient le sujet et les graphique d'évolution du temps d'execution de différentes fonctions. Le dossier `src` comprend tous les fichiers OCaml, plus particulièrement, `main` correspond aux fichiers que nous avons fait pour ce projet, et `usage` aux fichiers que nous avons utilisé mais dont nous ne sommes pas les créateurs.
