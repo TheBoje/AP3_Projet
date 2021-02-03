@@ -17,14 +17,17 @@
 (* ================================================== *)
 (* ================== IMPORTATIONS ================== *)
 (* ================================================== *)
+
 #directory "../usage";;
 
-#use "ap2util.ml";;
 #load "btree.cmo";;
 #load "bst.cmo";;
+#use "ap2util.ml";;
+#use "avl.ml";;
+
 open Bst;;
 open Btree;;
-#use "avl.ml";;
+
 Random.self_init;;
 
 
@@ -34,11 +37,9 @@ Random.self_init;;
 
 
 (*
-ici nous testont la rotation droite pour cela on utilise test_avl_rd 
-qui crée un arbre binaire equilibrer.
-ensuite nous affichons l'arbre avant et apres la rottation
+Création et affichage d'un arbre avant et après 
+une rotation droite
 *)
-
 let test_avl_rd : int t_avltree = 
   updateHeight(
       rooting((1, 2), 
@@ -53,13 +54,11 @@ show_avl_tree(test_avl_rd);;
 show_avl_tree(rd(test_avl_rd));;
 
 
+
 (*
-ici nous testont la rotation gauche pour cela on utilise test_avl_rg 
-qui crée un arbre binaire equilibrer.
-ensuite nous affichons l'arbre avant et apres la rottation
+Création et affichage d'un arbre avant et après 
+une rotation gauche
 *)
-
-
 let test_avl_rg : int t_avltree = 
   updateHeight(
       rooting((1, 2), 
@@ -73,12 +72,11 @@ let test_avl_rg : int t_avltree =
 show_avl_tree(test_avl_rg);; 
 show_avl_tree(rg(test_avl_rg));;
 
-(*
-ici nous testont la rotation gauche droite pour cela on utilise test_avl_rgd 
-qui crée un arbre binaire equilibrer.
-ensuite nous affichons l'arbre avant et apres la rottation
-*)
 
+(*
+Création et affichage d'un arbre avant et après 
+une rotation gauche droite
+*)
 let test_avl_rgd : int t_avltree = 
   updateHeight(rooting((6, 0), 
                        rooting((2, 2), 
@@ -96,12 +94,9 @@ show_avl_tree(rgd(test_avl_rgd));;
 
 
 (*
-ici nous testont la rotation droite gauche pour cela on utilise test_avl_rdg 
-qui crée un arbre binaire equilibrer.
-ensuite nous affichons l'arbre avant et apres la rottation
+Création et affichage d'un arbre avant et après 
+une rotation droite gauche
 *)
-
-
 let test_avl_rdg : int t_avltree = 
   updateHeight(
       rooting((2, 3),
@@ -118,14 +113,13 @@ let test_avl_rdg : int t_avltree =
 show_avl_tree(test_avl_rdg);; 
 show_avl_tree(rdg(test_avl_rdg));;
 
+
 (*
-Nous allons reutiliser l'arbre du test roation droite pour tester la fonction de calculer du désiquilibre
-d'un arbre.
-Pour verifier cela on print l'arbe , puis on test show_height_tree qui montre la hauteur d'un noeud de l'arbre
-enfin on test la fonction desequilibre
+Nous réutilisons un des arbres précédents pour tester
+le calcul du déséquilibre. Ici, nous utilisons aussi 
+la fonction show_height_tree() pour afficher la hauteur
+de chaque noeud de l'avl.
 *)
-
-
 let test_desequilibre : int t_avltree = test_avl_rd;;
 show_avl_tree(test_desequilibre);;
 show_height_tree(test_desequilibre);;
@@ -133,24 +127,22 @@ desequilibre(test_desequilibre);;
 
 
 (*
-Nous reutilison l'arbre de la rotation gauche droite pour tester les prochaines fonctions.
-Nous commencons donc par affiché l'arbre puis ensuite la hauteur de l'arbre
-une premiere fois puis ensuite on afficher l'arbre une seconde fosi mais avec
-la fonction reequilibrer et on affiche un seconde fois la hauteur de l'arbre reequilibrer.
+Nous réutilisons un des arbres précédents pour tester
+le rééquilibrage.
 *)
-
-
 let test_reequilibre: int t_avltree= test_avl_rdg;;
 show_avl_tree(test_reequilibre);;
 show_height_tree(test_reequilibre);;
 show_avl_tree(reequilibrer(test_reequilibre));;
 show_height_tree(reequilibrer(test_reequilibre));;
 
+
 (*
-Nous allons tester l'insertion dans un arbre.
-Pour cela nous allons d'abord  afficher l'arbre et son déséquilibre une premiere fois avant la fonction.
-Puis nous allons reafficher l'arbre et son déséquibilibre une seconde fois pour verifer que la fonction ai bien ajouter
-l'entier et ai garder un déséquilibre <= 2 ou -2
+Nous réutilisons un des arbres précédents pour tester
+l'insertion d'une valeur dans un avl. On note que le 
+déséquilibre de chaque noeud est compris entre 2 et -2.
+Nous testons ensuite l'insertion d'une valeur dans un
+avl qui est équilibré.
 *)
 
 let test_insert_avl: int t_avltree = test_avl_rdg;;
@@ -160,43 +152,37 @@ show_deseq_btree(test_insert_avl);;
 show_avl_tree(reequilibrer(test_insert_avl));;
 desequilibre(reequilibrer(test_insert_avl));;
 show_deseq_btree(reequilibrer(test_insert_avl));;
-(* erreur ->*)
 show_avl_tree(insert_avl(8,reequilibrer(test_insert_avl)));;
 desequilibre(insert_avl(8,reequilibrer(test_insert_avl)));;
 
 
 (*
-Nous reproduisons le meme deroulement que pour le teste inser_avl 
-mais cette fois avec la fonction supr_ avl qui renvoie
-un arbre équilibré sans  élément demandé.
-Pour cela on utiliseras un arbre spécifique que l'on definie a partir de l'arbre précédent 
- *)
-
+Nous suivons la meme logique avec la suppression d'une 
+valeur dans l'avl que pour l'insertion.
+*)
 let test_supr_avl : int t_avltree = insert_avl(8,reequilibrer(test_insert_avl));;
 show_avl_tree(test_supr_avl);;
 desequilibre(test_supr_avl);;
 show_avl_tree(suppr_avl(4,test_supr_avl));;
 desequilibre(suppr_avl(4,test_supr_avl));;
 
-(*
-En nous servant de l'arbre définit lors du test supr_avl nous
-teston la fonction seek_val qui recherche si une valeur est
-présente dans ette arbre et renvoi un booléen.
- *)
 
+(*
+Nous testons maintenant la recherche dans l'avl.
+On note que la fonction renvoie TRUE si la valeur
+est dans l'avl, et FALSE si elle ne l'est pas.
+*)
 seek_avl(5,test_supr_avl);;
 seek_avl(10,test_supr_avl);;
 
 
 
 (*
-Enfin nous teston ici la creation d'arbre équlibré a partir de listes
- grace a la fonctions avl_rnd_create. pour cela on utiliseras une liste connue
-puis par la suite on utiliseras la fonction rnd_list_sub qui crée une liste 
-aléatoire avec des entiers et des sous listes ordonées crée par la fonction
-rnd_sublist.
-Enfin on affiche l'arbre de cette lsite aléatoire.
- *)
+Enfin nous testons ici la creation d'arbre équlibré
+à partir de listes via la fonction avl_rnd_create().
+On utilise aussi des listes générés via rnd_list_int()
+et rnd_list_sub(). 
+*)
 
 let test_list: int list = [3;8;1;9;4;7];;
 let test_create_avl: int t_avltree = avl_rnd_create(test_list);;
@@ -205,6 +191,4 @@ show_avl_tree(test_create_avl);;
 show_avl_tree(avl_rnd_create(rnd_list_int(5, 100)));;
 show_avl_tree(avl_rnd_create(rnd_list_int(6, 100)));;
 
-_rnd_sublist( 10,10, 90);;
-rnd_list_sub(20,100,50);;
 show_avl_tree(avl_rnd_create(rnd_list_sub(100,100,50)));;

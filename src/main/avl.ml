@@ -479,12 +479,12 @@ let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
   - a : valeur du noeud à trouver
   - avl : arbre dans lequel on cherche a
   output : 
-  - 'a t_avltree : avl contenant la valeur recherchée dans le noeud.
-  Si l'élément d'existe pas dans l'avl, l'avl retourné est vide.
+  - bool : TRUE - elem existe dans avl
+          FALSE - elem n'existe pas dans avl
  *)
 let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
   if isEmpty(avl)
-  then avl
+  then false
   else
     let ((value, height), ls, rs) = 
           (root(avl),
@@ -492,7 +492,7 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : 'a t_avltree =
            rson(avl)
           ) in  
     if elem = value
-    then avl
+    then true
     else
       if elem > value
       then seek_avl(elem, rs)
