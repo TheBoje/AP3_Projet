@@ -302,7 +302,7 @@ La complexité en temps de ces trois fonctions est donc de l'ordre de O(log n) g
 Pour cette question, nous avons mis en place un protocole d'expérimentation avec Florian Legendre. En effet, nous avons généré des AVL suivant plusieurs méthodes (avec des sous-suites de longueur fixe, ascendante, descentande et aléatoire), et compté le nombre de rotations effectuées pour chacun de ces arbres. Pour chacun des cas suivants, nous avons générés 100 AVL de taille n pour obtenir les résultats.
 
 
-<table style="text-align:center">
+<table style="text-align:right">
     <tr>
         <th> Taille 
         <th colspan=4> Type de sous-suite
