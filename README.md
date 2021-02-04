@@ -17,7 +17,8 @@ Notre structude des fichiers se présente de la facon suivante :
 │   ├── sujet.pdf                   # Sujet du projet
 │   ├── insert.png                  # Graphique du temps d'exec. de la fct insert_avl()
 │   ├── seek.png                    # Graphique du temps d'exec. de la fct seek_avl()
-│   └── suppr.png                   # Graphique du temps d'exec. de la fct suppr_avl()
+│   ├── suppr.png                   # Graphique du temps d'exec. de la fct suppr_avl()
+|   └── rotations.png               # Graphique du nbr moyen de rotations des AVL
 │
 └── src                             # Dossier de code
     │
@@ -141,4 +142,25 @@ La complexité en temps de ces trois fonctions est donc de l'ordre de O(log n) g
 
 ### Question 2
 
-En créant plusieurs AVL avec des suites de nombres entiers qui contiennent des sous-suites ordonnés de longueur variable, nous pouvons estimer que le nombre de rotations qui sont effectuées pour garder l'arbre équilibré est de l'ordre de : ??? TODO 
+Pour cette question, nous avons mis en place un protocole d'expérimentation avec Florian Legendre. En effet, nous avons généré des AVL suivant plusieurs méthodes (avec des sous-suites de longueur fixe, ascendante, descentande et aléatoire), et compté le nombre de rotations effectuées pour chacun de ces arbres. Pour chacun des cas suivants, nous avons générés 100 AVL de taille n pour obtenir les résultats.
+
+
+<table>
+<tr>
+<th> Taille <th colspan=4> Type de sous-suite
+<tr> 
+<th> - <th> Fixe <th> Ascendant <th> Descendant <th> Aléatoire
+<tr>
+<td> 10 <td> 5,91 <td> 5,81 <td> 5,77 <td> 5,87
+<tr>
+<td> 100 <td> 49,34 <td> 67,82 <td> 68,82 <td> 75,6
+<tr>
+<td> 1 000 <td> 322,88 <td> 403,92 <td> 405,02 <td> 445,25
+<tr>
+<td> 10 000 <td> 675,37 <td> 1400,04 <td> 1405,95 <td> 1936,7
+<tr>
+<td> 100 000 <td> 747,34 <td> 1736,08 <td> 1725,62 <td> 2676,71
+</table>
+On obtient alors le graphique suivant : </br>
+<img src="data/rotations.png">Moyenne du nombre de rotation</img></br>
+On remarque alors que le nombre de rotation est alors logarithmique.

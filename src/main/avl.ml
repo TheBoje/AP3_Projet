@@ -149,6 +149,7 @@ let updateHeight(avl : 'a t_avltree) : 'a t_avltree =
 
 
 (* 
+  [FONCTIONS PRIVÉES]
   Fonctions d'affichage des AVL et de leurs différentes 
   données. Permet d'afficher :
   - les valeurs de l'avl
@@ -557,6 +558,7 @@ let rec rnd_list_int(n, max_val : int * int ) : int list =
   then []
   else Random.int(max_val)::rnd_list_int(n-1, max_val)
 ;;
+
 
 (*
   [FONCTION PRIVÉE]
