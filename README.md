@@ -14,11 +14,14 @@ Notre structude des fichiers se présente de la facon suivante :
 .
 ├── README.md                       # Fichier de rédaction du compte rendu
 ├── data                            # Dossier de données
+│   ├── avg_mixed.png               # Graphique de la fct mixed_unbalance_avg
+│   ├── avg_rnd.png                 # Graphique de la fct rnd_unbalance_avg
+│   ├── bst_mix_create.png          # Graphique de la fct bst_mix_create
 │   ├── sujet.pdf                   # Sujet du projet
 │   ├── insert.png                  # Graphique du temps d'exec. de la fct insert_avl()
 │   ├── seek.png                    # Graphique du temps d'exec. de la fct seek_avl()
 │   ├── suppr.png                   # Graphique du temps d'exec. de la fct suppr_avl()
-│  └── rotations.png               # Graphique du nbr moyen de rotations des AVL
+│   └── rotations.png               # Graphique du nbr moyen de rotations des AVL
 │
 └── src                             # Dossier de code
     │
@@ -77,14 +80,14 @@ La fonction `rnd_unbalance_avg : int tSample, int treesSize -> float` calcule la
 |	       10		|		     0.02023			|			24.51649			|
 |	     Moyenne		|		     0.00820			|			24.47947			|
 
-<img src="data/avg_rnd.png">_résultats de rnd__unbalance__avg en fonction de la taille des arbres_ </img> </br>
-<img src="data/avg_mixed.png">_résultats de mixed__unbalance__avg en fonction de la taille des arbres_ </img></br>
+<img src="data/avg_rnd.png">_résultats de `rnd_unbalance_avg` en fonction de la taille des arbres_ </img> </br>
+<img src="data/avg_mixed.png">_résultats de `mixed_unbalance_avg` en fonction de la taille des arbres_ </img></br>
 
 On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs aléatoires.
 
 ## Annexe
 
-<img src="data/bst_mix_create.png"> _complexité en temps de bst__mix__create_</img>
+<img src="data/bst_mix_create.png"> _complexité en temps de `bst_mix_create`_</img>
 
 # Partie 2 : Arbres de Adelson-Velsky et Landis (AVL)
 ## Implantation d'un module `AVL`
@@ -143,9 +146,9 @@ Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et
         <th> Recherche
     <tr>
         <td> Graphiques
-        <td> <img src="data/suppr.png">Fonction de suppression</img>
-        <td> <img src="data/insert.png">Fonction d'insertion</img>
-        <td> <img src="data/seek.png">Fonction de recherche</img>
+        <td> <img src="data/suppr.png"></img>
+        <td> <img src="data/insert.png"></img>
+        <td> <img src="data/seek.png"></img>
     <tr>
         <td> Complexité 
         <td> O(log(n))
@@ -166,22 +169,50 @@ La complexité en temps de ces trois fonctions est donc de l'ordre de O(log n) g
 Pour cette question, nous avons mis en place un protocole d'expérimentation avec Florian Legendre. En effet, nous avons généré des AVL suivant plusieurs méthodes (avec des sous-suites de longueur fixe, ascendante, descentande et aléatoire), et compté le nombre de rotations effectuées pour chacun de ces arbres. Pour chacun des cas suivants, nous avons générés 100 AVL de taille n pour obtenir les résultats.
 
 
-<table>
-<tr>
-<th> Taille <th colspan=4> Type de sous-suite
-<tr> 
-<th> - <th> Fixe <th> Ascendant <th> Descendant <th> Aléatoire
-<tr>
-<td> 10 <td> 5,91 <td> 5,81 <td> 5,77 <td> 5,87
-<tr>
-<td> 100 <td> 49,34 <td> 67,82 <td> 68,82 <td> 75,6
-<tr>
-<td> 1 000 <td> 322,88 <td> 403,92 <td> 405,02 <td> 445,25
-<tr>
-<td> 10 000 <td> 675,37 <td> 1400,04 <td> 1405,95 <td> 1936,7
-<tr>
-<td> 100 000 <td> 747,34 <td> 1736,08 <td> 1725,62 <td> 2676,71
+<table style="text-align:center">
+    <tr>
+        <th> Taille 
+        <th colspan=4> Type de sous-suite
+        <th> Graphique
+    <tr> 
+        <th> \
+        <th> Fixe 
+        <th> Ascendant 
+        <th> Descendant 
+        <th> Aléatoire
+    <tr>
+        <td> 10 
+        <td> 5,91 
+        <td> 5,81 
+        <td> 5,77 
+        <td> 5,87
+        <td rowspan=5><img src="data/rotations.png"></img>
+    <tr>
+        <td> 100 
+        <td> 49,34 
+        <td> 67,82 
+        <td> 68,82 
+        <td> 75,6
+    <tr>
+        <td> 1 000 
+        <td> 322,88 
+        <td> 403,92 
+        <td> 405,02 
+        <td> 445,25
+    <tr>
+        <td> 10 000 
+        <td> 675,37 
+        <td> 1400,04 
+        <td> 1405,95 
+        <td> 1936,7
+    <tr>
+        <td> 100 000 
+        <td> 747,34 
+        <td> 1736,08 
+        <td> 1725,62 
+        <td> 2676,71
+        
 </table>
 On obtient alors le graphique suivant : </br>
-<img src="data/rotations.png">Moyenne du nombre de rotation</img></br>
+</br>
 On remarque alors que le nombre de rotation est logarithmique par rapport à la taille de l'arbre.
