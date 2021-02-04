@@ -274,7 +274,7 @@ let rec _gen_seq_lst_aux(borneMin, borneMax , l : int * int * int list) : int li
   if borneMax = borneMin
   then l
   else
-    _gen_seq_lst_aux(borneMin, borneMax - 1, borneMax::list)
+    _gen_seq_lst_aux(borneMin, borneMax - 1, borneMax::l)
 ;;
 
 
