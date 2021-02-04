@@ -262,10 +262,10 @@ let gen_rnd_lst(size : int ) : int list =
 
 (*
   [FONCTION PRIVÉE]
-  Génère une liste contenant une suite d'entiers 
+  Génère une liste contenant une suite d'entiers
   input : 
-  - borneMin : TODO
-  - borneMax : TODO
+  - borneMin : la borne minimale de la suite
+  - borneMax : la borne maximale de la suite
   - l : liste de retour, initialisée à []
   output :
   - int list : suite d'entiers de taille borneMax - borneMin
@@ -281,8 +281,8 @@ let rec _gen_seq_lst_aux(borneMin, borneMax , l : int * int * int list) : int li
 (*
   Génère une liste contenant une suite d'entiers
   input : 
-  - borneMin : TODO
-  - borneMax : TODO
+  - borneMin : la borne minimale de la liste
+  - borneMax : la borne maximale de la liste
   output :
   - int list : suite d'entiers de taille borneMax - borneMin
  *)
@@ -414,14 +414,16 @@ let rnd_unbalance_avg (tSample, treesSize : int * int) : float =
 
 
 
-(* TODO Clarifier la formulation
-  Calcule la moyenne de avgSample déséquilibre
+(*
+  Calcule la moyenne d'une moyenne de déséquilibre effectué sur des échantillons d'arbres
+  générés à partir de liste composé de suite non-ordonnées la fonction appelle simplement
+  plusieurs fois 'rnd_unbalance_avg' et fait la moyenne des résultats obtenus à chaque appel
   input : 
-  - avgSample : TODO
-  - treeSample : TODO
+  - avgSample : nombre de moyennes à effectuer et à traiter
+  - treeSample : taille des échantillons d'arbre traités
   - treesSize : taille de chaque ABR
   output :
-  - float : TODO
+  - float : la moyenne des résulats des appels à 'rnd_unbalance_avg'
  *)
 let rnd_unbalance_avgs_avg(avgSample, treeSample, treesSize : int * int * int) : float =
   let sum : float ref = ref 0. in
@@ -454,16 +456,17 @@ let mixed_unbalance_avg (tSample, treesSize : int * int) : float =
   !sum /. float_of_int(tSample)
 ;;
 
-(* TODO Aussi clarifier la formulation
-  Calcule la moyenne de avgSample déséquilibre pour
-  des arbres générés à partir d'une liste composée
-  de sous-suites.
+(*
+  Calcule la moyenne d'une moyenne de déséquilibre effectué sur des échantillons d'arbres
+  générés à partir de liste composé de suite non-ordonnées et de suite ordonnées
+  la fonction appelle simplement plusieurs fois 'mixed_unbalance_avg' et fait la moyenne 
+  des résultats obtenus à chaque appel
   input : 
-  - avgSample : TODO
-  - treeSample : TODO
+  - avgSample : Nombre de moyennes à effectuer et à traiter 
+  - treeSample : taille des échantillons d'arbres traités
   - treesSize : taille de chaque ABR
   output :
-  - float : TODO
+  - float : la moyenne des résultats des appels à 'mixed_unbalance_avg'
  *)
 let mixed_unbalance_avgs_avg (avgSample, treeSample, treesSize : int * int * int) : float =
   let sum : float ref = ref 0. in
