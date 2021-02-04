@@ -180,13 +180,13 @@ Pour cette question, nous avons mis en place un protocole d'expérimentation ave
         <th> Ascendant 
         <th> Descendant 
         <th> Aléatoire
+        <td rowspan=6><img src="data/rotations.png"></img>
     <tr>
         <td> 10 
         <td> 5,91 
         <td> 5,81 
         <td> 5,77 
         <td> 5,87
-        <td rowspan=5><img src="data/rotations.png"></img>
     <tr>
         <td> 100 
         <td> 49,34 
