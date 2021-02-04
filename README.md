@@ -77,10 +77,14 @@ La fonction `rnd_unbalance_avg : int tSample, int treesSize -> float` calcule la
 |	       10		|		     0.02023			|			24.51649			|
 |	     Moyenne		|		     0.00820			|			24.47947			|
 
-La complexité des fonctions générant les résultats ci-dessus est en O(n)
+<img src="data/avg_rnd.png">_résultats de rnd__unbalance__avg en fonction de la taille des arbres_ </img> </br>
+<img src="data/avg_mixed.png">_résultats de mixed__unbalance__avg en fonction de la taille des arbres_ </img></br>
 
 On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs aléatoires.
 
+## Annexe
+
+<img src="data/bst_mix_create.png"> _complexité en temps de bst__mix__create_</img>
 
 # Partie 2 : Arbres de Adelson-Velsky et Landis (AVL)
 ## Implantation d'un module `AVL`
