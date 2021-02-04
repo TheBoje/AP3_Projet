@@ -224,7 +224,7 @@ insert_avl_plot(1000);;
 *)
 (*
 suppr_avl_plot(1000);; 
- *)
+*)
 (*
 seek_avl_plot(1000);;
- *)
+*)

@@ -133,13 +133,30 @@ Pour créer des AVL aléatoirement, nous avons mis en place plusieurs fonctions 
 - `avl_rnd_create (l : int list) : int t_avltree` permet de créer un AVL à partir d'une liste. Utilise la fonction privée `_avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree`.
 - `_avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree` permet de créer un AVL à partir d'une liste.
 
-Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et `bst_seek`. Pour cela, nous calculons le temps d'execution de chacune des fonction, et ce pour des arbres aléatoires de taille 1 à n. Une fois les calculs terminés, nous utilisons le module graphique d'Ocaml pour afficher l'évolution du temps de calcul en fonction de la taille de l'arbre étudié. L'ensemble des fonctions utilisés sont regroupés dans le fichier `avl_plot.ml`. Nous testons alors les différentes fonctions avec une taille d'arbre allant de 1 à 10000.
+Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et `bst_seek`. Pour cela, nous calculons le temps d'execution de chacune des fonction, et ce pour des arbres aléatoires de taille 1 à n. Une fois les calculs terminés, nous utilisons le module graphique d'Ocaml pour afficher l'évolution du temps de calcul en fonction de la taille de l'arbre étudié. L'ensemble des fonctions utilisés sont regroupés dans le fichier `avl_plot.ml`. Nous testons alors les différentes fonctions avec une taille d'arbre allant de 1 à 1000.
 
-<img src="data/suppr.png">Fonction de suppression</img></br>
+<table>
+    <tr>
+        <th> \
+        <th> Suppression
+        <th> Insersion
+        <th> Recherche
+    <tr>
+        <td> Graphiques
+        <td> <img src="data/suppr.png">Fonction de suppression</img>
+        <td> <img src="data/insert.png">Fonction d'insertion</img>
+        <td> <img src="data/seek.png">Fonction de recherche</img>
+    <tr>
+        <td> Complexité 
+        <td> O(log(n))
+        <td> O(log(n))
+        <td> O(log(n))
+</table>
+</br>
 Pour la fonction de suppression, nous pouvons constater que la complexité en temps est de l'ordre de O(log n), avec n la taille de l'avl.
-<img src="data/insert.png">Fonction d'insertion</img></br>
+
 Pour la fonction d'insertion, nous pouvons constater que la complexité en temps est de l'ordre de O(log n), avec n la taille de l'avl.
-<img src="data/seek.png">Fonction de recherche</img></br>
+
 Pour la fonction de recherche, nous pouvons constater que la complexité en temps est de l'ordre de O(log n), avec n la taille de l'avl.
 
 La complexité en temps de ces trois fonctions est donc de l'ordre de O(log n) grâce à la mise en place de la structure de données suivante : `'a t_avltree = ('a * int) bst`. 
@@ -167,4 +184,4 @@ Pour cette question, nous avons mis en place un protocole d'expérimentation ave
 </table>
 On obtient alors le graphique suivant : </br>
 <img src="data/rotations.png">Moyenne du nombre de rotation</img></br>
-On remarque alors que le nombre de rotation est alors logarithmique.
+On remarque alors que le nombre de rotation est logarithmique par rapport à la taille de l'arbre.
