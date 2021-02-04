@@ -194,19 +194,19 @@ Pour cette question, nous avons mis en place un protocole d'expérimentation ave
         <td> 68,82 
         <td> 75,6
     <tr>
-        <td> 1 000 
+        <td> 1'000 
         <td> 322,88 
         <td> 403,92 
         <td> 405,02 
         <td> 445,25
     <tr>
-        <td> 10 000 
+        <td> 10'000 
         <td> 675,37 
         <td> 1400,04 
         <td> 1405,95 
         <td> 1936,7
     <tr>
-        <td> 100 000 
+        <td> 100'000 
         <td> 747,34 
         <td> 1736,08 
         <td> 1725,62 
