@@ -18,7 +18,7 @@ Notre structude des fichiers se présente de la facon suivante :
 │   ├── insert.png                  # Graphique du temps d'exec. de la fct insert_avl()
 │   ├── seek.png                    # Graphique du temps d'exec. de la fct seek_avl()
 │   ├── suppr.png                   # Graphique du temps d'exec. de la fct suppr_avl()
-|   └── rotations.png               # Graphique du nbr moyen de rotations des AVL
+│  └── rotations.png               # Graphique du nbr moyen de rotations des AVL
 │
 └── src                             # Dossier de code
     │
