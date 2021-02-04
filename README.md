@@ -2,10 +2,7 @@
 
 Enseignant : M.Laurent Fuchs.
 
-Ce projet est à réaliser avant le 5 février 2021 à déposer sur UPDago dans le cadre de l'Unité d'Enseignement "Algorithmique et Programmation 3". Ce projet porte sur les Arbres binaires de recherche (ABR) et les Arbres AVL. Nous étudierons plus particulièrement le déséquilibre de ces arbres et la complexité en temps de certaines opérations de manipulation de ces derniers.
-
-Groupe 1: Yann Berthelot, Louis Leenart & Alexis Louail.
-
+Ce projet est à réaliser avant le 5 février 2021 à déposer sur UPDago dans le cadre de l'Unité d'Enseignement "Algorithmique et Programmation 3". Ce projet porte sur les Arbres binaires de recherche (ABR) et les Arbres AVL. Nous étudierons plus particulièrement le déséquilibre de ces arbres et la complexité en temps de certaines opérations de manipulation de ces derniers. Notre groupe suit la constitution suivante : Yann Berthelot, Louis Leenart & Alexis Louail.
 
 # Introduction 
 ## Structure des fichiers
@@ -22,16 +19,13 @@ Notre structude des fichiers se présente de la facon suivante :
 │   ├── seek.png                    # Graphique du temps d'exec. de la fct seek_avl()
 │   ├── suppr.png                   # Graphique du temps d'exec. de la fct suppr_avl()
 │   └── rotations.png               # Graphique du nbr moyen de rotations des AVL
-│
 └── src                             # Dossier de code
-    │
     ├── main                        # Dossier de code du projet
     │   ├── abr.ml                  # Implantation du module ABR
     │   ├── abr_plot.ml             # Tests de complexité / Affichage d'ABR
     │   ├── avl.ml                  # Implantation du module AVL
     │   ├── avl_plot.ml             # Tests de complexité / Affichage d'AVL
     │   └── avl_utilisation.ml      # Tests de l'implantation d'AVL
-    │
     └── usage                       # Dossier de dépendances
         ├── ap2util.ml              # Utilitaire listes
         ├── bst.cmi                 # Arbres binaires de recherche
@@ -41,6 +35,8 @@ Notre structude des fichiers se présente de la facon suivante :
         └── graphics.ml             # Fenetre graphique
 ```
 Le dossier `data` contient le sujet et les graphique d'évolution du temps d'execution de différentes fonctions. Le dossier `src` comprend tous les fichiers OCaml, plus particulièrement, `main` correspond aux fichiers que nous avons fait pour ce projet, et `usage` aux fichiers que nous avons utilisé mais dont nous ne sommes pas les créateurs.
+
+<div style="page-break-after: always;"></div>
 
 # Partie 1 : Arbres binaires de recherche (ABR)
 L'ensemble des fichiers liés au module `ABR` sont les suivants : 
@@ -88,6 +84,8 @@ On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils s
 ## Annexe
 
 <img src="data/bst_mix_create.png"> _complexité en temps de `bst_mix_create`_</img>
+
+<div style="page-break-after: always;"></div>
 
 # Partie 2 : Arbres de Adelson-Velsky et Landis (AVL)
 ## Implantation d'un module `AVL`
@@ -260,6 +258,9 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : bool =
       else seek_avl(elem, ls)
 ;;
 ```
+
+<div style="page-break-after: always;"></div>
+
 ## Expérimentations avec les arbres AVL
 ### Question 1
 Pour créer des AVL aléatoirement, nous avons mis en place plusieurs fonctions : 
@@ -303,11 +304,11 @@ Pour cette question, nous avons mis en place un protocole d'expérimentation ave
 
 
 <table style="text-align:right">
-    <tr>
+    <tr style="text-align:center">
         <th> Taille 
         <th colspan=4> Type de sous-suite
         <th> Graphique
-    <tr> 
+    <tr style="text-align:center"> 
         <th> \
         <th> Fixe 
         <th> Ascendant 
@@ -344,8 +345,4 @@ Pour cette question, nous avons mis en place un protocole d'expérimentation ave
         <td> 1736,08 
         <td> 1725,62 
         <td> 2676,71
-        
 </table>
-On obtient alors le graphique suivant : </br>
-</br>
-On remarque alors que le nombre de rotation est logarithmique par rapport à la taille de l'arbre.
