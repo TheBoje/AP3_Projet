@@ -109,12 +109,56 @@ src
 - `rgd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Gauche Droite de l'AVL, qui repose sur `rd(avl)` et `rg(avl)`.
 - `rdg(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Droite Gauche de l'AVL, qui repose sur `rd(avl)` et `rg(avl)`.
 - `updateHeight(avl : 'a t_avltree) : 'a t_avltree` permet de mettre à jour la hauteur du noeud suite à une rotation.
-- `getHeight(avl : 'a t_avltree) : int` et `getValue(avl : 'a t_avltree) : 'a` permettent de récupérer soit la valeur soit la hauteur du noeud. On note que la hauteur du noeud n'est pas mise à jour dynamiquement, il est donc nécessaire d'utiliser la fonction `updateHeight()` avant.
+- `getHeight(avl : 'a t_avltree) : int` et `getValue(avl : 'a t_avltree) : 'a` permettent de récupérer soit la valeur soit la hauteur du noeud. On note que la hauteur du noeud n'est pas mise à jour dynamiquement, il est donc nécessaire d'utiliser la fonction `updateHeight()` avant. 
+
+Par exemple, le code de la fonction de rotation droite est le suivant : 
+```ocaml
+let rd(avl : 'a t_avltree) : 'a t_avltree =
+  if (isEmpty(avl) || isEmpty(lson(avl)))
+  then invalid_arg "rd : avl and avl.lson must not be empty"
+  else (
+    let (p, q) = (root(lson(avl)), root(avl)) in
+    let (u, v, w) = (
+        lson(lson(avl)),
+        rson(lson(avl)), 
+        rson(avl)) in
+    updateHeight(rooting(
+          p, 
+          u, 
+          updateHeight(rooting(
+                q, 
+                v, 
+                w
+              ))
+        ))
+  )
+;;
+```
 
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 
 ### Question 2
-&nbsp; Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à l'opération de rééquilibrage de l'avl. En fonction des valeurs de déséquilibre de chaque noeud de l'avl (calculé via la hauteur de chaque noeuds fils), on effectue des rotations.
+&nbsp; Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à l'opération de rééquilibrage de l'avl. En fonction des valeurs de déséquilibre de chaque noeud de l'avl (calculé via la hauteur de chaque noeuds fils), on effectue des rotations. La fonction de rééquilibrage est la suivante : 
+```ocaml
+let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
+  let des = desequilibre(avl) in
+  if (des = 0 || des = -1 || des = 1)
+  then avl
+  else 
+    if des = 2
+    then 
+      if desequilibre(lson(avl)) = 1
+      then rd(avl)
+      else rgd(avl)
+    else 
+      if des = -2
+      then 
+        if desequilibre(rson(avl)) = 1
+        then rdg(avl)
+        else rg(avl)
+      else invalid_arg "reequilibrer: error desequilibre value"
+;;
+```
 
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 ### Question 3
@@ -123,10 +167,99 @@ Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 - `insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree` avec `a` la valeur a ajouter, et `avl` l'arbre d'entrée. On note que si la valeur `a` existe déjà dans l'arbre, alors on ignore la commande.
 - `max(avl : 'a t_avltree) : 'a` retourne l'élément maximal de `avl`.
 - `dmax(avl : 'a t_avltree) : 'a t_avltree` retourne `avl` privé de son élément maximal.
+Les fonctions de suppression et d'insertion sont les suivantes : 
+```ocaml
+let rec suppr_avl(a, avl : 'a* 'a t_avltree) : 'a t_avltree =
+  if isEmpty(avl)
+  then empty()
+  else
+    let ((value, height), ls, rs) : 
+    (('a * int) * 'a t_avltree * 'a t_avltree) =
+      (
+        root(avl),
+        lson(avl),
+        rson(avl)
+      ) in
+    if a < value
+    then reequilibrer(updateHeight(rooting(
+          (value, height), 
+          suppr_avl( a, ls), 
+          rs
+        )))
+    else
+      if a > value
+      then reequilibrer(updateHeight(rooting(
+              (value, height), 
+              ls, 
+              suppr_avl(a, rs)
+            )))
+      else
+        if isEmpty(rs)
+        then ls
+        else
+          if isEmpty(ls)
+          then rs
+          else reequilibrer(updateHeight(rooting(
+                        (max(ls), height), 
+                        dmax(ls), 
+                        rs
+                      )))
+;;
+
+(*==========*)
+
+let rec insert_avl(a, avl : 'a * 'a t_avltree) : 'a t_avltree =
+  if isEmpty(avl)
+  then rooting(
+      (a, 1), 
+      empty(), 
+      empty()
+    )
+  else (
+    let ((value, height), ls, rs) = (
+          root(avl), 
+          lson(avl), 
+          rson(avl)) in
+
+    if a < value
+    then reequilibrer(updateHeight(rooting(
+              (value, height), 
+              insert_avl(a, ls), 
+              rs
+            )))
+    else
+      if a > value
+      then reequilibrer(updateHeight(rooting(
+                      (value, height), 
+                      ls, 
+                      insert_avl(a, rs)
+                    )))
+      else avl (* cas a = value*)
+  )
+;;
+```
 
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 ### Question 4
-&nbsp; Nous remarquons que l'utilisation de la fonction `bst_seek(elem, tree : 'a * 'a t_avltree) : bool` a due être légèrement modifié pour permettre la recherche d'un élément dans un avl, cependant, les modifications sont mineurs et l'algorithme reste presque identique à la version utilisée pour les `'a bst`.
+&nbsp; Nous remarquons que l'utilisation de la fonction `bst_seek(elem, tree : 'a * 'a t_avltree) : bool` a due être légèrement modifié pour permettre la recherche d'un élément dans un avl. Cependant, les modifications sont mineurs et l'algorithme reste presque identique à la version utilisée pour les `'a bst`. Notre version de la recherche est la suivante : 
+```ocaml
+let rec seek_avl (elem, avl : 'a * 'a t_avltree) : bool =
+  if isEmpty(avl)
+  then false
+  else
+    let ((value, height), ls, rs) = 
+          (root(avl),
+           lson(avl),
+           rson(avl)
+          ) in  
+    if elem = value
+    then true
+    else
+      if elem > value
+      then seek_avl(elem, rs)
+      else seek_avl(elem, ls)
+;;
+```
 ## Expérimentations avec les arbres AVL
 ### Question 1
 Pour créer des AVL aléatoirement, nous avons mis en place plusieurs fonctions : 
