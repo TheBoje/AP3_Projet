@@ -35,7 +35,7 @@ Notre structude des fichiers se présente de la facon suivante :
         ├── btree.cmo               # Arbres binaires
         └── graphics.ml             # Fenetre graphique
 ```
-Le dossier `data` contient le sujet et les graphique d'évolution du temps d'execution de différentes fonctions. Le dossier `src` comprend tous les fichiers OCaml, plus particulièrement, `main` correspond aux fichiers que nous avons fait pour ce projet, et `usage` aux fichiers que nous avons utilisé mais dont nous ne sommes pas les créateurs.
+Le dossier `data` contient le sujet et les graphiques d'évolution du temps d'execution de différentes fonctions. Le dossier `src` comprend tous les fichiers OCaml, plus particulièrement, `main` correspond aux fichiers que nous avons fait pour ce projet, et `usage` aux fichiers que nous avons utilisé mais dont nous ne sommes pas les créateurs.
 
 <div style="page-break-after: always;"></div>
 
@@ -50,37 +50,37 @@ src
 ```
 ## Question 1
 &nbsp; La fonction `bst_rnd_create : int size -> 'a bst` créé un arbre de taille `size`, elle utilise deux fonctions auxiliaires : 
-* `gen_rnd_list : int size -> 'a list` qui génère une une liste de la taille de l'int donné en paramètre
-* `bst_build : 'a list ls -> 'a bst` qui créé un arbe binaire de recherche à partir de la liste donnée en paramètre
+* `gen_rnd_list : int size -> 'a list` qui génère une une liste de la taille donné en paramètre.
+* `bst_build : 'a list ls -> 'a bst` qui créé un arbe binaire de recherche à partir de la liste donnée en paramètre.
 ## Question 2
 &nbsp; La fonction évaluant le déséquilibre d'un arbre est `unbalance : 'a bst tree -> int`. Elle calcule la différence de hauteur entre le fils gauche et le fils droit d'un arbre.
-La fonction `rnd_unbalance_avg : int tSample, int treesSize -> float` calcule la moyenne des déséquilibre d'un nombre tSample d'arbres construits à partir de suites de nombres entiers aléatoires de taille treesSize _Les résultats d'expérimentations se trouvent dans la section consacrée à la question 4._
+La fonction `rnd_unbalance_avg : int tSample, int treesSize -> float` calcule la moyenne des déséquilibres d'un nombre tSample d'arbres construits à partir de suites de nombres entiers aléatoires de taille treesSize _Les résultats d'expérimentations se trouvent dans la section consacrée à la question 4._
 ## Question 3
-&nbsp; La fonction `mixed_unbalance_avg : int tSample, int treesSize -> float` calcule la moyenne des déséquilibre d'un nombre tSample d'arbres construits à partir de suites de nombres entiers aléatoires et de sous-suites ordonnées de taille treesSize _Les résultats d'expérimentations se trouvent dans la section consacrée à la question 4._ 
+&nbsp; La fonction `mixed_unbalance_avg : int tSample, int treesSize -> float` calcule la moyenne des déséquilibres d'un nombre tSample d'arbres construits à partir de suites de nombres entiers aléatoires et de sous-suites ordonnées de taille treesSize _Les résultats d'expérimentations se trouvent dans la section consacrée à la question 4._ 
 ## Question 4
 &nbsp; Dans notre projet, les ABR sont créés à partir d’une liste générée de manière différente selon si l’on veut un arbre construit à partir de valeurs au hasard où si nous voulons un arbre contenant des sous-suites ordonnées mais en ne prenant toujours qu’un argument ; la taille de la liste voulue. Cela facilite grandement la fiabilité des expérimentations en permettant de pratiquer sur des échantillons semblables.
 `unbalance_avgs_avg : int avgSample, int treeSample, int treesSize -> float `calcule une moyenne des moyennes des déséquilibres (`avgSample` étant le nombre de moyennes à évaluer).
 
 &nbsp; Cette organisation permet de lancer peu de fois la dernière fonction tout en évaluant un grand nombre d’arbres, nous avons décidé de lancer l’expérimentation 10 fois sur 1000 moyennes de déséquilibre entre 100 arbres de taille 100 afin d’avoir une expérimentation produisant des résultats fiables sur des échantillons similaires (changer les paramètres pourrait fausser les résultats).
 
-|	Expérimentation	|	Résultat pour les arbres au hasard	|	Résultat pour les arbres aves sous-suites	|
-| :-------------------------:	|:------------------------------------------:	| :------------------------------------------------:	|
-|		1		|		    -0.01604			|			24.45545			|
-|		2		|		    -0.00133			|			24.41074			|
-|		3		|		     0.00472			|			24.51547			|
-|		4		|		    -0.00033			|			24.45549			|
-|		5		|		     0.01846			|			24.45782			|
-|		6		|		     0.00623			|			24.44097			|
-|		7		|		     0.01629			|			24.50553			|
-|		8		|		    -0.00629			|			24.47762			|
-|		9		|		     0.04008			|			24.55913			|
-|	       10		|		     0.02023			|			24.51649			|
-|	     Moyenne		|		     0.00820			|			24.47947			|
+|   Expérimentation	|	Résultat pour les arbres au hasard	|	Résultat pour les arbres aves sous-suites	|
+| :--------------:	|:----------------------------:	| :---------------------------:	|
+|		1	    	|		    -0.01604			|			24.45545			|
+|		2		    |		    -0.00133			|			24.41074			|
+|		3		    |		     0.00472			|			24.51547			|
+|		4		    |		    -0.00033			|			24.45549			|
+|		5		    |		     0.01846			|			24.45782			|
+|		6		    |		     0.00623			|			24.44097			|
+|		7		    |		     0.01629			|			24.50553			|
+|		8		    |		    -0.00629			|			24.47762			|
+|		9		    |		     0.04008			|			24.55913			|
+|	    10		    |		     0.02023			|			24.51649			|
+|    Moyenne	    |		     0.00820			|			24.47947			|
 
 <img src="data/avg_rnd.png">_résultats de `rnd_unbalance_avg` en fonction de la taille des arbres_ </img> </br>
 <img src="data/avg_mixed.png">_résultats de `mixed_unbalance_avg` en fonction de la taille des arbres_ </img></br>
 
-On peut clairement conclure que les abr sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs aléatoires.
+On peut clairement conclure que les ABR sont bien plus équilibrés lorsqu'ils sont construits à partir de valeurs aléatoires.
 
 ## Annexe
 
@@ -102,7 +102,7 @@ src
 ```
 
 ### Question 1
-&nbsp; Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = ('a * int) bst`. Pour cette structure de données,  `'a` représente la valeur du noeud, et `int` représente la hauteur du noeud. Nous avons aussi implémenté les opérations suivante dans le fichier `avl.ml` : 
+&nbsp; Notre implantation du type `Avl` reprend la structure `t_btree` via la déclaration `type 'a t_avltree = ('a * int) bst`. Pour cette structure de données,  `'a` représente la valeur du noeud, et `int` représente la hauteur du noeud. Nous avons aussi implémenté les opérations suivantes dans le fichier `avl.ml` : 
 - `rd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Droite de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.lson` existent.
 - `rg(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Gauche de l'AVL. Pour ne pas rencontrer d'erreur, il faut que `avl` et `avl.rson` existent.
 - `rgd(avl : 'a t_avltree) : 'a t_avltree` effectue la Rotation Gauche Droite de l'AVL, qui repose sur `rd(avl)` et `rg(avl)`.
@@ -137,7 +137,7 @@ let rd(avl : 'a t_avltree) : 'a t_avltree =
 Des exemples d'utilisation sont fournis dans le fichier `avl_utilisation.ml`.
 
 ### Question 2
-&nbsp; Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à l'opération de rééquilibrage de l'avl. En fonction des valeurs de déséquilibre de chaque noeud de l'avl (calculé via la hauteur de chaque noeuds fils), on effectue des rotations. La fonction de rééquilibrage est la suivante : 
+&nbsp; Notre implantation de l'opération de rééquilibrage à partir des axiomes. La fonction `reequilibrer(avl : 'a t_avltree) : 'a t_avltree` correspond à l'opération de rééquilibrage de l'AVL. En fonction des valeurs de déséquilibre de chaque noeud de l'AVL (calculé via la hauteur de chaque noeud fils), on effectue des rotations. La fonction de rééquilibrage est la suivante : 
 ```ocaml
 let reequilibrer( avl : 'a t_avltree) : 'a t_avltree =
   let des = desequilibre(avl) in
@@ -267,11 +267,11 @@ let rec seek_avl (elem, avl : 'a * 'a t_avltree) : bool =
 Pour créer des AVL aléatoirement, nous avons mis en place plusieurs fonctions : 
 - `rnd_list_int(n, max_val : int * int) : int list` qui permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val`.
 - `_rnd_sublist(n, max_val, last_val : int * int * int) : int list` est une fonction privée qui permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val` avec `l[n] < l[n+1]`.
-- `rnd_list_sub(n, max_val, percent : int * int * int ) : int list` permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val` avec des sous-listes d'entiers de taille de taille 2 à 10. La probabilité de générer une sous-liste ordonnée est définie par l'argument `percent` ( 0 = aucune sous-liste, 100 = que des sous-listes).
+- `rnd_list_sub(n, max_val, percent : int * int * int ) : int list` permet de créer une liste d'entier de taille `n` compris entre 0 et `max_val` avec des sous-listes d'entiers de taille 2 à 10. La probabilité de générer une sous-liste ordonnée est définie par l'argument `percent` ( 0 = aucune sous-liste, 100 = que des sous-listes).
 - `avl_rnd_create (l : int list) : int t_avltree` permet de créer un AVL à partir d'une liste. Utilise la fonction privée `_avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree`.
 - `_avl_rnd_create_aux (l, t : 'a list * 'a t_avltree) : 'a t_avltree` permet de créer un AVL à partir d'une liste.
 
-Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et `bst_seek`. Pour cela, nous calculons le temps d'execution de chacune des fonction, et ce pour des arbres aléatoires de taille 1 à n. Une fois les calculs terminés, nous utilisons le module graphique d'Ocaml pour afficher l'évolution du temps de calcul en fonction de la taille de l'arbre étudié. L'ensemble des fonctions utilisés sont regroupés dans le fichier `avl_plot.ml`. Nous testons alors les différentes fonctions avec une taille d'arbre allant de 1 à 1000.
+Nous étudions ensuite la complexité des fonctions `insert_avl`, `suppr_avl` et `bst_seek`. Pour cela, nous calculons le temps d'execution de chacune des fonction, et ce pour des arbres aléatoires de taille 1 à n. Une fois les calculs terminés, nous utilisons le module graphique d'Ocaml pour afficher l'évolution du temps de calcul en fonction de la taille de l'arbre étudié. L'ensemble des fonctions utilisées sont regroupés dans le fichier `avl_plot.ml`. Nous testons alors les différentes fonctions avec une taille d'arbre allant de 1 à 1000.
 
 <table>
     <tr>
