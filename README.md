@@ -12,14 +12,14 @@ Notre structude des fichiers se présente de la facon suivante :
 ├── README.md                       # Fichier de rédaction du compte rendu
 ├── README.pdf                      # Fichier de rédaction du compte rendu
 ├── data                            # Dossier de données
-│   ├── avg_mixed.png               # Graphique de la fct mixed_unbalance_avg
-│   ├── avg_rnd.png                 # Graphique de la fct rnd_unbalance_avg
-│   ├── bst_mix_create.png          # Graphique de la fct bst_mix_create
+│   ├── avg_mixed.png               # Graphique de mixed_unbalance_avg
+│   ├── avg_rnd.png                 # Graphique de rnd_unbalance_avg
+│   ├── bst_mix_create.png          # Graphique de bst_mix_create
 │   ├── sujet.pdf                   # Sujet du projet
-│   ├── insert.png                  # Graphique du temps d'exec. de insert_avl()
-│   ├── seek.png                    # Graphique du temps d'exec. de seek_avl()
-│   ├── suppr.png                   # Graphique du temps d'exec. de suppr_avl()
-│   └── rotations.png               # Graphique du nbr moyen de rotations des AVL
+│   ├── insert.png                  # Graphique du tps d'exec de insert_avl
+│   ├── seek.png                    # Graphique du tps d'exec de seek_avl
+│   ├── suppr.png                   # Graphique du tps d'exec de suppr_avl
+│   └── rotations.png               # Graphique du nbr moyen de rotations
 └── src                             # Dossier de code
     ├── main                        # Dossier de code du projet
     │   ├── abr.ml                  # Implantation du module ABR
